@@ -11,7 +11,7 @@ import formats from "styles/defaultTheme/formats";
 const MILLISECONDS_IN_SECOND = 1000;
 
 const fontSize = "12px";
-const textColor = "rgba(255, 255, 255, 90%)";
+const textColor = "rgba(26, 39, 51, 95%)";
 
 let mode: ClockSource;
 let offscreenCanvas: OffscreenCanvas;

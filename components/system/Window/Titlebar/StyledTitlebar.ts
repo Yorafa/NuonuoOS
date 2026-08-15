@@ -4,6 +4,26 @@ type StyledTitlebarProps = {
   $foreground: boolean;
 };
 
+const activeTitlebarGradient = `
+  linear-gradient(
+    180deg,
+    rgb(41, 88, 173) 0%,
+    rgb(10, 36, 106) 14%,
+    rgb(30, 88, 168) 55%,
+    rgb(70, 130, 205) 88%,
+    rgb(120, 165, 220) 100%
+  )
+`;
+
+const inactiveTitlebarGradient = `
+  linear-gradient(
+    180deg,
+    rgb(150, 160, 174) 0%,
+    rgb(122, 134, 148) 50%,
+    rgb(140, 150, 164) 100%
+  )
+`;
+
 const styledBorder = ({
   $foreground,
   theme,
@@ -13,10 +33,8 @@ const styledBorder = ({
     : `1px solid ${theme.colors.titleBar.backgroundInactive}`;
 
 const StyledTitlebar = styled.header<StyledTitlebarProps>`
-  background-color: ${({ $foreground, theme }) =>
-    $foreground
-      ? theme.colors.titleBar.background
-      : theme.colors.titleBar.backgroundInactive};
+  background-image: ${({ $foreground }) =>
+    $foreground ? activeTitlebarGradient : inactiveTitlebarGradient};
   border-bottom: ${styledBorder};
   display: flex;
   height: ${({ theme }) => theme.sizes.titleBar.height}px;
@@ -33,7 +51,7 @@ const StyledTitlebar = styled.header<StyledTitlebarProps>`
     display: flex;
     flex-grow: 1;
     font-size: ${({ theme }) => theme.sizes.titleBar.fontSize};
-    font-weight: 400;
+    font-weight: 700;
     min-width: 0;
 
     figure {
@@ -68,18 +86,27 @@ const StyledTitlebar = styled.header<StyledTitlebarProps>`
     display: flex;
 
     button {
-      border-left: ${styledBorder};
+      background: linear-gradient(
+        180deg,
+        rgb(238, 245, 252) 0%,
+        rgb(196, 213, 232) 45%,
+        rgb(160, 183, 210) 100%
+      );
+      border-bottom-color: rgb(72, 92, 120);
+      border-left-color: rgb(255, 255, 255);
+      border-right-color: rgb(72, 92, 120);
+      border-style: outset;
+      border-top-color: rgb(255, 255, 255);
+      border-width: 1px;
       box-sizing: content-box;
       display: flex;
+      margin: 2px 2px 2px 0;
       place-content: center;
       place-items: center;
       width: ${({ theme }) => theme.sizes.titleBar.buttonWidth};
 
       svg {
-        fill: ${({ $foreground, theme }) =>
-          $foreground
-            ? theme.colors.titleBar.text
-            : theme.colors.titleBar.buttonInactive};
+        fill: ${({ theme }) => theme.colors.taskbar.button.color};
         margin: 0 1px 2px 0;
         width: ${({ theme }) => theme.sizes.titleBar.buttonIconWidth};
       }
@@ -94,33 +121,31 @@ const StyledTitlebar = styled.header<StyledTitlebarProps>`
       &:hover {
         background-color: ${({ theme }) =>
           theme.colors.titleBar.backgroundHover};
-
-        svg {
-          fill: ${({ theme }) => theme.colors.titleBar.text};
-        }
-
-        &.close {
-          background-color: ${({ theme }) => theme.colors.titleBar.closeHover};
-          transition: background-color 0.25s ease;
-        }
+        filter: brightness(1.06);
       }
 
       &:active {
-        background-color: rgb(51 51 51);
+        border-style: inset;
+        background: linear-gradient(
+          180deg,
+          rgb(150, 172, 200) 0%,
+          rgb(180, 200, 224) 100%
+        );
 
         &.close {
-          background-color: rgb(139 10 20);
+          background: linear-gradient(
+            180deg,
+            rgb(200, 60, 70) 0%,
+            rgb(232, 140, 70) 100%
+          );
         }
       }
 
       &:disabled {
-        svg {
-          fill: ${({ $foreground }) =>
-            $foreground ? "rgb(50, 50, 50)" : "rgb(60, 60, 60)"};
-        }
+        opacity: 0.5;
 
         &:hover {
-          background-color: inherit;
+          filter: none;
         }
       }
     }

@@ -8,7 +8,7 @@ type StyledClockProps = {
 };
 
 const StyledClock = styled.div<StyledClockProps>`
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.taskbar.button.color};
   display: flex;
   font-size: ${({ theme }) => theme.sizes.clock.fontSize};
   height: 100%;
