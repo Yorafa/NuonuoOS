@@ -1,4 +1,3 @@
-import type * as Monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
 import {
   type Operation,
@@ -28,7 +27,7 @@ type MediaPlayerProcessArguments = {
 };
 
 type MonacoProcessArguments = {
-  editor?: Monaco.editor.IStandaloneCodeEditor;
+  editor?: unknown;
 };
 
 type PdfProcessArguments = {

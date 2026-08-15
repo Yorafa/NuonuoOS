@@ -22,7 +22,6 @@ import processDirectory from "contexts/process/directory";
 import { useSession } from "contexts/session";
 import { useProcessesRef } from "hooks/useProcessesRef";
 import {
-  AI_TITLE,
   AUDIO_PLAYLIST_EXTENSIONS,
   CURSOR_FILE_EXTENSIONS,
   DESKTOP_PATH,
@@ -35,7 +34,6 @@ import {
   ROOT_SHORTCUT,
   SHORTCUT_EXTENSION,
   SPREADSHEET_FORMATS,
-  SUMMARIZABLE_FILE_EXTENSIONS,
   TEXT_EDITORS,
   VIDEO_FILE_EXTENSIONS,
 } from "utils/constants";
@@ -56,8 +54,6 @@ import {
   IMAGE_ENCODE_FORMATS,
 } from "utils/imagemagick/formats";
 import { Share } from "components/system/Menu/MenuIcons";
-import { useWindowAI } from "hooks/useWindowAI";
-import { getNavButtonByTitle } from "hooks/useGlobalKeyboardShortcuts";
 import useTransferDialog, {
   type ObjectReader,
 } from "components/system/Dialogs/Transfer/useTransferDialog";
@@ -86,7 +82,6 @@ const useFileContextMenu = (
   const { close, minimize, open, url: changeUrl } = useProcesses();
   const processesRef = useProcessesRef();
   const {
-    aiEnabled,
     setCursor,
     setForegroundId,
     setIconPositions,
@@ -111,7 +106,6 @@ const useFileContextMenu = (
     updateFolder,
   } = useFileSystem();
   const { contextMenu } = useMenu();
-  const hasWindowAI = useWindowAI();
   const { openTransferDialog } = useTransferDialog();
   const { onContextMenuCapture, ...contextMenuHandlers } = useMemo(
     () =>
@@ -543,30 +537,6 @@ const useFileContextMenu = (
           });
         }
 
-        if (
-          (aiEnabled || (hasWindowAI && "summarizer" in window.ai)) &&
-          SUMMARIZABLE_FILE_EXTENSIONS.has(urlExtension)
-        ) {
-          const aiCommand = (command: string): void => {
-            window.initialAiPrompt = `${command}: ${url}`;
-
-            const newTopicButton = document.querySelector<HTMLButtonElement>(
-              "main > section > footer > button.new-topic"
-            );
-
-            if (newTopicButton) {
-              newTopicButton?.click();
-            } else {
-              getNavButtonByTitle(AI_TITLE)?.click();
-            }
-          };
-
-          menuItems.unshift(MENU_SEPERATOR, {
-            action: () => aiCommand("Summarize"),
-            label: "Summarize Text (AI)",
-          });
-        }
-
         const hasBackgroundVideoExtension =
           VIDEO_FILE_EXTENSIONS.has(urlExtension);
 
@@ -684,7 +654,6 @@ const useFileContextMenu = (
         return menuItems[0] === MENU_SEPERATOR ? menuItems.slice(1) : menuItems;
       }),
     [
-      aiEnabled,
       archiveFiles,
       baseName,
       changeUrl,
@@ -697,7 +666,6 @@ const useFileContextMenu = (
       extractFiles,
       fileManagerId,
       focusedEntries,
-      hasWindowAI,
       isFocusedEntry,
       lstat,
       mapFs,

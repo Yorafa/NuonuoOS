@@ -7,7 +7,6 @@ import {
   Forward,
   Up,
 } from "components/apps/FileExplorer/NavigationIcons";
-import SearchBar from "components/apps/FileExplorer/SearchBar";
 import StyledNavigation from "components/apps/FileExplorer/StyledNavigation";
 import useTitlebarContextMenu from "components/system/Window/Titlebar/useTitlebarContextMenu";
 import { useMenu } from "contexts/menu";
@@ -153,7 +152,6 @@ const Navigation: FC<NavigationProps> = ({
         <Up />
       </Button>
       <AddressBar ref={addressBarRef} id={id} />
-      {!hideSearch && !removeSearch && <SearchBar ref={searchBarRef} id={id} />}
     </StyledNavigation>
   );
 };

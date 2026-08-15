@@ -1,7 +1,4 @@
-import { type StableDiffusionConfig } from "components/apps/StableDiffusion/types";
-import { type VantaWavesConfig } from "components/system/Desktop/Wallpapers/vantaWaves/types";
 import { type Size } from "components/system/Window/RndWindow/useResizable";
-import type MatrixConfig from "components/system/Desktop/Wallpapers/Matrix/config";
 import { type WallpaperFit } from "contexts/session/types";
 
 declare global {
@@ -12,10 +9,7 @@ declare global {
   }
 }
 
-export type WallpaperConfig =
-  | Partial<StableDiffusionConfig>
-  | Partial<typeof MatrixConfig>
-  | Partial<VantaWavesConfig>;
+export type WallpaperConfig = Record<string, unknown>;
 
 export type WallpaperFunc = (
   el: HTMLElement | null,
@@ -26,7 +20,7 @@ export type WallpaperFunc = (
 export type OffscreenRenderProps = {
   canvas: OffscreenCanvas;
   clockSize?: Size;
-  config?: Partial<StableDiffusionConfig> | VantaWavesConfig;
+  config?: WallpaperConfig;
   devicePixelRatio: number;
 };
 

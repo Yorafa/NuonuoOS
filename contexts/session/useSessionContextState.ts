@@ -38,11 +38,9 @@ import {
 import {
   getExtension,
   maybeRequestIdleCallback,
-  preloadLibs,
   updateIconPositionsIfEmpty,
 } from "utils/functions";
 import { getShortcutInfo } from "components/system/Files/FileEntry/functions";
-import { WALLPAPER_PATHS } from "components/system/Desktop/Wallpapers/constants";
 
 const DEFAULT_SESSION = (
   typeof window === "object" && "DEBUG_DEFAULT_SESSION" in window
@@ -273,15 +271,6 @@ const useSessionContextState = (): SessionContextState => {
                   ) as SessionData);
           } catch {
             session = DEFAULT_SESSION;
-          }
-
-          const sessionWallpaperImage =
-            session.wallpaperImage || DEFAULT_WALLPAPER;
-
-          if (sessionWallpaperImage in WALLPAPER_PATHS) {
-            WALLPAPER_PATHS[sessionWallpaperImage]().then(({ libs }) =>
-              preloadLibs(libs)
-            );
           }
 
           if (session.clockSource) setClockSource(session.clockSource);

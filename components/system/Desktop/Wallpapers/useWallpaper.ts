@@ -8,9 +8,6 @@ import {
   PRELOAD_ID,
   REDUCED_MOTION_PERCENT,
   STABLE_DIFFUSION_DELAY_IN_MIN,
-  WALLPAPER_PATHS,
-  WALLPAPER_WORKERS,
-  WALLPAPER_WORKER_NAMES,
   bgPositionSize,
 } from "components/system/Desktop/Wallpapers/constants";
 import {
@@ -59,9 +56,7 @@ const useWallpaper = (
     [wallpaperImage]
   );
   const isAlt = wallpaperImage.endsWith(" ALT");
-  const wallpaperWorker = useWorker<void>(
-    sessionLoaded ? WALLPAPER_WORKERS[wallpaperName] : undefined
-  );
+  const wallpaperWorker = useWorker<void>(undefined);
   const wallpaperTimerRef = useRef(0);
   const wallpaperLoadAbortRef = useRef<AbortController>(undefined);
   const failedOffscreenContext = useRef(false);
@@ -210,19 +205,6 @@ const useWallpaper = (
             );
           }
         }
-      } else if (WALLPAPER_PATHS[wallpaperName]) {
-        const fallbackWallpaper = (): void =>
-          setWallpaper(
-            wallpaperName === DEFAULT_WALLPAPER
-              ? "SLIDESHOW"
-              : DEFAULT_WALLPAPER
-          );
-
-        WALLPAPER_PATHS[wallpaperName]()
-          .then(({ default: wallpaper }) =>
-            wallpaper?.(desktopRef.current, config, fallbackWallpaper)
-          )
-          .catch(fallbackWallpaper);
       } else {
         setWallpaper(DEFAULT_WALLPAPER);
       }
@@ -515,7 +497,7 @@ const useWallpaper = (
 
       wallpaperLoadAbortRef.current?.abort();
 
-      if (wallpaperName && !WALLPAPER_WORKER_NAMES.includes(wallpaperName)) {
+      if (wallpaperName) {
         loadFileWallpaper().catch(loadWallpaper);
       } else {
         loadWallpaper();
@@ -525,7 +507,7 @@ const useWallpaper = (
 
   useEffect(() => {
     const resizeListener = (): void => {
-      if (!desktopRef.current || !WALLPAPER_PATHS[wallpaperName]) return;
+      if (!desktopRef.current) return;
 
       const desktopRect = desktopRef.current.getBoundingClientRect();
 

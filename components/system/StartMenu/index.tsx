@@ -4,7 +4,6 @@ import { type Variant } from "motion/react";
 import FileManager from "components/system/Files/FileManager";
 import Sidebar from "components/system/StartMenu/Sidebar";
 import StyledStartMenu from "components/system/StartMenu/StyledStartMenu";
-import { updateInputValueOnReactElement } from "components/system/Taskbar/Search/functions";
 import {
   SEARCH_BUTTON_TITLE,
   START_BUTTON_TITLE,
@@ -72,33 +71,6 @@ const StartMenu: FC<StartMenuProps> = ({ toggleStartMenu }) => {
           START_BUTTON_TITLE
         )
       }
-      onKeyDown={({ key }) => {
-        if (key === "Escape") toggleStartMenu(false);
-        else if (key.length === 1) {
-          toggleStartMenu(false);
-
-          const searchButton = getNavButtonByTitle(SEARCH_BUTTON_TITLE);
-
-          if (searchButton) {
-            searchButton.click();
-
-            let tries = 0;
-            const openSearchTimerRef = window.setInterval(() => {
-              const searchInput = document.querySelector<HTMLInputElement>(
-                "main > nav .search > input"
-              );
-
-              if (searchInput) {
-                updateInputValueOnReactElement(searchInput, key);
-              }
-
-              if (searchInput || ++tries > 10) {
-                window.clearInterval(openSearchTimerRef);
-              }
-            }, 50);
-          }
-        }
-      }}
       onMouseLeave={() => setShowScrolling(false)}
       onMouseMove={revealScrolling}
       {...startMenuTransition}

@@ -1,9 +1,13 @@
 import { relative } from "path";
 import { useCallback } from "react";
-import { isCorsUrl } from "components/apps/TinyMCE/functions";
 import { getProcessByFileExtension } from "components/system/Files/FileEntry/functions";
 import { useProcesses } from "contexts/process";
-import { haltEvent, isYouTubeUrl, getExtension } from "utils/functions";
+import {
+  getExtension,
+  haltEvent,
+  isCorsUrl,
+  isYouTubeUrl,
+} from "utils/functions";
 import { useSession } from "contexts/session";
 
 type LinkHandler = (

@@ -1281,12 +1281,25 @@ export const displayVersion = (): string => {
 
 export const isDev = (): boolean => "__nextDevClientId" in window;
 
-export const stopGlobalMusicVisualization = (): void => {
-  window.WebampGlobal?.store?.dispatch?.({
-    enabled: false,
-    type: "SET_MILKDROP_DESKTOP",
-  });
-};
+const allowedCorsDomains = new Set(["wikipedia.org", "archive.org"]);
 
-export const isGlobalMusicVisualizationRunning = (): boolean =>
-  window.WebampGlobal?.store?.getState?.()?.milkdrop?.display === "DESKTOP";
+/**
+ * Determine if a URL points to a domain whose content can be embedded
+ * directly in the internal Browser (i.e. it responds with permissive CORS
+ * headers). Used to route links to the in-OS browser instead of a new tab.
+ */
+export const isCorsUrl = (url?: string): boolean => {
+  if (!url) return false;
+
+  try {
+    const { hostname } = new URL(url);
+    const [, domain, tld] = hostname.split(".");
+
+    return (
+      allowedCorsDomains.has(`${domain}.${tld}`) ||
+      allowedCorsDomains.has(hostname)
+    );
+  } catch {
+    return false;
+  }
+};
