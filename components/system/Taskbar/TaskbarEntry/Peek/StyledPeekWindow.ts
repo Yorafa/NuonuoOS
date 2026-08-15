@@ -9,7 +9,7 @@ type StyledPeekWindowProps = {
 
 const StyledPeekWindow = styled(motion.div)<StyledPeekWindowProps>`
   backdrop-filter: ${({ theme }) => `blur(${theme.sizes.taskbar.blur})`};
-  background-color: ${({ theme }) => theme.colors.taskbar.background};
+  background-color: ${({ theme }) => theme.colors.taskbar.panel};
   border: ${({ theme }) => `1px solid ${theme.colors.taskbar.peekBorder}`};
   border-bottom: 0;
   bottom: ${TASKBAR_HEIGHT}px;

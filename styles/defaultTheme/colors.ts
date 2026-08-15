@@ -45,6 +45,7 @@ const colors = {
     foregroundHover: "hsla(216, 24%, 90%, 92%)",
     foregroundProgress: "hsla(113, 45%, 60%, 35%)",
     hover: "hsla(216, 25%, 92%, 92%)",
+    panel: "hsla(0, 0%, 12%, 96%)",
     peekBorder: "hsla(216, 30%, 40%, 65%)",
   },
   text: "rgba(255, 255, 255, 90%)",
