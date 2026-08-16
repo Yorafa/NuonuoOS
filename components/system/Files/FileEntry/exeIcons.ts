@@ -1,8 +1,6 @@
 import {
-  type IconGroupEntry,
-  type IconGroupItem,
-  type ResourceEntry,
-} from "resedit/dist/resource";
+  type Resource,
+} from "resedit";
 
 const RESERVED = 0;
 const ICON_TYPE = {
@@ -18,7 +16,7 @@ const createIconHeader = (iconCount: number): Uint8Array =>
   ]);
 
 const createIconDirEntry = (
-  { bitCount, colors, dataSize, height, planes, width }: IconGroupItem,
+  { bitCount, colors, dataSize, height, planes, width }: Resource.IconGroupItem,
   offset: number
 ): Uint8Array =>
   Uint8Array.from([
@@ -50,8 +48,8 @@ export const extractExeIcon = async (
   lockIconExtraction = true;
 
   const ResEdit = await import("resedit");
-  let iconGroupEntry: IconGroupEntry;
-  let entries: ResourceEntry[];
+  let iconGroupEntry: Resource.IconGroupEntry;
+  let entries: Resource.ResourceEntry[];
 
   try {
     ({ entries } = ResEdit.NtExecutableResource.from(
@@ -114,7 +112,7 @@ export const extractExeIcon = async (
   const combinedIconBuffer = Buffer.from(
     iconData.reduce(
       (accIcon, iconItem) =>
-        Buffer.concat([accIcon, Buffer.from((iconItem as ResourceEntry).bin)]),
+        Buffer.concat([accIcon, Buffer.from((iconItem as Resource.ResourceEntry).bin)]),
       iconHeader
     )
   );

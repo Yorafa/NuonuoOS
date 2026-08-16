@@ -46,8 +46,8 @@ import { useProcesses } from "contexts/process";
 import processDirectory from "contexts/process/directory";
 import { useSession } from "contexts/session";
 import { useProcessesRef } from "hooks/useProcessesRef";
+import { getLocale } from "contexts/language";
 import {
-  DEFAULT_LOCALE,
   DESKTOP_PATH,
   HIGH_PRIORITY_REQUEST,
   PACKAGE_DATA,
@@ -76,9 +76,8 @@ const SYNTAX_ERROR = "The syntax of the command is incorrect.";
 
 const { alias } = PACKAGE_DATA;
 
-const LS_TIME_FORMATTER = new Intl.DateTimeFormat(DEFAULT_LOCALE, {
-  timeStyle: "short",
-});
+const formatLsTime = (date: Date): string =>
+  new Intl.DateTimeFormat(getLocale(), { timeStyle: "short" }).format(date);
 
 type WindowPerformance = Performance & {
   memory: {
@@ -411,7 +410,7 @@ const useCommandInterpreter = (
                       0,
                       10
                     );
-                    const time = LS_TIME_FORMATTER.format(mDate).padStart(
+                    const time = formatLsTime(mDate).padStart(
                       8,
                       "0"
                     );

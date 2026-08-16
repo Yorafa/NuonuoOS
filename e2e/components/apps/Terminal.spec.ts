@@ -1,7 +1,6 @@
 import { expect, test } from "@playwright/test";
 import directory from "contexts/process/directory";
 import {
-  PYODIDE_HEADLESS_NOT_SUPPORTED_BROWSERS,
   ROOT_PUBLIC_TEST_FILE,
   TERMINAL_BASE_CD,
 } from "e2e/constants";
@@ -13,7 +12,6 @@ import {
   sendTabToTerminal,
   sendTextToTerminal,
   sendToTerminal,
-  sheepIsVisible,
   terminalDirectoryMatchesPublicFolder,
   terminalDoesNotHaveText,
   terminalFileMatchesPublicFile,
@@ -266,7 +264,7 @@ test.describe("has commands", () => {
 
   test("help", async ({ page }) => {
     await sendToTerminal({ page }, "help");
-    await terminalHasText({ page }, /Spawn a new sheep./);
+    await terminalHasText({ page }, /Provides Help information for commands\./);
   });
 
   test("history", async ({ page }) => {
@@ -308,19 +306,6 @@ test.describe("has commands", () => {
     await terminalHasText({ page }, "Name:    dustinbrett.com");
   });
 
-  test("python", async ({ browserName, headless, page }) => {
-    test.skip(
-      headless && PYODIDE_HEADLESS_NOT_SUPPORTED_BROWSERS.has(browserName),
-      "no headless Pyodide support"
-    );
-
-    await sendToTerminal({ page }, "py");
-
-    await expect(async () =>
-      terminalHasText({ page }, /\d+\.\d+\.\d+ \(main, .*\) \[Clang/)
-    ).toPass();
-  });
-
   test("qjs", async ({ page }) => {
     const randomNumber = Math.floor(Math.random() * 1000);
     const randomNumber2 = Math.floor(Math.random() * 1000);
@@ -330,11 +315,6 @@ test.describe("has commands", () => {
 
     await sendToTerminal({ page }, "qjs Object.keys(window)");
     await terminalHasText({ page }, '["console","window"]');
-  });
-
-  test("sheep", async ({ page }) => {
-    await sendToTerminal({ page }, "sheep");
-    await sheepIsVisible({ page });
   });
 
   test("shutdown", async ({ page }) => {

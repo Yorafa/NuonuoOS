@@ -4,13 +4,13 @@ import type HtmlToImage from "html-to-image";
 import { type DragPosition } from "components/system/Files/FileManager/useDraggableEntries";
 import { type Size } from "components/system/Window/RndWindow/useResizable";
 import { type Processes, type RelativePosition } from "contexts/process/types";
+import { getLocale } from "contexts/language";
 import {
   type IconPosition,
   type IconPositions,
   type SortOrders,
 } from "contexts/session/types";
 import {
-  DEFAULT_LOCALE,
   DESKTOP_PATH,
   HIGH_PRIORITY_REQUEST,
   ICON_CACHE,
@@ -1218,7 +1218,7 @@ export const jsonFetch = async <T extends Record<string, unknown>>(
 };
 
 export const generatePrettyTimestamp = (): string =>
-  new Intl.DateTimeFormat(DEFAULT_LOCALE, TIMESTAMP_DATE_FORMAT)
+  new Intl.DateTimeFormat(getLocale(), TIMESTAMP_DATE_FORMAT)
     .format(new Date())
     .replace(/[/:]/g, "-")
     .replace(",", "");

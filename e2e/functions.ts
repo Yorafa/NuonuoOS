@@ -30,7 +30,6 @@ import {
   SEARCH_BUTTON_SELECTOR,
   SEARCH_MENU_SELECTOR,
   SELECTION_SELECTOR,
-  SHEEP_SELECTOR,
   START_BUTTON_SELECTOR,
   START_MENU_SELECTOR,
   START_MENU_SIDEBAR_SELECTOR,
@@ -560,9 +559,6 @@ export const searchMenuIsHidden = async ({ page }: TestProps): Promise<void> =>
 
 export const searchMenuIsVisible = async ({ page }: TestProps): Promise<void> =>
   expect(page.locator(SEARCH_MENU_SELECTOR)).toBeVisible();
-
-export const sheepIsVisible = async ({ page }: TestProps): Promise<void> =>
-  expect(page.locator(SHEEP_SELECTOR)).toBeVisible();
 
 export const startButtonIsVisible = async ({
   page,

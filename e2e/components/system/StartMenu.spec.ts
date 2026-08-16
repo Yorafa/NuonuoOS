@@ -1,7 +1,6 @@
 import { expect, test } from "@playwright/test";
 import {
   START_MENU_APPS,
-  START_MENU_FOLDERS,
   START_MENU_SIDEBAR_SELECTOR,
 } from "e2e/constants";
 import {
@@ -49,40 +48,6 @@ test.describe("has sidebar", () => {
           ?.width || 0
       ).toBeGreaterThan(width)
     ).toPass();
-  });
-});
-
-test.describe("has folders", () => {
-  test.beforeEach(desktopEntriesAreVisible);
-
-  const MENU_FOLDERS = Object.keys(START_MENU_FOLDERS);
-
-  test("has items", async ({ page }) => {
-    for (const label of MENU_FOLDERS) {
-      // eslint-disable-next-line no-await-in-loop
-      await startMenuEntryIsVisible(label, { page });
-    }
-  });
-
-  test("has context menu (read only)", async ({ page }) => {
-    const [firstEntry] = MENU_FOLDERS;
-
-    await startMenuEntryIsVisible(firstEntry, { page });
-    await startMenuContextIsOpen(firstEntry, { page });
-    await contextMenuEntryIsVisible(/^Open$/, { page });
-    await contextMenuHasCount(1, { page });
-  });
-
-  test("has sub menus", async ({ page }) => {
-    for (const [folder, entries] of Object.entries(START_MENU_FOLDERS)) {
-      // eslint-disable-next-line no-await-in-loop
-      await clickStartMenuEntry(folder, { page });
-
-      for (const label of entries) {
-        // eslint-disable-next-line no-await-in-loop
-        await startMenuEntryIsVisible(label, { page });
-      }
-    }
   });
 });
 

@@ -19,8 +19,7 @@ const types = {
     type: "Audio Playlist File",
   },
   ChessGame: {
-    icon: "chess",
-    process: ["Chess", ...TEXT_EDITORS],
+    process: [...TEXT_EDITORS],
     type: "Portable Game Notation File",
   },
   DiscImage: {

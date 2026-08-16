@@ -6,6 +6,7 @@ import SidebarButton, {
 import {
   AllApps,
   Documents,
+  Language,
   Pictures,
   Power,
   SideMenu,
@@ -15,6 +16,7 @@ import StyledSidebar from "components/system/StartMenu/Sidebar/StyledSidebar";
 import { useFileSystem } from "contexts/fileSystem";
 import { useProcesses } from "contexts/process";
 import { useSession } from "contexts/session";
+import { useLanguage } from "contexts/language";
 import { HOME, TASKBAR_HEIGHT } from "utils/constants";
 import { haltEvent, viewHeight } from "utils/functions";
 
@@ -38,6 +40,7 @@ const Sidebar: FC<SidebarProps> = ({ height }) => {
   const { rootFs } = useFileSystem();
   const { open } = useProcesses();
   const { setHaltSession } = useSession();
+  const { locale, setLocale, t } = useLanguage();
   const [collapsed, setCollapsed] = useState(true);
   const expandTimer = useRef(0);
   const sidebarRef = useRef<HTMLElement>(null);
@@ -61,8 +64,14 @@ const Sidebar: FC<SidebarProps> = ({ height }) => {
         name: "All apps",
         ...(collapsed && { tooltip: "All apps" }),
       },
+      {
+        action: () => setLocale(locale === "en" ? "zh-CN" : "en"),
+        icon: <Language />,
+        name: locale === "en" ? "中文" : "English",
+        ...(collapsed && { tooltip: t("language.toggle") }),
+      },
     ],
-    [collapsed]
+    [collapsed, locale, setLocale, t]
   );
   const { sizes } = useTheme();
   const vh = viewHeight();

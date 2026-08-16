@@ -13,11 +13,11 @@ import {
 } from "components/system/Files/FileManager/functions";
 import { useFileSystem } from "contexts/fileSystem";
 import { useProcesses } from "contexts/process";
+import { useLanguage, getLocale } from "contexts/language";
 import directory from "contexts/process/directory";
 import { useSession } from "contexts/session";
 import Icon from "styles/common/Icon";
 import {
-  DEFAULT_LOCALE,
   DESKTOP_PATH,
   DISBALE_AUTO_INPUT_FEATURES,
   FOLDER_ICON,
@@ -40,7 +40,7 @@ type TabProps = {
 
 const dateTimeString = (date?: Date): string =>
   date
-    ?.toLocaleString(DEFAULT_LOCALE, {
+    ?.toLocaleString(getLocale(), {
       dateStyle: "long",
       timeStyle: "medium",
     })
@@ -48,6 +48,7 @@ const dateTimeString = (date?: Date): string =>
 
 const GeneralTab: FC<TabProps> = ({ icon, id, isShortcut, pid, url }) => {
   const { closeWithTransition, icon: setIcon } = useProcesses();
+  const { t } = useLanguage();
   const { setIconPositions } = useSession();
   const extension = useMemo(() => getExtension(url || ""), [url]);
   const extType = getFileType(extension);
@@ -193,7 +194,7 @@ const GeneralTab: FC<TabProps> = ({ icon, id, isShortcut, pid, url }) => {
             <td className="spacer" colSpan={2} />
           </tr>
           <tr>
-            <th scope="row">{isDirectory ? "Type:" : "Type of file:"}</th>
+            <th scope="row">{isDirectory ? t("properties.type") : t("properties.typeOfFile")}</th>
             <td>
               {isDirectory
                 ? "File folder"
@@ -204,7 +205,7 @@ const GeneralTab: FC<TabProps> = ({ icon, id, isShortcut, pid, url }) => {
           </tr>
           {!isDirectory && (
             <tr>
-              <th scope="row">{pid ? "Opens with:" : "Description:"}</th>
+              <th scope="row">{pid ? t("properties.opensWith") : t("properties.description")}</th>
               <td>
                 {pid && directory[pid]?.icon && (
                   <Icon imgSize={16} src={directory[pid].icon} />
@@ -219,11 +220,11 @@ const GeneralTab: FC<TabProps> = ({ icon, id, isShortcut, pid, url }) => {
             </tr>
           )}
           <tr>
-            <th scope="row">Location:</th>
+            <th scope="row">{t("properties.location")}</th>
             <td>{dirname(url)}</td>
           </tr>
           <tr>
-            <th scope="row">Size</th>
+            <th scope="row">{t("properties.size")}</th>
             <td>
               {entrySize
                 ? `${getFormattedSize(
@@ -236,20 +237,20 @@ const GeneralTab: FC<TabProps> = ({ icon, id, isShortcut, pid, url }) => {
           </tr>
           {isDirectory && (
             <tr>
-              <th scope="row">Contains</th>
-              <td>{`${fileCount.toLocaleString()} Files, ${folderCount.toLocaleString()} Folders`}</td>
+              <th scope="row">{t("properties.contains")}</th>
+              <td>{`${fileCount.toLocaleString()} ${t("properties.files")}, ${folderCount.toLocaleString()} ${t("properties.folders")}`}</td>
             </tr>
           )}
           <tr>
             <td className="spacer" colSpan={2} />
           </tr>
           <tr>
-            <th scope="row">Created:</th>
+            <th scope="row">{t("properties.created")}</th>
             <td>{dateTimeString(stats?.ctime)}</td>
           </tr>
           {!stats?.isDirectory() && (
             <tr>
-              <th scope="row">Modified:</th>
+              <th scope="row">{t("properties.modified")}</th>
               <td>
                 {stats &&
                   dateTimeString(
@@ -259,7 +260,7 @@ const GeneralTab: FC<TabProps> = ({ icon, id, isShortcut, pid, url }) => {
             </tr>
           )}
           <tr>
-            <th scope="row">Accessed:</th>
+            <th scope="row">{t("properties.accessed")}</th>
             <td>{dateTimeString(stats?.atime)}</td>
           </tr>
         </tbody>

@@ -28,7 +28,6 @@ import {
   hoverOnTaskbarEntry,
   loadApp,
   loadTestApp,
-  sheepIsVisible,
   startButtonIsVisible,
   taskbarEntriesAreVisible,
   taskbarEntryHasIcon,
@@ -53,14 +52,6 @@ test.describe("elements", () => {
   test.describe("has start button", () => {
     test.beforeEach(startButtonIsVisible);
 
-    test("can spawn sheep", async ({ page }) => {
-      await page.keyboard.down("Control");
-      await page.keyboard.down("Shift");
-
-      await clickStartButton({ page });
-      await sheepIsVisible({ page });
-    });
-
     test("has context menu", async ({ page }) => {
       await clickStartButton({ page }, true);
       await contextMenuIsVisible({ page });
@@ -82,11 +73,6 @@ test.describe("elements", () => {
 
       await clockTextIsVisible({ page });
       await clockCanvasIsHidden({ page });
-    });
-
-    test("can spawn sheep", async ({ page }) => {
-      await clickClock({ page }, 7);
-      await sheepIsVisible({ page });
     });
 
     test("has calendar", async ({ page }) => {

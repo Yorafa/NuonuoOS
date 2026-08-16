@@ -5,6 +5,8 @@
 ![截图](https://raw.githubusercontent.com/DustinBrett/daedalOS/refs/heads/main/public/screenshot.png?raw=true)
 
 > 本项目 Fork 自 [DustinBrett/daedalOS](https://github.com/DustinBrett/daedalOS) 并在其基础上修改而成:移除了重型应用与 AI 功能,换装 Win98 风格银色任务栏、斜角开始按钮与深蓝标题栏的经典皮肤。感谢原作者 [Dustin Brett](https://github.com/DustinBrett) 的开源贡献。
+>
+> 📖 如何使用与自定义本项目(例如:如何添加文件使其显示在桌面/文件管理器、创建快捷方式、更换图标、添加新应用等),参见 [USAGE.md](USAGE.md)。
 
 # 系统 🧠
 

@@ -36,7 +36,6 @@ import {
   getExtension,
   getSearchParam,
   isBeforeBg,
-  isGlobalMusicVisualizationRunning,
   parseBgPosition,
   preloadImage,
 } from "utils/functions";
@@ -342,9 +341,6 @@ const useWallpaper = (
         throw error;
       }
 
-      if (isGlobalMusicVisualizationRunning()) {
-        wallpaperLoadAbortRef.current?.abort();
-      }
       if (loadController.signal.aborted) return;
 
       if (newWallpaper) {

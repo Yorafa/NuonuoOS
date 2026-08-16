@@ -8,11 +8,11 @@ import { type FileStat } from "components/system/Files/FileManager/functions";
 import { get9pModifiedTime, isMountedFolder } from "contexts/fileSystem/core";
 import { type RootFileSystem } from "contexts/fileSystem/useAsyncFs";
 import processDirectory from "contexts/process/directory";
+import { getLocale } from "contexts/language";
 import {
   AUDIO_FILE_EXTENSIONS,
   BASE_2D_CONTEXT_OPTIONS,
   DECODED_VIDEO_FILE_EXTENSIONS,
-  DEFAULT_LOCALE,
   DYNAMIC_EXTENSION,
   DYNAMIC_PREFIX,
   FOLDER_BACK_ICON,
@@ -913,7 +913,7 @@ export const getDateModified = (
   let formatter: Intl.DateTimeFormat | undefined;
 
   if (!dateModifiedFormaters.has(format)) {
-    formatter = new Intl.DateTimeFormat(DEFAULT_LOCALE, format);
+    formatter = new Intl.DateTimeFormat(getLocale(), format);
     dateModifiedFormaters.set(format, formatter);
   }
 

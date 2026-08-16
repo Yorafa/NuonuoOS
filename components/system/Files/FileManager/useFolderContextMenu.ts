@@ -15,10 +15,10 @@ import {
   type MenuItem,
 } from "contexts/menu/useMenuContextState";
 import { useProcesses } from "contexts/process";
+import { useLanguage } from "contexts/language";
 import { useSession } from "contexts/session";
 import { useProcessesRef } from "hooks/useProcessesRef";
 import { useWebGPUCheck } from "hooks/useWebGPUCheck";
-import { CLOSE_EFFECT_NAMES } from "utils/closeEffect";
 import {
   DESKTOP_PATH,
   FOLDER_ICON,
@@ -34,9 +34,7 @@ import {
   getExtension,
   isFileSystemMappingSupported,
   isFirefox,
-  isGlobalMusicVisualizationRunning,
   isSafari,
-  stopGlobalMusicVisualization,
   updateIconPositions,
 } from "utils/functions";
 import { getMountUrl, isMountedFolder } from "contexts/fileSystem/core";
@@ -81,9 +79,7 @@ const useFolderContextMenu = (
     updateFolder,
   } = useFileSystem();
   const {
-    closeEffect,
     iconPositions,
-    setCloseEffect,
     setForegroundId,
     setWallpaper: setSessionWallpaper,
     setIconPositions,
@@ -92,6 +88,7 @@ const useFolderContextMenu = (
     wallpaperImage,
   } = useSession();
   const { minimize, open } = useProcesses();
+  const { t } = useLanguage();
   const updateSorting = useCallback(
     (value: SortBy | "", defaultIsAscending: boolean): void => {
       setIconPositions((currentIconPositions) =>
@@ -287,7 +284,7 @@ const useFolderContextMenu = (
                   top,
                 });
               },
-              label: "Scroll Here",
+              label: t("contextMenu.scrollHere"),
             },
             MENU_SEPERATOR,
             {
@@ -297,7 +294,7 @@ const useFolderContextMenu = (
                   top: 0,
                 });
               },
-              label: "Top",
+              label: t("contextMenu.top"),
             },
             {
               action: () => {
@@ -306,7 +303,7 @@ const useFolderContextMenu = (
                   top: targetElement.scrollHeight,
                 });
               },
-              label: "Bottom",
+              label: t("contextMenu.bottom"),
             },
             MENU_SEPERATOR,
             {
@@ -316,7 +313,7 @@ const useFolderContextMenu = (
                   top: -targetElement.clientHeight,
                 });
               },
-              label: "Page Up",
+              label: t("contextMenu.pageUp"),
             },
             {
               action: () => {
@@ -325,7 +322,7 @@ const useFolderContextMenu = (
                   top: targetElement.clientHeight,
                 });
               },
-              label: "Page Down",
+              label: t("contextMenu.pageDown"),
             },
             MENU_SEPERATOR,
             {
@@ -335,7 +332,7 @@ const useFolderContextMenu = (
                   top: -SCROLL_ITERATION_HEIGHT,
                 });
               },
-              label: "Scroll Up",
+              label: t("contextMenu.scrollUp"),
             },
             {
               action: () => {
@@ -344,7 +341,7 @@ const useFolderContextMenu = (
                   top: SCROLL_ITERATION_HEIGHT,
                 });
               },
-              label: "Scroll Down",
+              label: t("contextMenu.scrollDown"),
             },
           ];
         }
@@ -354,7 +351,7 @@ const useFolderContextMenu = (
             addToFolder().then((files) =>
               updateDesktopIconPositions(files, event)
             ),
-          label: "Add file(s)",
+          label: t("contextMenu.addFiles"),
         };
         const MAP_DIRECTORY = {
           action: () =>
@@ -367,7 +364,7 @@ const useFolderContextMenu = (
               .catch(() => {
                 // Ignore failure to map
               }),
-          label: "Map directory",
+          label: t("contextMenu.mapDirectory"),
         };
         const FS_COMMANDS = [
           ADD_FILE,
@@ -385,26 +382,26 @@ const useFolderContextMenu = (
 
         return [
           {
-            label: "Sort by",
+            label: t("contextMenu.sortBy"),
             menu: [
               {
                 action: () => updateSorting("name", true),
-                label: "Name",
+                label: t("contextMenu.name"),
                 toggle: !hasCustomOrder && sortBy === "name",
               },
               {
                 action: () => updateSorting("size", false),
-                label: "Size",
+                label: t("contextMenu.size"),
                 toggle: !hasCustomOrder && sortBy === "size",
               },
               {
                 action: () => updateSorting("type", true),
-                label: "Item type",
+                label: t("contextMenu.itemType"),
                 toggle: !hasCustomOrder && sortBy === "type",
               },
               {
                 action: () => updateSorting("date", false),
-                label: "Date modified",
+                label: t("contextMenu.dateModified"),
                 toggle: !hasCustomOrder && sortBy === "date",
               },
               ...(hasCustomOrder
@@ -413,23 +410,23 @@ const useFolderContextMenu = (
                     MENU_SEPERATOR,
                     {
                       action: () => updateSorting("", true),
-                      label: "Ascending",
+                      label: t("contextMenu.ascending"),
                       toggle: isAscending,
                     },
                     {
                       action: () => updateSorting("", false),
-                      label: "Descending",
+                      label: t("contextMenu.descending"),
                       toggle: !isAscending,
                     },
                   ]),
             ],
           },
-          { action: () => updateFolder(url), label: "Refresh" },
+          { action: () => updateFolder(url), label: t("contextMenu.refresh") },
           ...(isDesktop
             ? [
                 MENU_SEPERATOR,
                 {
-                  label: "Background",
+                  label: t("contextMenu.background"),
                   menu: WALLPAPER_MENU.filter(
                     ({ requiresWebGPU }) => !requiresWebGPU || hasWebGPU
                   ).reduce<MenuItem[]>(
@@ -456,14 +453,6 @@ const useFolderContextMenu = (
                     []
                   ),
                 },
-                {
-                  label: "Window close effect",
-                  menu: CLOSE_EFFECT_NAMES.map((effectName) => ({
-                    action: () => setCloseEffect(effectName),
-                    label: effectName,
-                    toggle: closeEffect === effectName,
-                  })),
-                },
                 ...(canCapture
                   ? [
                       {
@@ -483,35 +472,35 @@ const useFolderContextMenu = (
                 ...FS_COMMANDS,
                 {
                   action: () => open("Terminal", { url }),
-                  label: "Open Terminal here",
+                  label: t("contextMenu.openTerminalHere"),
                 },
                 MENU_SEPERATOR,
                 {
                   action: () => pasteToFolder(event),
                   disabled: Object.keys(pasteList).length === 0,
-                  label: "Paste",
+                  label: t("contextMenu.paste"),
                 },
                 MENU_SEPERATOR,
                 {
-                  label: "New",
+                  label: t("contextMenu.new"),
                   menu: [
                     {
                       action: () => newEntry(NEW_FOLDER, undefined, event),
                       icon: FOLDER_ICON,
-                      label: "Folder",
+                      label: t("contextMenu.folder"),
                     },
                     MENU_SEPERATOR,
                     {
                       action: () =>
                         newEntry(NEW_RTF_DOCUMENT, Buffer.from(""), event),
                       icon: getIconByFileExtension(".whtml"),
-                      label: "Rich Text Document",
+                      label: t("contextMenu.richTextDocument"),
                     },
                     {
                       action: () =>
                         newEntry(NEW_TEXT_DOCUMENT, Buffer.from(""), event),
                       icon: getIconByFileExtension(".txt"),
-                      label: "Text Document",
+                      label: t("contextMenu.textDocument"),
                     },
                   ],
                 },
@@ -537,7 +526,7 @@ const useFolderContextMenu = (
                             open("Properties", { url });
                           }
                         },
-                        label: "Properties",
+                        label: t("contextMenu.properties"),
                       },
                     ]),
               ]),
@@ -558,7 +547,7 @@ const useFolderContextMenu = (
                     open("Vim", { url: INDEX_FILE });
                     updateRecentFiles(INDEX_FILE, "Vim");
                   },
-                  label: "View page source",
+                  label: t("contextMenu.viewPageSource"),
                 },
               ]
             : []),
@@ -568,8 +557,7 @@ const useFolderContextMenu = (
       addToFolder,
       canCapture,
       captureScreen,
-      closeEffect,
-      contextMenu,
+        contextMenu,
       exists,
       hasWebGPU,
       iconPositions,
@@ -584,8 +572,7 @@ const useFolderContextMenu = (
       pasteToFolder,
       processesRef,
       rootFs?.mntMap,
-      setCloseEffect,
-      setForegroundId,
+        setForegroundId,
       setSessionWallpaper,
       sortBy,
       updateDesktopIconPositions,

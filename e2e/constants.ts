@@ -68,25 +68,9 @@ export const EXCLUDED_CONSOLE_LOGS = (
       "Blocked autofocusing on a form control in a cross-origin subframe.",
       "Failed to load resource: the server responded with a status of 404 (Not Found)",
       'Error: "Content-Security-Policy:',
-      "an ancestor violates the following Content Security Policy directive",
-      // Messenger
-      "WebSocket connection to 'wss://public.relaying.io/' failed:"
+      "an ancestor violates the following Content Security Policy directive"
     );
-
-    if (browserName === "firefox") {
-      excludedConsoleLogs.push(
-        // Messenger
-        "Firefox can’t establish a connection to the server at wss://"
-      );
-    } else if (browserName === "webkit") {
-      excludedConsoleLogs.push(
-        // TIC-80
-        "Unable to initialize SDL Audio: -1, No audio context available",
-        "Unable to initialize SDL Game Controller: -1, Gamepads not supported",
-        // Quake 3
-        "WebGL: INVALID_ENUM: texParameter: invalid parameter name"
-      );
-    } else if (browserName === "chromium") {
+    if (browserName === "chromium") {
       excludedConsoleLogs.push(
         // Browser
         "Blocked autofocusing on a <textarea> element in a cross-origin subframe"
@@ -151,7 +135,6 @@ export const FILE_EXPLORER_ENTRIES_FOCUSED_SELECTOR = `${FILE_EXPLORER_SELECTOR}
 export const FILE_EXPLORER_ENTRIES_RENAMING_SELECTOR = `${FILE_EXPLORER_ENTRIES_SELECTOR}>button>figure>textarea`;
 export const TERMINAL_SELECTOR = `${WINDOW_SELECTOR}>${VIEWPORT_SELECTOR}>${APP_CONTAINER_SELECTOR}>.terminal`;
 export const TERMINAL_ROWS_SELECTOR = `${TERMINAL_SELECTOR}>.xterm-screen>.xterm-rows>div:not(:empty)`;
-export const SHEEP_SELECTOR = `${DESKTOP_SELECTOR}>div>img[src^=data]`;
 
 export const CALENDAR_LABEL = /^Calendar$/;
 export const CLOCK_LABEL = /^Clock$/;
@@ -184,7 +167,6 @@ export const WEBGL_OFFSCREEN_NOT_SUPPORTED_BROWSERS = new Set(
 export const MEDIA_RECORDER_HEADLESS_NOT_SUPPORTED_BROWSERS = new Set([
   "webkit",
 ]);
-export const PYODIDE_HEADLESS_NOT_SUPPORTED_BROWSERS = new Set(["firefox"]);
 export const WEBGPU_HEADLESS_NOT_SUPPORTED_BROWSERS = new Set([
   "firefox",
   "webkit",
@@ -218,10 +200,8 @@ export const DESKTOP_MENU_ITEMS: MenuItems = {
   Background: true,
   "Capture screen": (browserName: string): boolean =>
     !MEDIA_RECORDER_HEADLESS_NOT_SUPPORTED_BROWSERS.has(browserName),
-  Inspect: true,
   Properties: false,
   "View page source": true,
-  "Window close effect": true,
 };
 
 export const CLOCK_MENU_ITEMS = [/^Local time$/, /^Server time$/];
@@ -248,32 +228,14 @@ export const START_BUTTON_MENU_ITEMS = [
 
 export const START_MENU_APPS = [
   /^Browser$/,
-  /^DevTools$/,
-  /^IRC$/,
   /^Marked$/,
-  /^Messenger$/,
-  /^Monaco Editor$/,
-  /^Paint$/,
   /^PDF$/,
   /^Photo Viewer$/,
-  /^Stable Diffusion$/,
   /^Terminal$/,
-  /^TinyMCE$/,
   /^Video Player$/,
   /^Vim$/,
-  /^Webamp$/,
 ];
 
-export const START_MENU_FOLDERS = {
-  Emulators: [
-    /^BoxedWine$/,
-    /^EmulatorJS$/,
-    /^js-dos$/,
-    /^Ruffle$/,
-    /^Virtual x86$/,
-  ],
-  Games: [/^ClassiCube$/, /^DX-Ball$/, /^Quake III Arena$/, /^Space Cadet$/],
-};
 
 export const TEST_APP_CONTAINER_APP = "Marked";
 export const TEST_APP_CONTAINER_APP_TITLE = (file: string | null): string =>
@@ -296,7 +258,7 @@ export const TEST_ROOT_FILE_COPY = /^CREDITS \(1\).md$/;
 export const TEST_ROOT_FILE_2 = /^favicon.ico$/;
 export const TEST_ROOT_FILE_TEXT = "CREDITS.md";
 export const TEST_ROOT_FILE_DEFAULT_APP = "Marked";
-export const TEST_ROOT_FILE_ALT_APP = "Monaco Editor";
+export const TEST_ROOT_FILE_ALT_APP = "Vim";
 export const TEST_ROOT_FILE_TOOLTIP =
   /^Type: Markdown File\nSize: \d\.\d\d KB\nDate modified: \d{4}-\d{2}-\d{2} \d{1,2}:\d{2} (?:AM|PM)$/;
 
