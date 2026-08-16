@@ -106,7 +106,6 @@ export const FAVICON_SELECTOR = "head>link[rel=icon]";
 export const CONTEXT_MENU_SELECTOR = `${NEXT_JS_CONTAINER_SELECTOR}>nav`;
 export const CONTEXT_MENU_ENTRIES_SELECTOR = `${CONTEXT_MENU_SELECTOR}>ol>li`;
 export const DESKTOP_SELECTOR = `${NEXT_JS_CONTAINER_SELECTOR}>main`;
-export const BACKGROUND_CANVAS_SELECTOR = `${DESKTOP_SELECTOR}>canvas`;
 export const DESKTOP_ENTRIES_SELECTOR = `${DESKTOP_SELECTOR}>ol>li`;
 export const SELECTION_SELECTOR = `${DESKTOP_SELECTOR}>ol>span`;
 export const TASKBAR_SELECTOR = `${DESKTOP_SELECTOR}>nav:not([style])`;

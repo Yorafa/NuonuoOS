@@ -10,7 +10,6 @@ import {
 import {
   type IsShown,
   type MenuItems,
-  BACKGROUND_CANVAS_SELECTOR,
   CALENDAR_LABEL,
   CLOCK_LABEL,
   CLOCK_REGEX,
@@ -128,22 +127,6 @@ export const disableWallpaper = ({ page }: TestProps): Promise<void> =>
   page.addInitScript(() => {
     window.DEBUG_DISABLE_WALLPAPER = true;
   });
-
-// action
-export const mockPictureSlideshowRequest = async ({
-  page,
-}: TestProps): Promise<() => Promise<void>> => {
-  let requested = false;
-
-  await page.route("/Users/Public/Pictures/slideshow.json", (route) =>
-    route.fulfill({ body: JSON.stringify([UNKNOWN_ICON_PATH]) })
-  );
-  await page.route(UNKNOWN_ICON_PATH, () => {
-    requested = true;
-  });
-
-  return () => expect(() => expect(requested).toBeTruthy()).toPass();
-};
 
 // locator->action
 export const clickDesktop = async (
@@ -538,11 +521,6 @@ export const windowIsMaximized = async (
   ).toPass();
 
 // expect->locator
-export const canvasBackgroundIsHidden = async ({
-  page,
-}: TestProps): Promise<void> =>
-  expect(page.locator(BACKGROUND_CANVAS_SELECTOR)).toBeHidden();
-
 export const contextMenuIsHidden = async ({ page }: TestProps): Promise<void> =>
   expect(page.locator(CONTEXT_MENU_SELECTOR)).toBeHidden();
 
@@ -945,19 +923,6 @@ export const terminalHasRows = async ({ page }: TestProps): Promise<void> =>
 export const windowsAreVisible = async ({ page }: TestProps): Promise<void> =>
   entriesAreVisible(WINDOW_SELECTOR, page);
 
-// meta function
-export const backgroundCanvasMaybeIsVisible = async ({
-  browserName,
-  headless,
-  page,
-}: TestProps): Promise<void> => {
-  if (!headless || !browserName) {
-    await expect(async () =>
-      expect(page.locator(BACKGROUND_CANVAS_SELECTOR)).toBeVisible()
-    ).toPass();
-  }
-};
-
 export const clockCanvasMaybeIsVisible = async ({
   browserName,
   page,
@@ -1026,11 +991,3 @@ export const loadContainerTestApp = async ({
 }: TestProps): Promise<Response | null> =>
   loadApp({ app: TEST_APP_CONTAINER_APP })({ page });
 
-export const loadAppWithCanvas = async ({
-  headless,
-  browserName,
-  page,
-}: TestProps): Promise<void> => {
-  await loadApp()({ page });
-  await backgroundCanvasMaybeIsVisible({ browserName, headless, page });
-};

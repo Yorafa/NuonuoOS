@@ -108,16 +108,6 @@ const directory: Processes = {
     singleton: true,
     title: "Run",
   },
-  ScreenSaver: {
-    Component: dynamic(() => import("components/system/Dialogs/ScreenSaver")),
-    allowResizing: false,
-    dialogProcess: true,
-    hasWindow: false,
-    hideTaskbarEntry: true,
-    icon: "/System/Icons/screensaver.webp",
-    singleton: true,
-    title: "Screen Saver",
-  },
   Terminal: {
     Component: dynamic(() => import("components/apps/Terminal")),
     backgroundColor: "#000000",

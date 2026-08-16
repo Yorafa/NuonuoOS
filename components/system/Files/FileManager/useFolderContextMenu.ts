@@ -1,6 +1,5 @@
 import { basename, dirname, join } from "path";
 import { useCallback, useMemo } from "react";
-import { WALLPAPER_MENU } from "components/system/Desktop/Wallpapers/constants";
 import { getIconByFileExtension } from "components/system/Files/FileEntry/functions";
 import { type FolderActions } from "components/system/Files/FileManager/useFolder";
 import {
@@ -81,11 +80,9 @@ const useFolderContextMenu = (
   const {
     iconPositions,
     setForegroundId,
-    setWallpaper: setSessionWallpaper,
     setIconPositions,
     sortOrders,
     updateRecentFiles,
-    wallpaperImage,
   } = useSession();
   const { minimize, open } = useProcesses();
   const { t } = useLanguage();
@@ -425,34 +422,6 @@ const useFolderContextMenu = (
           ...(isDesktop
             ? [
                 MENU_SEPERATOR,
-                {
-                  label: t("contextMenu.background"),
-                  menu: WALLPAPER_MENU.filter(
-                    ({ requiresWebGPU }) => !requiresWebGPU || hasWebGPU
-                  ).reduce<MenuItem[]>(
-                    (menu, { hasAlt = true, id, name }) => [
-                      ...menu,
-                      {
-                        action: () => {
-                          setSessionWallpaper(
-                            `${id}${
-                              hasAlt &&
-                              wallpaperImage.startsWith(id) &&
-                              !wallpaperImage.endsWith(" ALT")
-                                ? " ALT"
-                                : ""
-                            }`
-                          );
-                        },
-                        label: name || id,
-                        toggle: hasAlt
-                          ? wallpaperImage.startsWith(id)
-                          : wallpaperImage === id,
-                      },
-                    ],
-                    []
-                  ),
-                },
                 ...(canCapture
                   ? [
                       {
@@ -573,15 +542,13 @@ const useFolderContextMenu = (
       processesRef,
       rootFs?.mntMap,
         setForegroundId,
-      setSessionWallpaper,
       sortBy,
       updateDesktopIconPositions,
       updateFolder,
       updateRecentFiles,
       updateSorting,
       url,
-      wallpaperImage,
-      writeFile,
+        writeFile,
     ]
   );
 };

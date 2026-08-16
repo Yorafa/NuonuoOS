@@ -18,10 +18,6 @@ const types = {
     process: ["VideoPlayer"],
     type: "Audio Playlist File",
   },
-  ChessGame: {
-    process: [...TEXT_EDITORS],
-    type: "Portable Game Notation File",
-  },
   DiscImage: {
     icon: "image",
     process: [],
@@ -63,10 +59,6 @@ const types = {
     process: ["PDF"],
     type: "PDF Document",
   },
-  ScreenSaver: {
-    process: ["ScreenSaver"],
-    type: "Screen Saver",
-  },
   SvgFile: {
     process: ["Photos", ...TEXT_EDITORS],
     type: "Scalable Vector Graphics File",
@@ -104,14 +96,12 @@ const extensions: Record<string, Extension> = {
   ".mp3": types.Music,
   ".otf": types.Font,
   ".pdf": types.PdfDocument,
-  ".pgn": types.ChessGame,
   ".pls": types.AudioPlaylist,
   ".svg": types.SvgFile,
   ".ttf": types.Font,
   ".wasm": types.WasmFile,
   ".woff": types.Font,
   ".wsz": types.WinampSkin,
-  ".xscr": types.ScreenSaver,
   ".zip": types.ZipFile,
 };
 

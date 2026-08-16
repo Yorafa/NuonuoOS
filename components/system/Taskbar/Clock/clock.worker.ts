@@ -1,4 +1,10 @@
-import { type OffscreenRenderProps } from "components/system/Desktop/Wallpapers/types";
+import { type Size } from "components/system/Window/RndWindow/useResizable";
+
+type OffscreenRenderProps = {
+  canvas: OffscreenCanvas;
+  clockSize?: Size;
+  devicePixelRatio: number;
+};
 import {
   type LocaleTimeDate,
   formatLocaleDateTime,

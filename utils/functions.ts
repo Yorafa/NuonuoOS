@@ -1,5 +1,5 @@
 import { basename, dirname, extname, join } from "path";
-import { type Position } from "eruda";
+type Position = { x: number; y: number };
 import type HtmlToImage from "html-to-image";
 import { type DragPosition } from "components/system/Files/FileManager/useDraggableEntries";
 import { type Size } from "components/system/Window/RndWindow/useResizable";

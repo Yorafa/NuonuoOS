@@ -13,9 +13,8 @@ const FileSystemConfig = (): FileSystemConfiguration => ({
           fs: "HTTPRequest",
           options: { index },
         },
-        // Writes stay in memory so a refresh restores the deployed filesystem
         writable: {
-          fs: "InMemory",
+          fs: "IndexedDB",
         },
       },
     },

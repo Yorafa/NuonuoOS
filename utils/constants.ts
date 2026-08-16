@@ -25,7 +25,7 @@ export const DEFAULT_CLOSE_EFFECT = "None";
 export const DEFAULT_THEME: ThemeName = "defaultTheme";
 
 // Dreamcore Retro Windows 98: empty default uses the classic teal desktop color.
-export const DEFAULT_WALLPAPER = "";
+export const DEFAULT_WALLPAPER = "/Users/Public/Pictures/lnn.jpg";
 
 export const DEFAULT_WALLPAPER_FIT: WallpaperFit = "fill";
 
@@ -61,12 +61,6 @@ export const PICTURES_FOLDER = `${HOME}/Pictures`;
 export const VIDEOS_FOLDER = `${HOME}/Videos`;
 
 export const INDEX_FILE = "/index.html";
-
-export const PROMPT_FILE = "prompts.json";
-
-export const SLIDESHOW_FILE = "slideshow.json";
-
-export const SLIDESHOW_TIMEOUT_IN_MILLISECONDS = 15000;
 
 export const ICON_GIF_SECONDS = 2;
 
@@ -127,14 +121,6 @@ export const IMAGE_FILE_EXTENSIONS = new Set([
   ".cur",
   ".jxl",
   ".qoi",
-]);
-
-export const UNSUPPORTED_SLIDESHOW_EXTENSIONS = new Set([
-  ...HEIF_IMAGE_FORMATS,
-  ...TIFF_IMAGE_FORMATS,
-  ".jxl",
-  ".qoi",
-  ".svg",
 ]);
 
 export const TEXT_EDITORS = ["Vim"];

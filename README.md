@@ -68,23 +68,9 @@
 - 日期悬浮提示
 - 日历弹窗
 
-### 壁纸与屏保
+### 壁纸
 
-- 动态动画壁纸([OffscreenCanvas](https://developer.mozilla.org/zh-CN/docs/Web/API/OffscreenCanvas)/[Web Worker](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Using_web_workers))
-  - [波浪](https://www.vantajs.com/?effect=waves)
-  - [Hexells](https://znah.net/hexells/)
-  - [Matrix](https://rezmason.github.io/matrix/)
-  - [海岸风景](https://www.shadertoy.com/view/fstyD4)
-- 通过图片/视频设置(填充、适应、拉伸、平铺、居中)
-- 图片幻灯片
-- [每日天文图片](https://api.nasa.gov/#apod)
-- [芝加哥艺术学院](https://api.artic.edu/docs/)
-- [Lorem Picsum](https://picsum.photos/)
-- 自定义屏保文件支持
-  - [3D 花箱](https://github.com/kevin-shannon/3D-FlowerBox)
-  - [3D 迷宫](https://github.com/ibid-11962/Windows-95-3D-Maze-Screensaver)
-  - [3D 管道](https://github.com/1j01/pipes)
-  - [Hackers](https://github.com/sindresorhus/hackers.scr)
+- 通过图片设置壁纸(填充、适应、拉伸、平铺、居中)
 
 ### URL
 
