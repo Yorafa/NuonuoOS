@@ -1,281 +1,175 @@
 ## 🌌 **daedalOS** 🌌
 
-## _Desktop environment in the browser_
+## _浏览器中的桌面环境_
 
-![Screenshot](https://raw.githubusercontent.com/DustinBrett/daedalOS/refs/heads/main/public/screenshot.png?raw=true)
+![截图](https://raw.githubusercontent.com/DustinBrett/daedalOS/refs/heads/main/public/screenshot.png?raw=true)
 
-### Feature Overview
+> 本项目 Fork 自 [DustinBrett/daedalOS](https://github.com/DustinBrett/daedalOS) 并在其基础上修改而成:移除了重型应用与 AI 功能,换装 Win98 风格银色任务栏、斜角开始按钮与深蓝标题栏的经典皮肤。感谢原作者 [Dustin Brett](https://github.com/DustinBrett) 的开源贡献。
 
-[![Feature Overview](https://img.youtube.com/vi/djCqHH0SCmA/mqdefault.jpg)](http://www.youtube.com/watch?v=djCqHH0SCmA)
+# 系统 🧠
 
-# System 🧠
+### [文件系统](https://github.com/jvilk/BrowserFS)
 
-### [File System](https://github.com/jvilk/BrowserFS)
+- 文件资源管理器
+  - 后退、前进、最近位置、上一级、地址栏、搜索
+  - 缩略图与详细信息视图
+- [拖放](https://developer.mozilla.org/zh-CN/docs/Web/API/HTML_Drag_and_Drop_API)文件支持(内部与外部)
+  - 加载进度对话框
+- ZIP([写入支持](https://www.npmjs.com/package/fflate)),[ZIP](https://github.com/jvilk/BrowserFS/blob/master/src/backends/ZipFS.ts)/[ISO](https://github.com/jvilk/BrowserFS/blob/master/src/backends/IsoFS.ts) 读取支持,[7Z/GZ/RAR/TAR 等解压](https://github.com/use-strict/7z-wasm)支持
+- 写入 [IndexedDb](https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API)
+- 框选/批量操作,拖拽排序与整理
+- 音乐、图片、视频的动态自动缓存图标
+- 右键菜单
+  - 剪切、复制、创建快捷方式、删除、重命名
+  - [添加文件](https://developer.mozilla.org/zh-CN/docs/Web/API/File/Using_files_from_web_applications)、[映射目录](https://developer.mozilla.org/zh-CN/docs/Web/API/File_System_Access_API)
+  - 打开方式选项/对话框、打开文件/文件夹位置、在新窗口打开、在此处打开终端
+  - 下载、添加到压缩包、解压到此处、设为壁纸、转换音频/视频/图片/电子表格、属性(含详细信息)
+  - 排序方式、新建文件夹、新建文本文档
+  - 屏幕捕获
+- 键盘快捷键
+  - CTRL+C、CTRL+V、CTRL+X、CTRL+A、Delete
+  - F2、F5、Backspace、方向键、Enter
+  - SHIFT+CTRL+R、SHIFT+F10
+  - 全屏时:Windows 键、Windows 键 + R
+- 文件信息悬浮提示
+- 支持按名称、大小、类型或日期排序
+  - 图标位置/排序顺序持久化
 
-- File Explorer
-  - Back, Forward, Recent locations, Up one level, Address bar, Search
-  - Thumbnail & Details Views
-- [Drag & Drop](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API) File Support (internal & external)
-  - Loading progress dialog
-- ZIP ([write support](https://www.npmjs.com/package/fflate)), [ZIP](https://github.com/jvilk/BrowserFS/blob/master/src/backends/ZipFS.ts)/[ISO](https://github.com/jvilk/BrowserFS/blob/master/src/backends/IsoFS.ts) read support, [7Z/GZ/RAR/TAR/etc. extract](https://github.com/use-strict/7z-wasm) support
-- Writes to [IndexedDb](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)
-- Group selection/manipulation & drag to sort/arrange
-- Dynamic and auto cached icons for [music](https://github.com/Borewit/music-metadata-browser), images, video & emulator states
-- Context Menus
-  - Cut, Copy, Create shortcut, Delete, Rename
-  - [Add file(s)](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications), [Map directory](https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API)
-  - Open with options/dialog, Open file/folder location, Open in new window, Open Terminal here
-  - Download, Add to archive, Extract here, Set as wallpaper, Set as mouse pointer, Convert audio/video/photo/spreadsheets, Properties (w/Details)
-  - Sort by, New Folder, New Text Document
-  - Screen Capture
-- Keyboard Shortcuts
-  - CTRL+C, CTRL+V, CTRL+X, CTRL+A, Delete
-  - F2, F5, Backspace, Arrows, Enter
-  - SHIFT+CTRL+R, SHIFT+F10, SHIFT+F12
-  - In Fullscreen: Windows Key, Windows Key + R
-- File information tooltips
-- Allow sorting by name, size, type or date
-  - Persists icon position/sort order
+### 窗口
 
-### Windows
+- [可调整大小与拖动](https://github.com/bokuweb/react-rnd)
+- 最小化、最大化与关闭
+- 尺寸/位置/最大化状态持久化
+- 打开与关闭[动画](https://www.framer.com/motion/)
 
-- [Resizable and Draggable](https://github.com/bokuweb/react-rnd)
-- Minimize, Maximize & Close
-- Persists size/position/maximized states
-- [Animates](https://www.framer.com/motion/) opening and closing
+### 开始菜单
 
-### Start Menu
+- 可展开侧边栏
+  - 应用列表、文档/图片/视频快捷方式、电源(清除会话)
+- 聚光灯视觉效果
+- 文件夹支持
+- 键盘快捷键 **_SHIFT+ESC_** 打开
+  - 全屏时也可用 Windows 键
 
-- Expandable Sidebar
-  - Apps list, Documents/Pictures/Videos shortcuts, Power (clears session)
-- Spotlight visual effect
-- Folder support
-- Keyboard shortcut opens with **_SHIFT+ESC_**
-  - Or Windows Key when in fullscreen
+### 任务栏
 
-### Taskbar
+- 悬停 [预览](https://github.com/bubkoo/html-to-image)窗口内容
+- 当前焦点窗口指示
+- 搜索菜单(含最近文件)
 
-- [Peek](https://github.com/bubkoo/html-to-image) hover preview of windows
-- Focused window indicator
-- Search menu (w/Recent files)
-- AI Chat Agent ([Prompt API](https://docs.google.com/document/d/1VG8HIyz361zGduWgNG7R_R8Xkv0OOJ8b5C9QKeCjU0c/edit) & [WebLLM](https://github.com/mlc-ai/web-llm)) (w/Summarize & Image Generation)
+### 时钟
 
-### Clock
+- 在 [Web Worker](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Using_web_workers) 中运行
+  - 绘制在 [OffscreenCanvas](https://developer.mozilla.org/zh-CN/docs/Web/API/OffscreenCanvas) 上
+- NTP 服务器时间模式([ntp.js](http://www.ntpjs.org/))
+- 加载时与系统时钟同步
+- 日期悬浮提示
+- 日历弹窗
 
-- Runs in a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
-  - Drawn in an [OffscreenCanvas](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas)
-- NTP server time mode ([ntp.js](http://www.ntpjs.org/))
-- Synced to system clock on load
-- Date tooltip
-- Calendar popup
+### 壁纸与屏保
 
-### Background & Screensaver
-
-- Dynamic animated wallpapers ([OffscreenCanvas](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas)/[Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers))
-  - [Waves](https://www.vantajs.com/?effect=waves)
+- 动态动画壁纸([OffscreenCanvas](https://developer.mozilla.org/zh-CN/docs/Web/API/OffscreenCanvas)/[Web Worker](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Using_web_workers))
+  - [波浪](https://www.vantajs.com/?effect=waves)
   - [Hexells](https://znah.net/hexells/)
   - [Matrix](https://rezmason.github.io/matrix/)
-  - [Coastal Landscape](https://www.shadertoy.com/view/fstyD4)
-- Set via image/video (Fill, Fit, Stretch, Tile, Center)
-- Picture Slideshow
-- [Astronomy Picture of the Day](https://api.nasa.gov/#apod)
-- [Art Institute of Chicago](https://api.artic.edu/docs/)
-- [Metropolitan Museum of Art](https://metmuseum.github.io/)
+  - [海岸风景](https://www.shadertoy.com/view/fstyD4)
+- 通过图片/视频设置(填充、适应、拉伸、平铺、居中)
+- 图片幻灯片
+- [每日天文图片](https://api.nasa.gov/#apod)
+- [芝加哥艺术学院](https://api.artic.edu/docs/)
 - [Lorem Picsum](https://picsum.photos/)
-- AI Generated Wallpapers [Stable Diffusion](https://stability.ai/stable-diffusion)
-- Custom screen saver file support
-  - [3D FlowerBox](https://github.com/kevin-shannon/3D-FlowerBox)
-  - [3D Maze](https://github.com/ibid-11962/Windows-95-3D-Maze-Screensaver)
-  - [Pipes](https://github.com/1j01/pipes)
-
-### Run Dialog
-
-- Launch apps by alias or paths
-- Opens `ipfs:` & `nostr:` URIs
+- 自定义屏保文件支持
+  - [3D 花箱](https://github.com/kevin-shannon/3D-FlowerBox)
+  - [3D 迷宫](https://github.com/ibid-11962/Windows-95-3D-Maze-Screensaver)
+  - [3D 管道](https://github.com/1j01/pipes)
+  - [Hackers](https://github.com/sindresorhus/hackers.scr)
 
 ### URL
 
-- Query parameter loading
-  - Examples:
+- 查询参数加载
+  - 示例:
     - `/?url=/CREDITS.md`
     - `/?app=Browser`
 
-# Apps 🧪
+# 应用 🧪
 
-### [BoxedWine](http://www.boxedwine.org/) (**_.exe, .zip_**)
+### Browser(**_.htm, .html_**)
 
-- Runs 16/32-bit Windows applications
+- 加载网站(_支持 CORS_)
+- 书签栏
+- 网站图标支持
+- 后退/前进与重新加载
+- 通过地址栏进行 Google 搜索
+- IPFS 协议支持
+- [chrome://dino](https://github.com/wayou/t-rex-runner) 恐龙小游戏
 
-### Browser (**_.htm, .html_**)
+### [Marked](https://marked.js.org/)(**_.md_**)
 
-- Loads websites (_w/CORS support_)
-- Bookmark bar with favicon support
-- Proxy support (Wayback Machine & The Old Net)
-- Back/Forward & Reload
-- Google search via Address bar
-- IPFS protocol support
-- [chrome://dino](https://github.com/wayou/t-rex-runner) game
+- Markdown 查看器
 
-### [DevTools](https://eruda.liriliri.io/)
+### [OpenType](https://github.com/opentypejs/opentype.js)(**_.otf, .ttf, .woff_**)
 
-- Console, Elements, Network, Resources, Sources, DOM
-- Activate from Start Menu or **_SHIFT+F12_**
+- 字体预览与字形查看
 
-### [EmulatorJS](https://github.com/ethanaobrien/emulatorjs) (**_.32x, .a26, .a52, .a78, .gb, .gba, .gbc, .gen, .gg, .j64, .jag, .lnx, .n64, .nds, .nes, .ngc, .ngp, .pce, .sfc, .smc, .smd, .sms, .v64, .vb, .vboy, .ws, .wsc, .z64_**)
+### [PDF](https://mozilla.github.io/pdf.js/)(**_.pdf_**)
 
-- Plays console game roms
-
-### [IRC](https://kiwiirc.com/)
-
-- Internet Relay Chat Client
-- Connects over WebSockets
-
-### [js-dos](https://js-dos.com/) (**_.exe, .jsdos, .zip_**)
-
-- DOS emulator
-- Automatic save states on close
-  - /Users/Public/Snapshots
-- Automatic window resize
-
-### [Marked](https://marked.js.org/) (**_.md_**)
-
-- Markdown Viewer
-
-### Messenger
-
-- Encrypted direct messaging client
-- Utilizes [Nostr Protocol](https://nostr.com/) ([NIP-04](https://github.com/nostr-protocol/nips/blob/master/04.md))
-- Automatic public/private key creation
-
-### [Monaco Editor](https://microsoft.github.io/monaco-editor/)
-
-- Code/text editor
-- Supports all file types
-- Save files via **_CTRL+S_**
-- Line count, cursor position, language id
-- [Prettier](https://prettier.io/) formatting
-  - json, js/ts, css/sass/less, html, markdown
-
-### [OpenType](https://github.com/opentypejs/opentype.js) (**_.otf, .ttf, .woff_**)
-
-- Font viewer
-
-### [Paint](https://github.com/1j01/jspaint) (**_.bmp, .gif, .ico, .jpg, .png, .tiff, .webp,_**)
-
-- Create & edit images
-
-### [PDF](https://mozilla.github.io/pdf.js/) (**_.pdf_**)
-
-- Render/Print PDF's
-- Page current/count & Zoom
+- 渲染/打印 PDF
+- 当前页码/总页数与缩放
 
 ### Photos
 
-- [Supported Formats](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#supported_image_formats)
-  - [HEIF](https://github.com/catdad-experiments/libheif-js) (**_.heic, .heif_**)
-  - [JPEG XL](https://github.com/niutech/jxl.js) (**_.jxl_**)
-  - [QOI](https://gist.github.com/nicolaslegland/f0577cb49b1e56b729a2c0fc0aa151ba) (**_.qoi_**)
-  - [TIFF](https://github.com/photopea/UTIF.js) (**_.tif, .tiff_**)
-- Fullscreen & [Zoom](https://github.com/anvaka/panzoom)
+- [支持的格式](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/img#supported_image_formats)
+  - [HEIF](https://github.com/catdad-experiments/libheif-js)(**_.heic, .heif_**)
+  - [JPEG XL](https://github.com/niutech/jxl.js)(**_.jxl_**)
+  - [QOI](https://gist.github.com/nicolaslegland/f0577cb49b1e56b729a2c0fc0aa151ba)(**_.qoi_**)
+  - [TIFF](https://github.com/photopea/UTIF.js)(**_.tif, .tiff_**)
+- 全屏与[缩放](https://github.com/anvaka/panzoom)
 
-### [Ruffle](https://ruffle.rs/) (**_.swf, .spl_**)
+### Terminal([Xterm.js](https://xtermjs.org/))
 
-- Flash Player emulator
-
-### [Stable Diffusion](https://stability.ai/stable-diffusion)
-
-- Creates 512x512 images using artificial intelligence
-- Runs locally using [WebSD](https://mlc.ai/web-stable-diffusion/)
-
-### [Terminal](https://xtermjs.org/)
-
-- File system support
-- Autocomplete & history
-- Pipe commands together
-- Command list via `help`
-- [Git support](https://isomorphic-git.org/) (checkout & clone)
-- [Python support](https://pyodide.org/) (**_.py_**)
-- [WebAssembly Package Manager](https://wapm.io/)
-  - Ex: `wapm cowsay moo` ([\#](https://wapm.io/package/cowsay))
-- [Weather information](https://wttr.in/)
-- [eSheep](https://adrianotiger.github.io/web-esheep/)
-- Activate from Start Menu or **_SHIFT+F10_**
+- 文件系统支持
+- 自动补全与历史记录
+- 管道命令
+- 通过 `help` 查看命令列表
+- [Git 支持](https://isomorphic-git.org/)(checkout 与 clone)
+- JavaScript 运行([QuickJS](https://github.com/justjake/quickjs-emscripten))
+- [WebAssembly 包管理器](https://wapm.io/)
+  - 示例:`wapm cowsay moo`([#](https://wapm.io/package/cowsay))
+- [天气信息](https://wttr.in/)
+- FFmpeg / ImageMagick / mediainfo / SheetJS 格式转换命令
+- 从开始菜单或 **_SHIFT+F10_** 启动
 - Neofetch
-- [FFmpeg](https://github.com/ffmpegwasm/ffmpeg.wasm) & [ImageMagick](https://github.com/KnicKnic/WASM-ImageMagick) conversion
-
-### [TIC-80](https://tic80.com/) (**_.tic_**)
-
-- Runs "fantasy computer" games
-
-### [TinyMCE](https://www.tiny.cloud/tinymce/) (**_.rtf, .whtml_**)
-
-- Read & WYSIWYG modes
-- File save support
-
-### [Virtual x86](https://copy.sh/v86/) (**_.img, .iso_**)
-
-- x86 emulator
-- Automatic save states on close
-  - /Users/Public/Snapshots
-- Automatic window resize
 
 ### [Video Player](https://videojs.com/)
 
-- [Supported Formats](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Video_codecs) ([codecbox.js](https://github.com/duanyao/codecbox.js))
-- Plays [YouTube](https://github.com/videojs/videojs-youtube) videos/shortcuts
-- Keyboard Shortcuts (Volume, Seek, Scale, Fullscreen)
+- [支持的格式](https://developer.mozilla.org/zh-CN/docs/Web/Media/Formats/Video_codecs)
+- 播放 [YouTube](https://github.com/videojs/videojs-youtube) 视频/快捷方式
+- 键盘快捷键(音量、快进、缩放、全屏)
+- 音频与播放列表文件(**_.mp3, .m3u, .asx, .pls_**)
 
 ### [Vim](https://github.com/coolwanglu/vim.js)
 
-- Code/text editor
-- Supports all file types
+- 代码/文本编辑器
+- 支持所有文件类型
 
-### [Webamp](https://webamp.org/) (**_.mp3, .wsz_**)
+# 试一试 🚀
 
-- Winamp audio player
-- [Skin support](https://skins.webamp.org/) (w/random skins via [Winamp Skin Museum](https://skins.webamp.org/))
-- Playlist & streaming support
-- Visualization support (["Milkdrop"](https://github.com/jberg/butterchurn))
+##### 环境要求
 
-# Games 🎮
+- [Node.js](https://nodejs.org/zh-cn/download)
+- [Yarn](https://yarnpkg.com/)
 
-### [Chess](https://github.com/jhlywa/chess.js) (**_.pgn_**)
-
-- Play against [stockfish.js](https://github.com/nmrugg/stockfish.js), a friend, or watch CPU vs CPU
-- Load PGN games w/move navigation
-
-### [ClassiCube](https://www.classicube.net/)
-
-- Minecraft Classic compatible client
-
-### [DX-Ball](https://habr.com/en/post/147339/)
-
-- Block breaker arcade game like Arkanoid
-
-### [Space Cadet Pinball](https://github.com/alula/SpaceCadetPinball)
-
-- Reverse engineering of 3D Pinball from Windows
-
-### [Quake III Arena](https://github.com/lrusso/Quake3)
-
-- Port of the classic first-person shooter
-
-# Try It 🚀
-
-##### Requirements
-
-- [Node.js](https://nodejs.org/en/download/)
-- [Yarn](https://yarnpkg.com/en/)
-
-##### Development
+##### 开发
 
 ```
 yarn install
 yarn build:prebuild
-yarn dev
+yarn dev --webpack
 ```
 
-##### Production
+> 注意:Next.js 16 默认使用 Turbopack,而本项目包含自定义 webpack 配置,开发时需要加 `--webpack` 参数。
+
+##### 生产构建
 
 ```
 yarn install
@@ -290,6 +184,10 @@ docker build -t daedalos .
 docker run -dp 3000:3000 --rm --name daedalos daedalos
 ```
 
-##### Notes
+# 致谢
 
-- If during `yarn install` you receive the error `digital envelope routines::unsupported`, you need to set `NODE_OPTIONS` to `--openssl-legacy-provider` ([1](https://github.com/DustinBrett/daedalOS/blob/main/Dockerfile#L3), [2](https://github.com/DustinBrett/daedalOS/blob/main/.github/workflows/main.yml#L17), [3](https://stackoverflow.com/a/69699772/5895982))
+参见 [CREDITS.md](public/CREDITS.md)。
+
+##### 备注
+
+- 如果在 `yarn install` 期间收到 `digital envelope routines::unsupported` 错误,需要将 `NODE_OPTIONS` 设置为 `--openssl-legacy-provider`([1](https://github.com/DustinBrett/daedalOS/blob/main/Dockerfile#L3),[2](https://github.com/DustinBrett/daedalOS/blob/main/.github/workflows/main.yml#L17),[3](https://stackoverflow.com/a/69699772/5895982))

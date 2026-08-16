@@ -1,21 +1,23 @@
-# Credits
+# 致谢
 
-This project is greatly augmented by code from the open source community. Thank you to all the developers who have contributed to these projects!
+本项目 Fork 自 [DustinBrett/daedalOS](https://github.com/DustinBrett/daedalOS) 并在其基础上修改而成。
 
-## Frameworks
+本项目得益于开源社区的诸多代码。感谢所有为这些项目做出贡献的开发者!
+
+## 框架
 
 - [Next.js](https://github.com/vercel/next.js)
 - [TypeScript](https://github.com/microsoft/TypeScript)
 - [React](https://github.com/facebook/react)
 - [styled-components](https://github.com/styled-components/styled-components)
 
-## Core Libraries
+## 核心库
 
 - [BrowserFS](https://github.com/jvilk/BrowserFS)
 - [Framer Motion](https://github.com/framer/motion)
 - [react-rnd](https://github.com/bokuweb/react-rnd)
 
-## Tools
+## 工具
 
 - [Jest](https://github.com/facebook/jest)
 - [Playwright](https://github.com/microsoft/playwright)
@@ -24,13 +26,12 @@ This project is greatly augmented by code from the open source community. Thank 
 - [Prettier](https://github.com/prettier/prettier)
 - [Husky](https://github.com/typicode/husky)
 
-## System Libraries
+## 系统库
 
 - [3D FlowerBox](https://github.com/kevin-shannon/3D-FlowerBox)
 - [3D Maze](https://github.com/ibid-11962/Windows-95-3D-Maze-Screensaver)
 - [7z-wasm](https://github.com/use-strict/7z-wasm)
 - [ani-cursor](https://github.com/captbaritone/webamp/tree/master/packages/ani-cursor)
-- [Burn-My-Windows](https://github.com/Schneegans/Burn-My-Windows)
 - [Coastal Landscape](https://www.shadertoy.com/view/fstyD4)
 - [codecbox.js](https://github.com/duanyao/codecbox.js)
 - [decode-ico](https://github.com/LinusU/decode-ico)
@@ -64,58 +65,32 @@ This project is greatly augmented by code from the open source community. Thank 
 - [UTIF.js](https://github.com/photopea/UTIF.js)
 - [Vanta.js](https://github.com/tengbao/vanta)
 - [Wasmer](https://github.com/wasmerio/wasmer)
-- [Web Stable Diffusion](https://github.com/mlc-ai/web-stable-diffusion)
-- [WebLLM](https://github.com/mlc-ai/web-llm)
 
-## App Libraries
+## 应用库
 
-- [Boxedwine](https://github.com/danoon2/Boxedwine)
-- [chess.js](https://github.com/jhlywa/chess.js)
-- [chessboard2](https://chessboardjs.com/v2/)
-- [ClassiCube](https://github.com/UnknownShadow200/ClassiCube)
-- [DX-Ball](https://habr.com/en/post/147339/)
-- [emulatorjs](https://github.com/ethanaobrien/emulatorjs)
 - [Eruda](https://github.com/liriliri/eruda)
-- [js-dos](https://github.com/caiiiycuk/js-dos)
-- [jspaint](https://github.com/1j01/jspaint)
-- [Kiwi IRC](https://github.com/kiwiirc/kiwiirc)
 - [Marked](https://github.com/markedjs/marked)
   - [DOMPurify](https://github.com/cure53/DOMPurify)
-- [Monaco Editor](https://github.com/microsoft/monaco-editor)
 - [nostr-tools](https://github.com/nbd-wtf/nostr-tools)
 - [opentype.js](https://github.com/opentypejs/opentype.js)
 - [PDF.js](https://github.com/mozilla/pdf.js)
 - [Print.js](https://github.com/crabbly/print.js)
-- [Pyodide](https://github.com/pyodide/pyodide)
-- [Quake 3](https://github.com/lrusso/Quake3)
 - [quickjs-emscripten](https://github.com/justjake/quickjs-emscripten)
-- [Ruffle](https://github.com/ruffle-rs/ruffle)
-- [Space Cadet Pinball](https://github.com/alula/SpaceCadetPinball)
-- [stockfish.js](https://github.com/nmrugg/stockfish.js)
 - [t-rex-runner](https://github.com/wayou/t-rex-runner)
-- [TIC-80](https://tic80.com/)
-- [TinyMCE](https://github.com/tinymce/tinymce)
 - [Video.js](https://github.com/videojs/video.js)
 - [Vim.js](https://github.com/coolwanglu/vim.js)
-- [Virtual x86](https://github.com/copy/v86)
-- [Web eSheep](https://github.com/Adrianotiger/web-esheep)
-- [Webamp](https://github.com/captbaritone/webamp)
-  - [Butterchurn](https://github.com/jberg/butterchurn)
 - [Xterm.js](https://github.com/xtermjs/xterm.js)
 
-## Services
+## 服务
 
 - [ntp.js](http://www.ntpjs.org/)
 - [allOrigins](https://allorigins.win/)
-- [Art Institute of Chicago](https://www.artic.edu/open-access/public-api)
 - [Astronomy Picture of the Day](https://apod.nasa.gov/apod/)
 - [Cloudflare DoH](https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/)
 - [Google DoH](https://developers.google.com/speed/public-dns/docs/doh)
 - [isomorphic-git Cors Proxy](https://github.com/isomorphic-git/cors-proxy)
 - [IPFS Public Gateways](https://ipfs.github.io/public-gateway-checker/)
-- [MMoA](https://metmuseum.github.io/)
 - [The Old Net](https://theoldnet.com/)
 - [Wayback Machine](https://web.archive.org/)
 - [Wasmer Registry](https://docs.wasmer.io/registry)
-- [Winamp Skin Museum](https://skins.webamp.org/)
 - [Weather Report](https://github.com/chubin/wttr.in)
