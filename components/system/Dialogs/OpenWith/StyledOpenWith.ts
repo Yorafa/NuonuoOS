@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 const StyledOpenWith = styled.div`
+  /* Classic Win98 dialog: grey background. */
+  background-color: rgb(192, 192, 192);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -26,13 +28,19 @@ const StyledOpenWith = styled.div`
   }
 
   nav {
-    background-color: #fff;
+    background-color: rgb(192, 192, 192);
     height: 80px;
     width: 100%;
 
     button {
-      background-color: rgb(204 204 204);
-      color: #000;
+      /* Classic Win98 raised bevel button. */
+      background-color: rgb(192, 192, 192);
+      border-top: 1px solid rgb(255, 255, 255);
+      border-left: 1px solid rgb(255, 255, 255);
+      border-right: 1px solid rgb(0, 0, 0);
+      border-bottom: 1px solid rgb(0, 0, 0);
+      box-shadow: inset -1px -1px 0 rgb(128, 128, 128), inset 1px 1px 0 rgb(223, 223, 223);
+      color: rgb(0, 0, 0);
       font-size: 15px;
       font-weight: 600;
       height: 32px;
@@ -42,12 +50,16 @@ const StyledOpenWith = styled.div`
       width: 200px;
 
       &:hover {
-        background-color: rgb(216 216 216);
+        background-color: rgb(208, 208, 208);
       }
 
       &:active {
-        background-color: #000;
-        color: #fff;
+        background-color: rgb(192, 192, 192);
+        border-top: 1px solid rgb(0, 0, 0);
+        border-left: 1px solid rgb(0, 0, 0);
+        border-right: 1px solid rgb(255, 255, 255);
+        border-bottom: 1px solid rgb(255, 255, 255);
+        box-shadow: inset 1px 1px 0 rgb(128, 128, 128);
       }
     }
   }

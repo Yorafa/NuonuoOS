@@ -17,6 +17,11 @@ const StyledClock = styled.div<StyledClockProps>`
     `calc(${$width}px + ${theme.sizes.clock.padding * 2}px)`};
   min-width: ${({ theme, $width }) =>
     `calc(${$width}px + ${theme.sizes.clock.padding * 2}px)`};
+  /* Classic Win98 system tray clock: inset bevel. */
+  border-top: 1px solid rgb(128, 128, 128);
+  border-left: 1px solid rgb(128, 128, 128);
+  border-right: 1px solid rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(255, 255, 255);
   padding: ${({ theme }) => `0 ${theme.sizes.clock.padding}px`};
   place-content: center;
   position: absolute;

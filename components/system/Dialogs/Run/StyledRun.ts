@@ -2,8 +2,8 @@ import styled from "styled-components";
 import StyledButton from "components/system/Dialogs/StyledButton";
 
 const StyledRun = styled.div`
-  background-color: #fff;
-  border: 1px solid rgb(240 240 240);
+  /* Classic Win98 dialog: grey background with raised bevel. */
+  background-color: rgb(192, 192, 192);
   font-size: 12px;
 
   figure {
@@ -38,7 +38,12 @@ const StyledRun = styled.div`
 
       input,
       select {
-        border: 1px solid rgb(122 122 122);
+        /* Classic Win98 sunken/inset input field. */
+        border-top: 1px solid rgb(128, 128, 128);
+        border-left: 1px solid rgb(128, 128, 128);
+        border-right: 1px solid rgb(255, 255, 255);
+        border-bottom: 1px solid rgb(255, 255, 255);
+        background-color: rgb(255, 255, 255);
         border-radius: 0;
         font-family: ${({ theme }) => theme.formats.systemFont};
         font-size: 12px;
@@ -51,13 +56,12 @@ const StyledRun = styled.div`
       }
 
       select {
-        background-color: #fff;
+        background-color: rgb(255, 255, 255);
         clip-path: inset(0 0 0 calc(100% - 19px));
         position: absolute;
         width: calc(100% - 21px);
 
         &:disabled {
-          border: 1px solid rgb(122 122 122);
           opacity: 100%;
         }
       }
@@ -65,21 +69,12 @@ const StyledRun = styled.div`
       input {
         border-right: 0;
         margin-right: 32px;
-
-        &:focus {
-          border: 1px solid rgb(0 120 215);
-          border-right: 0;
-
-          + select {
-            border-color: rgb(0 120 215);
-          }
-        }
       }
     }
   }
 
   nav {
-    background-color: rgb(240 240 240);
+    background-color: rgb(192, 192, 192);
     display: flex;
     flex-direction: row;
     height: 100%;

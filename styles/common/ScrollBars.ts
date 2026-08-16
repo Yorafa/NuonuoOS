@@ -23,12 +23,12 @@ const colorScheme: Record<ColorSchemes, ColorScheme> = {
     track: "rgb(23, 23, 23)",
   },
   light: {
-    active: "rgb(96, 96, 96)",
-    blendMode: "color-dodge",
-    buttonHover: "rgb(218, 218, 218)",
-    thumb: "rgb(205, 205, 205)",
-    thumbHover: "rgb(166, 166, 166)",
-    track: "rgb(240, 240, 240)",
+    active: "rgb(64, 64, 64)",
+    blendMode: "color-burn",
+    buttonHover: "rgb(208, 208, 208)",
+    thumb: "rgb(192, 192, 192)",
+    thumbHover: "rgb(160, 160, 160)",
+    track: "rgb(224, 224, 224)",
   },
 };
 

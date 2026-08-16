@@ -55,25 +55,36 @@ const StyledFileEntry = styled.li<StyledFileEntryProps>`
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.fileEntry.background};
+    background-color: ${({ $desktop, theme }) =>
+      $desktop ? theme.colors.fileEntry.background : "rgb(0, 0, 128)"};
     outline: ${({ $desktop, theme }) =>
       $desktop ? `1px solid ${theme.colors.fileEntry.border}` : undefined};
+
+    figcaption {
+      color: ${({ $desktop }) => ($desktop ? undefined : "rgb(255, 255, 255)")};
+    }
   }
 
   &.focus-within {
-    background-color: ${({ theme }) =>
-      theme.colors.fileEntry.backgroundFocused};
+    background-color: ${({ $desktop, theme }) =>
+      $desktop ? theme.colors.fileEntry.backgroundFocused : "rgb(0, 0, 128)"};
     outline: ${({ $desktop, theme }) =>
       $desktop
         ? `1px solid ${theme.colors.fileEntry.borderFocused}`
         : undefined};
     z-index: 1;
 
+    figcaption {
+      color: ${({ $desktop }) => ($desktop ? undefined : "rgb(255, 255, 255)")};
+    }
+
     &:hover {
-      background-color: ${({ theme, $selecting }) =>
+      background-color: ${({ theme, $selecting, $desktop }) =>
         $selecting
           ? theme.colors.fileEntry.backgroundFocused
-          : theme.colors.fileEntry.backgroundFocusedHover};
+          : $desktop
+            ? theme.colors.fileEntry.backgroundFocusedHover
+            : "rgb(0, 0, 128)"};
       outline: ${({ $desktop, theme }) =>
         $desktop
           ? `1px solid ${theme.colors.fileEntry.borderFocusedHover}`

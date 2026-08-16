@@ -6,7 +6,8 @@ const StyledTerminal = styled.div`
   width: 100%;
 
   .terminal {
-    backdrop-filter: blur(8px);
+    /* Classic retro terminal: solid black background. */
+    background-color: rgb(0, 0, 0) !important;
     height: 100% !important;
   }
 

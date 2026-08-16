@@ -3,11 +3,16 @@ import styled from "styled-components";
 import { TASKBAR_HEIGHT } from "utils/constants";
 
 const StyledCalendar = styled(motion.section)`
-  backdrop-filter: ${({ theme }) => `blur(${theme.sizes.taskbar.panelBlur})`};
-  background-color: ${({ theme }) => theme.colors.taskbar.panel};
-  border: ${({ theme }) => `1px solid ${theme.colors.taskbar.peekBorder}`};
-  border-bottom: 0;
-  border-right: 0;
+  /* Classic Win98 raised bevel panel. */
+  background-color: rgb(192, 192, 192);
+  border-top: 1px solid rgb(255, 255, 255);
+  border-left: 1px solid rgb(255, 255, 255);
+  border-right: 1px solid rgb(0, 0, 0);
+  border-bottom: 1px solid rgb(0, 0, 0);
+  box-shadow:
+    inset -1px -1px 0 rgb(128, 128, 128),
+    inset 1px 1px 0 rgb(223, 223, 223),
+    2px 2px 6px rgba(0, 0, 0, 40%);
   bottom: ${TASKBAR_HEIGHT}px;
   position: absolute;
   right: 0;
@@ -18,7 +23,7 @@ const StyledCalendar = styled(motion.section)`
     white-space: nowrap;
 
     td {
-      color: #fff;
+      color: rgb(0, 0, 0);
       display: inline-table;
       height: 40px;
       line-height: 32px;
@@ -28,7 +33,7 @@ const StyledCalendar = styled(motion.section)`
 
       &.prev,
       &.next {
-        color: rgb(125 125 125);
+        color: rgb(128, 128, 128);
       }
     }
 
@@ -46,14 +51,14 @@ const StyledCalendar = styled(motion.section)`
           place-content: space-between;
 
           header {
-            color: rgb(223 223 223);
+            color: rgb(0, 0, 0);
 
             &:hover {
-              color: #fff;
+              color: rgb(0, 0, 128);
             }
 
             &:active {
-              color: rgb(165 156 156);
+              color: rgb(0, 0, 128);
             }
           }
         }
@@ -71,14 +76,14 @@ const StyledCalendar = styled(motion.section)`
         padding-top: 2px;
 
         button {
-          fill: rgb(223 223 223);
+          fill: rgb(0, 0, 0);
 
           &:hover {
-            fill: #fff;
+            fill: rgb(0, 0, 128);
           }
 
           &:active {
-            fill: rgb(165 156 156);
+            fill: rgb(0, 0, 128);
           }
 
           svg {
@@ -89,8 +94,8 @@ const StyledCalendar = styled(motion.section)`
     }
 
     tbody.curr td.today {
-      background-color: rgb(0 120 215);
-      color: #fff;
+      background-color: rgb(0, 0, 128);
+      color: rgb(255, 255, 255);
       position: relative;
 
       &::after,
@@ -104,19 +109,19 @@ const StyledCalendar = styled(motion.section)`
       }
 
       &::before {
-        border: 2px solid #000;
+        border: 2px solid rgb(255, 255, 255);
         inset: 2px;
       }
 
       &:hover {
         &::after {
-          border: 2px solid rgb(102 174 231);
+          border: 2px solid rgb(255, 255, 255);
         }
       }
 
       &:active {
         &::after {
-          border: 2px solid rgb(153 201 239);
+          border: 2px solid rgb(192, 192, 192);
         }
       }
     }

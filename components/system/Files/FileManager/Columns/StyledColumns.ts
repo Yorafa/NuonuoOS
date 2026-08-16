@@ -1,7 +1,10 @@
 import styled from "styled-components";
 
 const StyledColumns = styled.span`
-  background-color: rgb(32 32 32);
+  /* Classic Win98 column header: grey raised bevel. */
+  background-color: rgb(192, 192, 192);
+  border-bottom: 1px solid rgb(0, 0, 0);
+  box-shadow: inset 0 1px 0 rgb(255, 255, 255);
   display: block;
   margin-bottom: 6px;
   margin-right: ${({ theme }) => theme.sizes.fileManager.detailsStartPadding}px;
@@ -15,7 +18,7 @@ const StyledColumns = styled.span`
     height: ${({ theme }) => theme.sizes.fileManager.columnHeight}px;
 
     li {
-      color: rgb(222 222 222);
+      color: rgb(0, 0, 0);
       display: flex;
       font-size: 12px;
       padding-left: 6px;
@@ -23,7 +26,7 @@ const StyledColumns = styled.span`
       position: relative;
 
       > svg {
-        fill: rgb(149 149 149);
+        fill: rgb(0, 0, 0);
         left: calc(50% - 4px);
         position: absolute;
         top: 0;
@@ -44,7 +47,7 @@ const StyledColumns = styled.span`
       }
 
       .resize {
-        border-left: 1px solid rgb(99 99 99);
+        border-left: 1px solid rgb(128, 128, 128);
         cursor: col-resize;
         height: ${({ theme }) => theme.sizes.fileManager.columnHeight}px;
         padding-left: ${({ theme }) =>
@@ -55,7 +58,7 @@ const StyledColumns = styled.span`
       }
 
       &:hover {
-        background-color: rgb(67 67 67);
+        background-color: rgb(208, 208, 208);
 
         .resize {
           border-left: none;
@@ -63,7 +66,11 @@ const StyledColumns = styled.span`
       }
 
       &:active {
-        background-color: rgb(131 131 131);
+        /* Classic Win98 pressed/inset bevel. */
+        background-color: rgb(192, 192, 192);
+        border-top: 1px solid rgb(0, 0, 0);
+        border-left: 1px solid rgb(0, 0, 0);
+        box-shadow: inset 1px 1px 0 rgb(128, 128, 128);
       }
 
       &:first-child {

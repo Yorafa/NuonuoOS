@@ -59,9 +59,14 @@ const GlobalStyle = styled.createGlobalStyle`
     }
   }
 
+  ::selection {
+    background-color: rgb(0, 0, 128);
+    color: #fff;
+  }
+
   input::selection,
   textarea::selection {
-    background-color: rgb(0 120 215);
+    background-color: rgb(0, 0, 128);
     color: #fff;
   }
 

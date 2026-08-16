@@ -7,11 +7,17 @@ const TaskbarPanel = (
   left = 0,
   hasBorder = false
 ): RuleSet<object> => css`
-  background-color: hsl(0 0% 13% / 95%);
-  border: ${hasBorder ? "1px solid hsla(0, 0%, 25%, 75%)" : "none"};
-  border-bottom-width: 0;
+  /* Classic Win98 raised bevel panel. */
+  background-color: rgb(192, 192, 192);
+  border-top: 1px solid rgb(255, 255, 255);
+  border-left: 1px solid rgb(255, 255, 255);
+  border-right: 1px solid rgb(0, 0, 0);
+  border-bottom: 1px solid rgb(0, 0, 0);
+  box-shadow:
+    inset -1px -1px 0 rgb(128, 128, 128),
+    inset 1px 1px 0 rgb(223, 223, 223),
+    2px 2px 6px rgba(0, 0, 0, 40%);
   bottom: ${TASKBAR_HEIGHT}px;
-  box-shadow: 3px 0 10px 3px hsl(0 0% 10% / 50%);
   contain: strict;
   display: flex;
   height: 100%;
@@ -22,9 +28,7 @@ const TaskbarPanel = (
   width: calc(100% - ${left}px);
   z-index: 10000;
 
-  @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-    background-color: hsl(0 0% 13% / 70%);
-  }
+  /* Solid Win98 grey — no translucency. */
 `;
 
 export default TaskbarPanel;

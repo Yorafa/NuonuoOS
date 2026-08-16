@@ -25,14 +25,14 @@ const StyledSidebarButton = styled.li<StyledSidebarButtonProps>`
   }
 
   figure {
-    color: ${({ $active, theme }) =>
-      $active ? theme.colors.highlight : theme.colors.text};
+    color: ${({ $active }) =>
+      $active ? "rgb(0, 0, 128)" : "rgb(0, 0, 0)"};
     display: flex;
     place-items: center;
 
     svg {
-      fill: ${({ $active, theme }) =>
-        $active ? theme.colors.highlight : theme.colors.text};
+      fill: ${({ $active }) =>
+        $active ? "rgb(0, 0, 128)" : "rgb(0, 0, 0)"};
       height: ${({ theme }) => theme.sizes.startMenu.sideBar.iconSize};
       left: ${({ theme }) => theme.sizes.startMenu.sideBar.iconSize};
       margin-left: 1px;
@@ -60,12 +60,18 @@ const StyledSidebarButton = styled.li<StyledSidebarButtonProps>`
   }
 
   &:hover {
-    background-color: hsl(0 0% 35% / 70%);
-    border: 1px solid hsl(0 0% 45% / 70%);
+    background-color: rgb(0, 0, 128);
+    border: 1px solid rgb(0, 0, 0);
+
+    figure,
+    svg {
+      color: rgb(255, 255, 255);
+      fill: rgb(255, 255, 255);
+    }
   }
 
   &:active {
-    background-color: hsl(0 0% 40% / 70%);
+    background-color: rgb(0, 0, 128);
   }
 `;
 

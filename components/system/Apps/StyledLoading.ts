@@ -10,14 +10,13 @@ const StyledLoading = styled.div<StyledLoadingProps>`
   width: 100%;
 
   &::before {
-    color: #fff;
+    color: rgb(0, 0, 0);
     content: "Working on it...";
     display: flex;
     font-size: 12px;
-    font-weight: 200;
+    font-weight: 400;
     justify-content: center;
     letter-spacing: 0.3px;
-    mix-blend-mode: difference;
     padding-top: ${({ $hasColumns, theme }) =>
       $hasColumns
         ? theme.sizes.window.textTopPadding +

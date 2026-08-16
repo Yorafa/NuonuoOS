@@ -13,36 +13,25 @@ const StyledSidebar = styled.nav`
   width: ${({ theme }) => theme.sizes.startMenu.sideBar.width}px;
   z-index: 1;
 
+  /* Classic Win98 sidebar: inset bevel separating it from the menu. */
+  border-right: 1px solid rgb(0, 0, 0);
+  box-shadow: inset -1px 0 0 rgb(128, 128, 128), inset 1px 0 0 rgb(255, 255, 255);
+  background-color: rgb(192, 192, 192);
+
   &:hover:not(&.collapsed) {
-    background-color: hsl(0 0% 10% / 95%);
-    box-shadow: 8px 0 5px -5px hsl(0 0% 10% / 50%);
+    background-color: rgb(176, 176, 176);
+    box-shadow: inset -1px 0 0 rgb(128, 128, 128), inset 1px 0 0 rgb(255, 255, 255);
     transition:
       all 300ms ease,
-      backdrop-filter 1ms;
+      width 300ms ease;
     transition-timing-function: cubic-bezier(0.15, 1, 0.5, 1);
     width: ${({ theme }) => theme.sizes.startMenu.sideBar.expandedWidth};
-
-    @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-      background-color: hsl(0 0% 10% / 75%);
-    }
-
-    &::before {
-      backdrop-filter: ${({ theme }) =>
-        `blur(${theme.sizes.taskbar.panelBlur})`};
-      background-color: hsl(0 0% 10% / 50%);
-      content: "";
-      height: 100%;
-      margin-top: -4px;
-      position: absolute;
-      width: 100%;
-      z-index: -100000;
-    }
   }
 
   &.collapsed {
     transition:
       all 300ms ease,
-      backdrop-filter 600ms;
+      width 300ms ease;
   }
 `;
 

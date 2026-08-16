@@ -16,23 +16,31 @@ const StyledTaskbarEntry = styled(motion.li)<StyledTaskbarEntryProps>`
   width: ${({ theme }) => theme.sizes.taskbar.entry.maxWidth};
 
   &::before {
-    background-color: ${({ $foreground, $progress, theme }) =>
-      $foreground
-        ? $progress && $progress > 0 && $progress < 100
-          ? theme.colors.taskbar.foregroundProgress
-          : theme.colors.taskbar.foreground
-        : ""};
+    background-color: ${({ $foreground, theme }) =>
+      $foreground ? theme.colors.taskbar.foreground : ""};
     background-image: ${({ $progress, theme }) =>
       $progress && $progress > 0 && $progress < 100
         ? `linear-gradient(to right, ${theme.colors.progressBackground} 0% ${$progress}%, transparent ${$progress}% 100%)`
         : ""};
-    border-bottom: ${({ $progress, theme }) => `
-        ${theme.sizes.taskbar.entry.borderSize} solid ${
-          $progress && $progress > 0 && $progress < 100
-            ? theme.colors.progress
-            : theme.colors.highlight
-        }
-      `};
+    /* Classic Win98 bevel: pressed (inset) when foreground, raised on hover. */
+    border-top: ${({ $foreground }) =>
+      $foreground ? "1px solid rgb(0, 0, 0)" : "1px solid rgb(255, 255, 255)"};
+    border-left: ${({ $foreground }) =>
+      $foreground ? "1px solid rgb(0, 0, 0)" : "1px solid rgb(255, 255, 255)"};
+    border-right: ${({ $foreground }) =>
+      $foreground ? "1px solid rgb(255, 255, 255)" : "1px solid rgb(0, 0, 0)"};
+    border-bottom: ${({ $foreground, $progress, theme }) =>
+      $foreground
+        ? "1px solid rgb(255, 255, 255)"
+        : `1px solid ${
+            $progress && $progress > 0 && $progress < 100
+              ? theme.colors.progress
+              : theme.colors.highlight
+          }`};
+    box-shadow: ${({ $foreground }) =>
+      $foreground
+        ? "inset 1px 1px 0 rgb(128, 128, 128), inset -1px -1px 0 rgb(223, 223, 223)"
+        : "inset -1px -1px 0 rgb(128, 128, 128), inset 1px 1px 0 rgb(223, 223, 223)"};
     bottom: 0;
     content: "";
     height: ${({ $foreground }) => ($foreground ? "100%" : 0)};

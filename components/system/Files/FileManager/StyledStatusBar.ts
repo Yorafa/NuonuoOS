@@ -2,12 +2,14 @@ import styled from "styled-components";
 
 const StyledStatusBar = styled.footer`
   align-items: center;
-  background-color: rgb(51 51 51);
+  /* Classic Win98 status bar: grey with inset top bevel. */
+  background-color: rgb(192, 192, 192);
+  border-top: 1px solid rgb(255, 255, 255);
+  box-shadow: inset 1px 1px 0 rgb(223, 223, 223), inset 0 1px 0 rgb(128, 128, 128);
   bottom: 0;
-  color: rgb(247 247 247);
+  color: rgb(0, 0, 0);
   display: flex;
   font-size: 12px;
-  font-weight: 200;
   height: ${({ theme }) => theme.sizes.fileExplorer.statusBarHeight};
   padding: 0 4px 0 5px;
   position: absolute;
@@ -20,7 +22,7 @@ const StyledStatusBar = styled.footer`
     padding: 0 3px 0 9px;
 
     &::after {
-      border-right: 1px solid rgb(247 247 247);
+      border-right: 1px solid rgb(128, 128, 128);
       content: "";
       height: 11px;
       margin-left: 12px;
@@ -56,13 +58,22 @@ const StyledStatusBar = styled.footer`
       }
 
       &:hover {
-        background-color: rgb(77 77 77);
-        border: 1px solid rgb(99 99 99);
+        /* Classic Win98 raised bevel on hover. */
+        background-color: rgb(192, 192, 192);
+        border-top: 1px solid rgb(255, 255, 255);
+        border-left: 1px solid rgb(255, 255, 255);
+        border-right: 1px solid rgb(0, 0, 0);
+        border-bottom: 1px solid rgb(0, 0, 0);
       }
 
       &.active {
-        background-color: rgb(102 102 102);
-        border: 1px solid rgb(131 131 131);
+        /* Classic Win98 pressed/inset bevel when active. */
+        background-color: rgb(192, 192, 192);
+        border-top: 1px solid rgb(0, 0, 0);
+        border-left: 1px solid rgb(0, 0, 0);
+        border-right: 1px solid rgb(255, 255, 255);
+        border-bottom: 1px solid rgb(255, 255, 255);
+        box-shadow: inset 1px 1px 0 rgb(128, 128, 128);
 
         picture {
           padding-left: 1px;

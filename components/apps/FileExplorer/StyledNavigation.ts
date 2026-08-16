@@ -1,15 +1,18 @@
 import styled from "styled-components";
 
 const StyledNavigation = styled.nav`
-  background-color: rgb(25 25 25);
+  /* Classic Win98 toolbar: grey with inset bottom bevel. */
+  background-color: rgb(192, 192, 192);
+  border-bottom: 1px solid rgb(128, 128, 128);
+  box-shadow: inset 0 1px 0 rgb(255, 255, 255);
   display: flex;
   height: ${({ theme }) => theme.sizes.fileExplorer.navBarHeight};
 
   svg {
-    color: #fff;
+    color: rgb(0, 0, 0);
     fill: currentColor;
     height: 16px;
-    transition: color 0.35s ease;
+    transition: color 0.2s ease;
     width: 16px;
   }
 
@@ -39,22 +42,37 @@ const StyledNavigation = styled.nav`
       }
     }
 
-    &:active {
+    /* Classic Win98 raised bevel on hover. */
+    &:hover {
+      background-color: rgb(192, 192, 192);
+      border-top: 1px solid rgb(255, 255, 255);
+      border-left: 1px solid rgb(255, 255, 255);
+      border-right: 1px solid rgb(0, 0, 0);
+      border-bottom: 1px solid rgb(0, 0, 0);
+
       svg {
-        color: rgb(54 116 178);
-        transition: none;
+        color: rgb(0, 0, 0);
       }
     }
 
-    &:hover {
+    &:active {
+      /* Classic Win98 pressed/inset bevel. */
+      background-color: rgb(192, 192, 192);
+      border-top: 1px solid rgb(0, 0, 0);
+      border-left: 1px solid rgb(0, 0, 0);
+      border-right: 1px solid rgb(255, 255, 255);
+      border-bottom: 1px solid rgb(255, 255, 255);
+      box-shadow: inset 1px 1px 0 rgb(128, 128, 128);
+
       svg {
-        color: rgb(50 152 254);
+        color: rgb(0, 0, 128);
+        transition: none;
       }
     }
 
     &:disabled {
       svg {
-        color: rgb(140 140 140);
+        color: rgb(128, 128, 128);
       }
     }
   }

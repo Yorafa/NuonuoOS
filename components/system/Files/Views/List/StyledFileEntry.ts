@@ -12,7 +12,7 @@ const StyledFileEntry = styled.li`
     place-items: center;
 
     figcaption {
-      color: #fff;
+      color: rgb(0, 0, 0);
     }
 
     picture {
@@ -21,7 +21,7 @@ const StyledFileEntry = styled.li`
     }
 
     svg {
-      fill: rgb(210 210 210);
+      fill: rgb(0, 0, 0);
       height: 8px;
       margin-left: auto;
       margin-right: 8px;
@@ -56,14 +56,26 @@ const StyledFileEntry = styled.li`
 
     @media (pointer: fine) {
       &:hover {
-        background-color: hsl(0 0% 35% / 70%);
+        background-color: rgb(0, 0, 128);
+
+        figcaption {
+          color: rgb(255, 255, 255);
+        }
+
+        svg {
+          fill: rgb(255, 255, 255);
+        }
       }
     }
 
     @media (pointer: coarse) {
       &:active {
-        background-color: hsl(0 0% 35% / 70%);
-        border: 1px solid hsl(0 0% 45% / 70%);
+        background-color: rgb(0, 0, 128);
+        border: 1px solid rgb(0, 0, 0);
+
+        figcaption {
+          color: rgb(255, 255, 255);
+        }
       }
     }
   }

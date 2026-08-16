@@ -4,7 +4,11 @@ const StyledAddressBar = styled.div`
   background-position: 2px 5px;
   background-repeat: no-repeat;
   background-size: 16px;
-  border: 1px solid rgb(83 83 83);
+  /* Classic Win98 sunken/inset input field. */
+  border-top: 1px solid rgb(128, 128, 128);
+  border-left: 1px solid rgb(128, 128, 128);
+  border-right: 1px solid rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(255, 255, 255);
   display: flex;
   height: ${({ theme }) => theme.sizes.fileExplorer.navInputHeight}px;
   margin: 6px 12px 5px 5px;
@@ -14,9 +18,9 @@ const StyledAddressBar = styled.div`
   width: 100%;
 
   input {
-    background-color: rgb(25 25 25);
-    border-right: 1px solid rgb(21 21 21);
-    color: #fff;
+    background-color: rgb(255, 255, 255);
+    border: 0;
+    color: rgb(0, 0, 0);
     font-family: ${({ theme }) => theme.formats.systemFont};
     font-size: 12px;
     font-weight: 400;
@@ -39,7 +43,13 @@ const StyledAddressBar = styled.div`
   }
 
   .action {
-    background-color: rgb(25 25 25);
+    /* Classic Win98 raised bevel button. */
+    background-color: rgb(192, 192, 192);
+    border-top: 1px solid rgb(255, 255, 255);
+    border-left: 1px solid rgb(255, 255, 255);
+    border-right: 1px solid rgb(0, 0, 0);
+    border-bottom: 1px solid rgb(0, 0, 0);
+    box-shadow: inset -1px -1px 0 rgb(128, 128, 128), inset 1px 1px 0 rgb(223, 223, 223);
     display: flex;
     height: ${({ theme }) => theme.sizes.fileExplorer.navInputHeight - 2}px;
     margin: 0;
@@ -51,18 +61,21 @@ const StyledAddressBar = styled.div`
     width: 24px;
 
     &:hover {
-      background-color: rgb(27 41 49);
-      border: 1px solid rgb(34 114 153);
+      background-color: rgb(208, 208, 208);
     }
 
     &:active {
-      background-color: rgb(28 57 71);
-      border: 1px solid rgb(38 160 218);
+      background-color: rgb(192, 192, 192);
+      border-top: 1px solid rgb(0, 0, 0);
+      border-left: 1px solid rgb(0, 0, 0);
+      border-right: 1px solid rgb(255, 255, 255);
+      border-bottom: 1px solid rgb(255, 255, 255);
+      box-shadow: inset 1px 1px 0 rgb(128, 128, 128);
     }
 
     svg {
-      color: rgb(128 128 128);
-      stroke: rgb(128 128 128);
+      color: rgb(0, 0, 0);
+      stroke: rgb(0, 0, 0);
 
       &.refresh {
         position: relative;

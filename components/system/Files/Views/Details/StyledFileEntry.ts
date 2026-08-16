@@ -21,7 +21,7 @@ const StyledFileEntry = styled.li<StyledFileEntryProps>`
       position: relative;
 
       figcaption {
-        color: ${({ theme }) => theme.colors.fileEntry.text};
+        color: rgb(0, 0, 0);
         font-size: ${({ theme }) => theme.sizes.fileEntry.fontSize};
         overflow: hidden;
         overflow-wrap: anywhere;
@@ -38,18 +38,22 @@ const StyledFileEntry = styled.li<StyledFileEntryProps>`
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.fileEntry.background};
+    background-color: rgb(0, 0, 128);
+
+    figcaption {
+      color: rgb(255, 255, 255);
+    }
   }
 
   &.focus-within {
-    background-color: ${({ theme }) =>
-      theme.colors.fileEntry.backgroundFocused};
+    background-color: rgb(0, 0, 128);
+
+    figcaption {
+      color: rgb(255, 255, 255);
+    }
 
     &:hover {
-      background-color: ${({ theme, $selecting }) =>
-        $selecting
-          ? theme.colors.fileEntry.backgroundFocused
-          : theme.colors.fileEntry.backgroundFocusedHover};
+      background-color: rgb(0, 0, 128);
     }
   }
 `;
