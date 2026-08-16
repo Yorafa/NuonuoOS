@@ -11,11 +11,7 @@ import {
   SESSION_FILE,
 } from "utils/constants";
 import * as BrowserFS from "public/System/BrowserFS/browserfs.min.js";
-import {
-  UNKNOWN_STATE_CODES,
-  get9pSize,
-  supportsIndexedDB,
-} from "contexts/fileSystem/core";
+import { UNKNOWN_STATE_CODES, get9pSize } from "contexts/fileSystem/core";
 import FileSystemConfig from "contexts/fileSystem/FileSystemConfig";
 import { isExistingFile } from "components/system/Files/FileEntry/functions";
 
@@ -280,8 +276,8 @@ const useAsyncFs = (): AsyncFSModule => {
     } else if ("getRootFS" in fs) {
       runQueuedFsCalls(fs);
     } else {
-      const setupFs = (writeToIndexedDB: boolean): void =>
-        configure(FileSystemConfig(!writeToIndexedDB), () => {
+      const setupFs = (): void =>
+        configure(FileSystemConfig(), () => {
           const loadedFs = BFSRequire("fs");
 
           fsRef.current = loadedFs;
@@ -289,7 +285,7 @@ const useAsyncFs = (): AsyncFSModule => {
           setRootFs(loadedFs.getRootFS() as RootFileSystem);
         });
 
-      supportsIndexedDB().then(setupFs);
+      setupFs();
     }
   }, [fs]);
 
