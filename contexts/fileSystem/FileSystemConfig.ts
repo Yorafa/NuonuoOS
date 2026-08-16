@@ -3,7 +3,7 @@ import { fs9pToBfs } from "contexts/fileSystem/core";
 
 const index = fs9pToBfs();
 
-const FileSystemConfig = (writeToMemory = false): FileSystemConfiguration => ({
+const FileSystemConfig = (): FileSystemConfiguration => ({
   fs: "MountableFileSystem",
   options: {
     "/": {
@@ -13,8 +13,9 @@ const FileSystemConfig = (writeToMemory = false): FileSystemConfiguration => ({
           fs: "HTTPRequest",
           options: { index },
         },
+        // Writes stay in memory so a refresh restores the deployed filesystem
         writable: {
-          fs: writeToMemory ? "InMemory" : "IndexedDB",
+          fs: "InMemory",
         },
       },
     },
