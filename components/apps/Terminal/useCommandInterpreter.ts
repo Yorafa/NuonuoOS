@@ -7,7 +7,6 @@ import { runJs } from "components/apps/Terminal/js";
 import { colorAttributes, rgbAnsi } from "components/apps/Terminal/color";
 import {
   BACKUP_NAME_SERVER,
-  LINUX_IMAGE_PATH,
   PI_ASCII,
   PRIMARY_NAME_SERVER,
   config,
@@ -27,7 +26,6 @@ import {
 } from "components/apps/Terminal/functions";
 import loadWapm from "components/apps/Terminal/loadWapm";
 import processGit from "components/apps/Terminal/processGit";
-import { runPython } from "components/apps/Terminal/python";
 import {
   type CommandInterpreter,
   type LocalEcho,
@@ -52,7 +50,6 @@ import {
   DEFAULT_LOCALE,
   DESKTOP_PATH,
   HIGH_PRIORITY_REQUEST,
-  MILLISECONDS_IN_SECOND,
   PACKAGE_DATA,
   SHORTCUT_EXTENSION,
   SYSTEM_PATH,
@@ -961,34 +958,6 @@ const useCommandInterpreter = (
             }
             break;
           }
-          case "sheep":
-          case "esheep": {
-            const { countSheep, killSheep, spawnSheep } = await import(
-              "utils/spawnSheep"
-            );
-            let [count = 1, duration = 0] = commandArgs;
-
-            if (!Number.isNaN(count) && !Number.isNaN(duration)) {
-              count = Number(count);
-              duration = Number(duration);
-
-              if (count > 1) {
-                await spawnSheep();
-                count -= 1;
-              }
-
-              const maxDuration =
-                (duration || (count > 1 ? 1 : 0)) * MILLISECONDS_IN_SECOND;
-
-              Array.from({ length: count === 0 ? countSheep() : count })
-                .fill(0)
-                .map(() => Math.floor(Math.random() * maxDuration))
-                .forEach((delay) =>
-                  setTimeout(count === 0 ? killSheep : spawnSheep, delay)
-                );
-            }
-            break;
-          }
           case "ps":
           case "tasklist":
             printTable(
@@ -1002,26 +971,6 @@ const useCommandInterpreter = (
               ),
               printLn
             );
-            break;
-          case "py":
-          case "python":
-          case "python3":
-            {
-              const [file] = commandArgs;
-              const fullSourcePath = await getFullPath(file);
-
-              if (await exists(fullSourcePath)) {
-                const code = await readFile(fullSourcePath);
-
-                if (code.length > 0) {
-                  await runPython(code.toString(), printLn);
-                }
-              } else {
-                const [, code = "version"] = command.split(" ");
-
-                await runPython(code, printLn);
-              }
-            }
             break;
           case "qjs":
           case "quickjs":
@@ -1125,8 +1074,7 @@ const useCommandInterpreter = (
             break;
           case "wsl":
           case "linux":
-            open("V86", { url: LINUX_IMAGE_PATH });
-            updateRecentFiles(LINUX_IMAGE_PATH, "V86");
+            printLn("linux: no installed distribution");
             break;
           case "xlsx": {
             const [file, format = "xlsx"] = commandArgs;

@@ -44,7 +44,6 @@ export type SessionData = {
   closeEffect: string;
   cursor: string | undefined;
   iconPositions: IconPositions;
-  lazySheep?: boolean;
   recentFiles: RecentFiles;
   runHistory: string[];
   sortOrders: SortOrders;

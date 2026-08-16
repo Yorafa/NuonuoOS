@@ -29,7 +29,6 @@ import {
   DEFAULT_WALLPAPER,
   DEFAULT_WALLPAPER_FIT,
   DESKTOP_PATH,
-  MILLISECONDS_IN_HOUR,
   SESSION_FILE,
   SHORTCUT_EXTENSION,
   SYSTEM_FILES,
@@ -61,7 +60,6 @@ const useSessionContextState = (): SessionContextState => {
   const [cursor, setCursor] = useState<string | undefined>();
   const [aiEnabled, setAiEnabled] = useState(false);
   const [closeEffect, setCloseEffect] = useState(DEFAULT_CLOSE_EFFECT);
-  const [lazySheep, setLazySheep] = useState(false);
   const [windowStates, setWindowStates] = useState(
     Object.create(null) as WindowStates
   );
@@ -220,7 +218,6 @@ const useSessionContextState = (): SessionContextState => {
             closeEffect,
             cursor,
             iconPositions,
-            lazySheep,
             recentFiles,
             runHistory,
             sortOrders,
@@ -241,7 +238,6 @@ const useSessionContextState = (): SessionContextState => {
     cursor,
     haltSession,
     iconPositions,
-    lazySheep,
     recentFiles,
     runHistory,
     sessionLoaded,
@@ -351,17 +347,6 @@ const useSessionContextState = (): SessionContextState => {
             setRecentFiles(session.recentFiles);
           } else if (!Array.isArray(session.recentFiles)) {
             setRecentFiles(DEFAULT_SESSION?.recentFiles || []);
-          }
-          if (session.lazySheep) {
-            setLazySheep(session.lazySheep);
-
-            maybeRequestIdleCallback(() => {
-              window.setTimeout(async () => {
-                const { spawnSheep } = await import("utils/spawnSheep");
-
-                spawnSheep(true);
-              }, MILLISECONDS_IN_HOUR);
-            });
           }
         } catch (error) {
           if ((error as ApiError)?.code === "ENOENT") {

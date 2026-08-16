@@ -19,41 +19,7 @@ import { useMenuPreload } from "hooks/useMenuPreload";
 
 type ClockWorkerResponse = LocaleTimeDate | "source";
 
-const EASTER_EGG_CLICK_COUNT = 7;
-
 const LARGEST_CLOCK_TEXT = "44:44:44 AM";
-
-let triggerEasterEggCountdown = EASTER_EGG_CLICK_COUNT;
-
-const resetEasterEggCountdown = (): void => {
-  triggerEasterEggCountdown = EASTER_EGG_CLICK_COUNT;
-};
-
-const easterEggOnClick: React.MouseEventHandler<HTMLElement> = async ({
-  target,
-}): Promise<void> => {
-  if (
-    triggerEasterEggCountdown === EASTER_EGG_CLICK_COUNT &&
-    target instanceof HTMLElement
-  ) {
-    target.removeEventListener("mouseleave", resetEasterEggCountdown);
-    target.addEventListener(
-      "mouseleave",
-      resetEasterEggCountdown,
-      ONE_TIME_PASSIVE_EVENT
-    );
-  }
-
-  triggerEasterEggCountdown -= 1;
-
-  if (triggerEasterEggCountdown === 0) {
-    const { spawnSheep } = await import("utils/spawnSheep");
-
-    spawnSheep();
-
-    triggerEasterEggCountdown = EASTER_EGG_CLICK_COUNT;
-  }
-};
 
 type ClockProps = {
   hasAI: boolean;
@@ -162,13 +128,6 @@ const Clock: FC<ClockProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentWorker, now]
   );
-  const onClockClick = useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
-      easterEggOnClick(event);
-      toggleCalendar();
-    },
-    [toggleCalendar]
-  );
   const menuPreloadHandler = useMenuPreload(importCalendar);
 
   useEffect(() => {
@@ -206,7 +165,7 @@ const Clock: FC<ClockProps> = ({
       $hasAI={hasAI}
       $width={width}
       aria-label="Clock"
-      onClick={onClockClick}
+      onClick={() => toggleCalendar()}
       role="timer"
       title={date}
       suppressHydrationWarning

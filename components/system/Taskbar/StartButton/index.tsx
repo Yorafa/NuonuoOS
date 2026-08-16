@@ -30,14 +30,8 @@ const StartButton: FC<StartButtonProps> = ({
   toggleStartMenu,
 }) => {
   const onClick = useCallback(
-    async ({ ctrlKey, shiftKey }: React.MouseEvent): Promise<void> => {
+    (): void => {
       toggleStartMenu();
-
-      if (ctrlKey && shiftKey) {
-        const { spawnSheep } = await import("utils/spawnSheep");
-
-        spawnSheep();
-      }
     },
     [toggleStartMenu]
   );
