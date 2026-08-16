@@ -26,7 +26,7 @@ const directory: Processes = {
   },
   FileExplorer: {
     Component: dynamic(() => import("components/apps/FileExplorer")),
-    backgroundColor: "#202020",
+    backgroundColor: "#c0c0c0",
     defaultSize: {
       height: 325,
       width: 447,
@@ -131,8 +131,7 @@ const directory: Processes = {
   },
   Terminal: {
     Component: dynamic(() => import("components/apps/Terminal")),
-    backgroundBlur: "8px",
-    backgroundColor: "rgba(12, 12, 12, 0.5)",
+    backgroundColor: "#000000",
     defaultSize: {
       height: 374,
       width: 615,
@@ -187,15 +186,6 @@ const directory: Processes = {
     libs: ["/Program Files/Vim.js/vim.js"],
     singleton: true,
     title: "Vim",
-  },
-  Webamp: {
-    Component: dynamic(() => import("components/apps/Webamp")),
-    allowResizing: false,
-    hasWindow: false,
-    icon: "/System/Icons/webamp.webp",
-    libs: ["/Program Files/Webamp/webamp.bundle.min.js"],
-    singleton: true,
-    title: "Webamp",
   },
 };
 
