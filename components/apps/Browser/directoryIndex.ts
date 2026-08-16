@@ -38,15 +38,11 @@ const extensionIconToIndexIcon: Record<string, string> = {
   "Shockwave Flash File": "portal",
   audio: "sound2",
   compressed: "compressed",
-  emulator: "portal",
   executable: "binary",
   font: "a",
   image: "diskimg",
-  jsdos: "compressed",
   marked: "layout",
   pdf: "layout",
-  python: "p",
-  tinymce: "layout",
   wapm: "binary",
 };
 

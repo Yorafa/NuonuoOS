@@ -26,10 +26,6 @@ type MediaPlayerProcessArguments = {
   unmute?: () => void;
 };
 
-type MonacoProcessArguments = {
-  editor?: unknown;
-};
-
 type PdfProcessArguments = {
   count?: number;
   page?: number;
@@ -68,7 +64,6 @@ export type ProcessArguments = BaseProcessArguments &
   BrowserProcessArguments &
   DialogProcessArguments &
   MediaPlayerProcessArguments &
-  MonacoProcessArguments &
   PdfProcessArguments;
 
 export type ProcessElements = {

@@ -1,5 +1,4 @@
 import { basename, dirname, extname, join } from "path";
-import { type URLTrack } from "webamp";
 import { useMemo } from "react";
 import { type FileStat } from "components/system/Files/FileManager/functions";
 import { EXTRACTABLE_EXTENSIONS } from "components/system/Files/FileEntry/constants";
@@ -25,7 +24,6 @@ import {
   AUDIO_PLAYLIST_EXTENSIONS,
   CURSOR_FILE_EXTENSIONS,
   DESKTOP_PATH,
-  EDITABLE_IMAGE_FILE_EXTENSIONS,
   IMAGE_FILE_EXTENSIONS,
   MENU_SEPERATOR,
   MOUNTABLE_EXTENSIONS,
@@ -368,13 +366,11 @@ const useFileContextMenu = (
                             absoluteEntry,
                             extname(absoluteEntry)
                           )}.${extension}`;
-                          const [{ convertSheet }, sheetBuffer] =
-                            await Promise.all([
-                              import("utils/sheetjs"),
-                              readFile(absoluteEntry),
-                            ]);
+                          const { convertSheet } = await import(
+                            "utils/sheetjs"
+                          );
                           const workBook = await convertSheet(
-                            sheetBuffer,
+                            await readFile(absoluteEntry),
                             extension
                           );
                           const workBookDirName = dirname(path);
@@ -407,18 +403,15 @@ const useFileContextMenu = (
                         absoluteEntry,
                         extname(absoluteEntry)
                       )}.m3u`;
-                      const [
-                        { createM3uPlaylist, tracksFromPlaylist },
-                        fileBuffer,
-                      ] = await Promise.all([
-                        import("components/apps/Webamp/functions"),
-                        readFile(absoluteEntry),
-                      ]);
+                      const { createM3uPlaylist, tracksFromPlaylist } =
+                        await import(
+                          "components/system/Files/FileEntry/playlist"
+                        );
                       const playlist = createM3uPlaylist(
-                        (await tracksFromPlaylist(
-                          fileBuffer.toString(),
+                        await tracksFromPlaylist(
+                          (await readFile(absoluteEntry)).toString(),
                           getExtension(absoluteEntry)
-                        )) as URLTrack[]
+                        )
                       );
                       const playlistDirName = dirname(path);
 
@@ -517,16 +510,6 @@ const useFileContextMenu = (
                 rootFs?.mntMap[path].getName() !== "FileSystemAccess"
               ),
             label: "Disconnect",
-          });
-        }
-
-        if (EDITABLE_IMAGE_FILE_EXTENSIONS.has(urlExtension)) {
-          menuItems.unshift({
-            action: () => {
-              open("Paint", { url });
-              if (url) updateRecentFiles(url, "Paint");
-            },
-            label: "Edit",
           });
         }
 

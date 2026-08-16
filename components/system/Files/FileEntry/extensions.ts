@@ -10,12 +10,12 @@ type Extension = {
 const types = {
   Application: {
     icon: "executable",
-    process: ["BoxedWine", "JSDOS"],
+    process: [],
     type: "Application",
   },
   AudioPlaylist: {
     icon: "audio",
-    process: ["Webamp"],
+    process: ["VideoPlayer"],
     type: "Audio Playlist File",
   },
   ChessGame: {
@@ -25,7 +25,7 @@ const types = {
   },
   DiscImage: {
     icon: "image",
-    process: ["V86"],
+    process: [],
     type: "Disc Image File",
   },
   Font: {
@@ -34,7 +34,7 @@ const types = {
     type: "Font File",
   },
   GraphicsEditor: {
-    process: ["Photos", "Paint"],
+    process: ["Photos"],
     type: "Picture File",
   },
   HtmlDocument: {
@@ -52,23 +52,17 @@ const types = {
   },
   MountableDiscImage: {
     icon: "image",
-    process: ["FileExplorer", "V86"],
+    process: ["FileExplorer"],
     type: "Disc Image File",
   },
   Music: {
     icon: "audio",
-    process: ["Webamp", "VideoPlayer"],
+    process: ["VideoPlayer"],
   },
   PdfDocument: {
     icon: "pdf",
     process: ["PDF"],
     type: "PDF Document",
-  },
-  PythonFile: {
-    command: "py",
-    icon: "python",
-    process: ["Terminal", ...TEXT_EDITORS],
-    type: "Python File",
   },
   ScreenSaver: {
     process: ["ScreenSaver"],
@@ -86,12 +80,12 @@ const types = {
   },
   WinampSkin: {
     icon: "audio",
-    process: ["Webamp", "FileExplorer"],
+    process: ["FileExplorer"],
     type: "Winamp Skin File",
   },
   ZipFile: {
     icon: "compressed",
-    process: ["FileExplorer", "BoxedWine", "JSDOS"],
+    process: ["FileExplorer"],
     type: "Compressed (zipped) Folder",
   },
 };
@@ -113,7 +107,6 @@ const extensions: Record<string, Extension> = {
   ".pdf": types.PdfDocument,
   ".pgn": types.ChessGame,
   ".pls": types.AudioPlaylist,
-  ".py": types.PythonFile,
   ".svg": types.SvgFile,
   ".ttf": types.Font,
   ".wasm": types.WasmFile,

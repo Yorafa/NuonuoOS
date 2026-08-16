@@ -22,7 +22,6 @@ import {
 } from "utils/constants";
 import { getExtension, haltEvent, notFound } from "utils/functions";
 import { getIpfsFileName, getIpfsResource } from "utils/ipfs";
-import { spawnSheep } from "utils/spawnSheep";
 import Icon from "styles/common/Icon";
 import { ADDRESS_INPUT_PROPS } from "components/apps/FileExplorer/AddressBar";
 
@@ -30,20 +29,11 @@ const OPEN_ID = "open";
 
 export const resourceAliasMap: Record<string, string> = {
   cmd: "Terminal",
-  code: "MonacoEditor",
-  dos: "JSDOS",
   explorer: "FileExplorer",
-  monaco: "MonacoEditor",
-  mspaint: "Paint",
   vlc: "VideoPlayer",
 };
 
 const MESSAGE = `Type the name of a program, folder, document, or Internet resource, and ${PACKAGE_DATA.alias} will open it for you.`;
-
-const utilCommandMap: Record<string, () => void> = {
-  esheep: spawnSheep,
-  sheep: spawnSheep,
-};
 
 const Run: FC<ComponentProcessProps> = ({ id }) => {
   const {
@@ -178,9 +168,6 @@ const Run: FC<ComponentProcessProps> = ({ id }) => {
             pid,
             resourcePath === resourcePid ? undefined : { url: resourcePath }
           );
-          addRunHistoryEntry();
-        } else if (utilCommandMap[resource.toLowerCase()]) {
-          utilCommandMap[resource.toLowerCase()]();
           addRunHistoryEntry();
         } else {
           notFound(resource);

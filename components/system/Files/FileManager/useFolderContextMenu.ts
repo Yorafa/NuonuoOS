@@ -373,7 +373,6 @@ const useFolderContextMenu = (
           ADD_FILE,
           ...(isFileSystemMappingSupported() ? [MAP_DIRECTORY] : []),
         ];
-        const isMusicVisualizationRunning = isGlobalMusicVisualizationRunning();
         const mountUrl = getMountUrl(url, rootFs?.mntMap || {});
         const isReadOnly =
           MOUNTABLE_EXTENSIONS.has(getExtension(url)) ||
@@ -438,9 +437,6 @@ const useFolderContextMenu = (
                       ...menu,
                       {
                         action: () => {
-                          if (isMusicVisualizationRunning) {
-                            stopGlobalMusicVisualization();
-                          }
                           setSessionWallpaper(
                             `${id}${
                               hasAlt &&
@@ -457,16 +453,7 @@ const useFolderContextMenu = (
                           : wallpaperImage === id,
                       },
                     ],
-                    isMusicVisualizationRunning
-                      ? [
-                          {
-                            action: stopGlobalMusicVisualization,
-                            checked: true,
-                            label: "Music Visualization",
-                          },
-                          MENU_SEPERATOR,
-                        ]
-                      : []
+                    []
                   ),
                 },
                 {
@@ -568,14 +555,10 @@ const useFolderContextMenu = (
                       updateFolder(dirname(INDEX_FILE), basename(INDEX_FILE));
                     }
 
-                    open("MonacoEditor", { url: INDEX_FILE });
-                    updateRecentFiles(INDEX_FILE, "MonacoEditor");
+                    open("Vim", { url: INDEX_FILE });
+                    updateRecentFiles(INDEX_FILE, "Vim");
                   },
                   label: "View page source",
-                },
-                {
-                  action: () => open("DevTools", { url: "dom" }),
-                  label: "Inspect",
                 },
               ]
             : []),

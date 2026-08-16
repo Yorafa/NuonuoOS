@@ -24,7 +24,8 @@ export const DEFAULT_CLOSE_EFFECT = "None";
 
 export const DEFAULT_THEME: ThemeName = "defaultTheme";
 
-export const DEFAULT_WALLPAPER = "/Users/Public/Pictures/lnn.jpg";
+// Dreamcore Retro Windows 98: empty default uses the classic teal desktop color.
+export const DEFAULT_WALLPAPER = "";
 
 export const DEFAULT_WALLPAPER_FIT: WallpaperFit = "fill";
 
@@ -136,7 +137,7 @@ export const UNSUPPORTED_SLIDESHOW_EXTENSIONS = new Set([
   ".svg",
 ]);
 
-export const TEXT_EDITORS = ["MonacoEditor", "Vim"];
+export const TEXT_EDITORS = ["Vim"];
 
 export const CURSOR_FILE_EXTENSIONS = new Set([".ani", ".cur"]);
 

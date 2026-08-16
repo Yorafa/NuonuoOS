@@ -602,7 +602,7 @@ export const getInfoWithExtension = (
       decodeImage();
       break;
     case ".whtml":
-      getInfoByFileExtension("/System/Icons/tinymce.webp", (signal) =>
+      getInfoByFileExtension("/System/Icons/unknown.webp", (signal) =>
         fs.readFile(path, async (error, contents = Buffer.from("")) => {
           if (!error && contents.length > 0 && !signal.aborted) {
             const htmlToImage = await getHtmlToImage();
