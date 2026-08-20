@@ -1,24 +1,16 @@
 // @ts-check
 
-const path = require("path");
-
-const isProduction = process.env.NODE_ENV === "production";
-
-const bundleAnalyzer = process.env.npm_config_argv?.includes(
-  "build:bundle-analyzer"
-);
-
 /**
  * @type {import("next").NextConfig}
  * */
 const nextConfig = {
   compiler: {
-    reactRemoveProperties: isProduction,
-    removeConsole: isProduction,
+    reactRemoveProperties: process.env.NODE_ENV === "production",
+    removeConsole: process.env.NODE_ENV === "production",
     styledComponents: {
       displayName: false,
       fileName: false,
-      minify: isProduction,
+      minify: process.env.NODE_ENV === "production",
       pure: true,
       ssr: true,
       transpileTemplateLiterals: true,
@@ -28,7 +20,7 @@ const nextConfig = {
   output: "export",
   productionBrowserSourceMaps: false,
   reactProductionProfiling: false,
-  reactStrictMode: !isProduction,
+  reactStrictMode: process.env.NODE_ENV !== "production",
   turbopack: {
     resolveAlias: {
       "node:buffer": "buffer",
@@ -36,9 +28,4 @@ const nextConfig = {
     },
   },
 };
-
-module.exports = bundleAnalyzer
-  ? require("@next/bundle-analyzer")({
-      enabled: isProduction,
-    })(nextConfig)
-  : nextConfig;
+module.exports = nextConfig;

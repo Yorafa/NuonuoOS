@@ -153,10 +153,10 @@
 ```
 yarn install
 yarn build:prebuild
-yarn dev --webpack
+yarn dev --turbopack
 ```
 
-> 注意:Next.js 16 默认使用 Turbopack,而本项目包含自定义 webpack 配置,开发时需要加 `--webpack` 参数。
+> 本项目统一使用 Next.js Turbopack 开发与生产构建。
 
 ##### 生产构建
 

@@ -11,7 +11,7 @@ export const BASE_2D_CONTEXT_OPTIONS: CanvasRenderingContext2DSettings = {
 export const IFRAME_CONFIG = {
   referrerPolicy: "no-referrer" as React.HTMLAttributeReferrerPolicy,
   sandbox:
-    "allow-downloads allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts",
+    "allow-downloads allow-forms allow-modals allow-pointer-lock allow-presentation allow-same-origin allow-scripts",
 };
 
 export const DEFAULT_LOCALE = "en";

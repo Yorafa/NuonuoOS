@@ -1,8 +1,5 @@
 import { basename, join, resolve } from "path";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import useProxyMenu, {
-  type ProxyState,
-} from "components/apps/Browser/useProxyMenu";
 import { ADDRESS_INPUT_PROPS } from "components/apps/FileExplorer/AddressBar";
 import useHistoryMenu from "components/apps/Browser/useHistoryMenu";
 import useBookmarkMenu from "components/apps/Browser/useBookmarkMenu";
@@ -10,18 +7,14 @@ import {
   createDirectoryIndex,
   type DirectoryEntries,
 } from "components/apps/Browser/directoryIndex";
-import {
-  Arrow,
-  Network,
-  Refresh,
-  Stop,
-} from "components/apps/Browser/NavigationIcons";
+import { Arrow, Refresh, Stop } from "components/apps/Browser/NavigationIcons";
 import StyledBrowser from "components/apps/Browser/StyledBrowser";
 import {
+  BLOCKED_PAGE,
   DINO_GAME,
   HOME_PAGE,
+  isAllowedBrowserUrl,
   NOT_FOUND,
-  PROXIES,
   SURF_TO_MISC,
   bookmarks,
 } from "components/apps/Browser/config";
@@ -40,7 +33,6 @@ import {
   SHORTCUT_EXTENSION,
 } from "utils/constants";
 import {
-  GOOGLE_SEARCH_QUERY,
   LOCAL_HOST,
   getExtension,
   getUrlOrSearch,
@@ -71,7 +63,7 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
   const { setForegroundId, updateRecentFiles } = useSession();
   const { prependFileToTitle } = useTitle(id);
   const { initialTitle = "", url = "" } = process || {};
-  const initialUrl = url || HOME_PAGE;
+  const initialUrl = isAllowedBrowserUrl(url) ? url : HOME_PAGE;
   const { canGoBack, canGoForward, history, moveHistory, position } =
     useHistory(initialUrl, id);
   const { exists, fs, stat, readFile, readdir } = useFileSystem();
@@ -106,21 +98,27 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
   };
   const goToLink = useCallback(
     (newUrl: string): void => {
+      if (!isAllowedBrowserUrl(newUrl)) {
+        iframeRef.current?.removeAttribute("src");
+        iframeRef.current?.setAttribute("sandbox", IFRAME_CONFIG.sandbox);
+        setSrcDoc(BLOCKED_PAGE);
+        prependFileToTitle("Access denied");
+        return;
+      }
+
       if (inputRef.current) {
         inputRef.current.value = newUrl;
       }
 
       changeUrl(id, newUrl);
     },
-    [changeUrl, id]
+    [changeUrl, id, prependFileToTitle]
   );
   const { backMenu, forwardMenu } = useHistoryMenu(
     history,
     position,
     moveHistory
   );
-  const [proxyState, setProxyState] = useState<ProxyState>("CORS");
-  const proxyMenu = useProxyMenu(proxyState, setProxyState);
   const bookmarkMenu = useBookmarkMenu();
   const setUrl = useCallback(
     async (addressInput: string): Promise<void> => {
@@ -145,14 +143,23 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
         };
         const lowerAddressInput = addressInput.toLowerCase();
 
-        if (lowerAddressInput.startsWith(SURF_TO_MISC.url)) {
+        if (lowerAddressInput === SURF_TO_MISC.url) {
           loadLocalSite(SURF_TO_MISC.path, SURF_TO_MISC.name);
-        } else if (lowerAddressInput.startsWith(DINO_GAME.url)) {
+        } else if (lowerAddressInput === DINO_GAME.url) {
           loadLocalSite(DINO_GAME.path, `${DINO_GAME.url}/`);
         } else if (!isHtml) {
-          iframeRef.current?.setAttribute("sandbox", IFRAME_CONFIG.sandbox);
-
           const processedUrl = await getUrlOrSearch(addressInput);
+
+          if (!isAllowedBrowserUrl(processedUrl.href)) {
+            iframeRef.current?.removeAttribute("src");
+            iframeRef.current?.setAttribute("sandbox", IFRAME_CONFIG.sandbox);
+            setLoading(false);
+            setSrcDoc(BLOCKED_PAGE);
+            prependFileToTitle("Access denied");
+            return;
+          }
+
+          iframeRef.current?.setAttribute("sandbox", IFRAME_CONFIG.sandbox);
 
           if (
             LOCAL_HOST.has(processedUrl.host) ||
@@ -329,51 +336,39 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
             setSrcDoc(newSrcDoc);
             prependFileToTitle(newTitle);
           } else {
-            const addressUrl = PROXIES[proxyState]
-              ? await PROXIES[proxyState](processedUrl.href)
-              : processedUrl.href;
+            const addressUrl = processedUrl.href;
 
             changeIframeWindowLocation(addressUrl, contentWindow);
 
-            if (addressUrl.startsWith(GOOGLE_SEARCH_QUERY)) {
-              prependFileToTitle(`${addressInput} - Google Search`);
-            } else {
-              const { name = initialTitle } =
-                bookmarks?.find(
-                  ({ url: bookmarkUrl }) => bookmarkUrl === addressInput
-                ) || {};
+            const { name = initialTitle } =
+              bookmarks?.find(
+                ({ url: bookmarkUrl }) => bookmarkUrl === addressInput
+              ) || {};
 
-              prependFileToTitle(name);
-            }
+            prependFileToTitle(name);
 
-            if (addressInput.startsWith("ipfs://")) {
-              setIcon(id, "/System/Icons/Favicons/ipfs.webp");
-            } else {
-              const favicon = new Image();
-              const faviconUrl = `${
-                new URL(addressUrl).origin
-              }${FAVICON_BASE_PATH}`;
+            const favicon = new Image();
+            const faviconUrl = `${new URL(addressUrl).origin}${FAVICON_BASE_PATH}`;
 
-              favicon.addEventListener(
-                "error",
-                () => {
-                  const { icon } =
-                    bookmarks?.find(
-                      ({ url: bookmarkUrl }) => bookmarkUrl === addressUrl
-                    ) || {};
+            favicon.addEventListener(
+              "error",
+              () => {
+                const { icon } =
+                  bookmarks?.find(
+                    ({ url: bookmarkUrl }) => bookmarkUrl === addressUrl
+                  ) || {};
 
-                  if (icon) setIcon(id, icon);
-                },
-                ONE_TIME_PASSIVE_EVENT
-              );
-              favicon.addEventListener(
-                "load",
-                () => setIcon(id, faviconUrl),
-                ONE_TIME_PASSIVE_EVENT
-              );
-              favicon.decoding = "async";
-              favicon.src = faviconUrl;
-            }
+                if (icon) setIcon(id, icon);
+              },
+              ONE_TIME_PASSIVE_EVENT
+            );
+            favicon.addEventListener(
+              "load",
+              () => setIcon(id, faviconUrl),
+              ONE_TIME_PASSIVE_EVENT
+            );
+            favicon.decoding = "async";
+            favicon.src = faviconUrl;
           }
         }
       }
@@ -386,13 +381,29 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
       initialTitle,
       open,
       prependFileToTitle,
-      proxyState,
       readFile,
       readdir,
       setIcon,
       stat,
       updateRecentFiles,
     ]
+  );
+  const navigateToAddress = useCallback(
+    async (addressInput: string): Promise<void> => {
+      const processedUrl = isAllowedBrowserUrl(addressInput)
+        ? addressInput
+        : (await getUrlOrSearch(addressInput)).href;
+
+      if (isAllowedBrowserUrl(processedUrl)) {
+        if (inputRef.current) inputRef.current.value = processedUrl;
+
+        changeUrl(id, processedUrl);
+        if (currentUrl.current === processedUrl) setUrl(processedUrl);
+      } else {
+        setUrl(addressInput);
+      }
+    },
+    [changeUrl, id, setUrl]
   );
   const supportsCredentialless = useMemo(
     () => "credentialless" in HTMLIFrameElement.prototype,
@@ -447,24 +458,13 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
           onFocusCapture={() => inputRef.current?.select()}
           onKeyDown={({ key }) => {
             if (inputRef.current && key === "Enter") {
-              changeUrl(id, inputRef.current.value);
-              if (currentUrl.current === inputRef.current.value) {
-                setUrl(inputRef.current.value);
-              }
+              navigateToAddress(inputRef.current.value.trim());
               window.getSelection()?.removeAllRanges();
               inputRef.current.blur();
             }
           }}
           {...ADDRESS_INPUT_PROPS}
         />
-        <Button
-          className="proxy"
-          onClick={proxyMenu.onContextMenuCapture}
-          onContextMenu={haltEvent}
-          {...label("Proxy settings")}
-        >
-          <Network />
-        </Button>
       </nav>
       <nav>
         {bookmarks.map(({ name, icon, url: bookmarkUrl }) => (

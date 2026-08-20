@@ -75,12 +75,9 @@
 ## 服务
 
 - [ntp.js](http://www.ntpjs.org/) — 网络时间协议,获取服务器时间
-- [allOrigins](https://allorigins.win/) — CORS 代理服务,绕过跨域限制
 - [Cloudflare DoH](https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/) — Cloudflare DNS-over-HTTPS 查询服务
 - [Google DoH](https://developers.google.com/speed/public-dns/docs/doh) — Google DNS-over-HTTPS 查询服务
 - [isomorphic-git Cors Proxy](https://github.com/isomorphic-git/cors-proxy) — Git 操作的 CORS 代理
 - [IPFS Public Gateways](https://ipfs.github.io/public-gateway-checker/) — IPFS 去中心化文件系统公共网关列表
-- [The Old Net](https://theoldnet.com/) — 旧版网站存档访问服务
-- [Wayback Machine](https://web.archive.org/) — 互联网档案馆网页快照服务
 - [Wasmer Registry](https://docs.wasmer.io/registry) — Wasmer WASM 包注册表
 - [Weather Report](https://github.com/chubin/wttr.in) — wttr.in 天气预报服务

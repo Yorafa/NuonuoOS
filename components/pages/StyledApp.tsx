@@ -7,12 +7,7 @@ import themes from "styles/themes";
 import { DEFAULT_THEME } from "utils/constants";
 
 const motionFeatures = async (): Promise<FeatureBundle> =>
-  (
-    await import(
-      /* webpackMode: "eager" */
-      "styles/motionFeatures"
-    )
-  ).default;
+  (await import("styles/motionFeatures")).default;
 
 const StyledApp: FC = ({ children }) => {
   const { themeName } = useSession();

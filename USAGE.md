@@ -1,6 +1,6 @@
 # daedalOS 使用与自定义指南
 
-本指南面向想要**使用和定制**本项目的人，重点解答最常见的问题：*"我添加一个文件，怎么让它出现在桌面 / 文件管理器里？"* 以及快捷方式、图标、默认打开方式、新增应用等自定义玩法。
+本指南面向想要**使用和定制**本项目的人，重点解答最常见的问题：_"我添加一个文件，怎么让它出现在桌面 / 文件管理器里？"_ 以及快捷方式、图标、默认打开方式、新增应用等自定义玩法。
 
 项目的整体功能介绍见 [README.md](README.md)。
 
@@ -60,14 +60,14 @@ daedalOS 在浏览器里模拟了一个操作系统，桌面、资源管理器�
 
 ### 放在哪里，显示在哪里
 
-| 仓库路径（public/ 下） | 虚拟路径 | 前端效果 |
-| --- | --- | --- |
-| `Users/Public/Desktop/` | `/Users/Public/Desktop` | **桌面图标**（桌面就是对这个文件夹的文件管理器视图） |
-| `Users/Public/Start Menu/` | `/Users/Public/Start Menu` | **开始菜单**里的条目（支持子文件夹分组） |
-| `Users/Public/Documents/` 等 | `/Users/Public/Documents` 等 | 用户文件夹（文档/音乐/图片/视频） |
-| `Program Files/` | `/Program Files` | 存放应用所需的第三方库文件（不参与开始菜单搜索） |
-| `System/` | `/System` | 系统资源：图标、屏保（`.xscr`）、WASM 工具等 |
-| 根目录，如 `CREDITS.md` | `/CREDITS.md` | 可通过 `/?url=/CREDITS.md` 直接打开 |
+| 仓库路径（public/ 下）       | 虚拟路径                     | 前端效果                                             |
+| ---------------------------- | ---------------------------- | ---------------------------------------------------- |
+| `Users/Public/Desktop/`      | `/Users/Public/Desktop`      | **桌面图标**（桌面就是对这个文件夹的文件管理器视图） |
+| `Users/Public/Start Menu/`   | `/Users/Public/Start Menu`   | **开始菜单**里的条目（支持子文件夹分组）             |
+| `Users/Public/Documents/` 等 | `/Users/Public/Documents` 等 | 用户文件夹（文档/音乐/图片/视频）                    |
+| `Program Files/`             | `/Program Files`             | 存放应用所需的第三方库文件（不参与开始菜单搜索）     |
+| `System/`                    | `/System`                    | 系统资源：图标、屏保（`.xscr`）、WASM 工具等         |
+| 根目录，如 `CREDITS.md`      | `/CREDITS.md`                | 可通过 `/?url=/CREDITS.md` 直接打开                  |
 
 ### 注意事项
 
@@ -81,8 +81,8 @@ daedalOS 在浏览器里模拟了一个操作系统，桌面、资源管理器�
 作为普通使用者，不需要动仓库代码就能往系统里加文件：
 
 - **拖拽**：把本地文件（或文件夹）直接拖到桌面或任意资源管理器窗口，会显示传输进度对话框；
-- **右键菜单**：在资源管理器空白处右键 → *添加文件* / *新建文件夹* / *新建文本文档*；
-- **映射本地目录**：右键 → *映射目录*（基于 File System Access API，需浏览器支持，如 Chrome/Edge）；
+- **右键菜单**：在资源管理器空白处右键 → _添加文件_ / _新建文件夹_ / _新建文本文档_；
+- **映射本地目录**：右键 → _映射目录_（基于 File System Access API，需浏览器支持，如 Chrome/Edge）；
 - **终端**：用 Terminal 里的文件系统命令创建。
 
 这些内容全部保存在浏览器 IndexedDB 中——换台电脑、换个浏览器、或点了 Power，就都不见了。想"固化"成预置内容，就把文件复制进 `public/` 再按第 2 节重新生成索引。
@@ -91,18 +91,18 @@ daedalOS 在浏览器里模拟了一个操作系统，桌面、资源管理器�
 
 双击文件时用哪个应用打开，由扩展名映射表决定：[`components/system/Files/FileEntry/extensions.ts`](components/system/Files/FileEntry/extensions.ts)。当前默认值摘录：
 
-| 扩展名 | 默认应用 | 备注 |
-| --- | --- | --- |
-| `.md` | **Marked** | Markdown 渲染，可再用 Vim 编辑 |
-| `.pdf` | **PDF** | |
-| `.htm` / `.html` | **Browser** | |
-| `.otf` / `.ttf` / `.woff` | **OpenType** | 字体预览 |
-| 图片（png/jpg/webp/heic/jxl/qoi/tiff…） | **Photos** | 部分格式可再用文本编辑器打开 |
-| 音频 / 视频 / 播放列表（`.m3u` 等） | **VideoPlayer** | 支持 YouTube 链接 |
-| `.zip` / `.iso` | **FileExplorer** | 双击挂载为文件夹浏览 |
-| `.xscr` | **ScreenSaver** | 屏保，`public/System/` 下有示例 |
-| `.wasm` | **Terminal** | 通过 `wapm` 运行 |
-| 其他文本类文件 | **Vim** | |
+| 扩展名                                  | 默认应用         | 备注                            |
+| --------------------------------------- | ---------------- | ------------------------------- |
+| `.md`                                   | **Marked**       | Markdown 渲染，可再用 Vim 编辑  |
+| `.pdf`                                  | **PDF**          |                                 |
+| `.htm` / `.html`                        | **Browser**      |                                 |
+| `.otf` / `.ttf` / `.woff`               | **OpenType**     | 字体预览                        |
+| 图片（png/jpg/webp/heic/jxl/qoi/tiff…） | **Photos**       | 部分格式可再用文本编辑器打开    |
+| 音频 / 视频 / 播放列表（`.m3u` 等）     | **VideoPlayer**  | 支持 YouTube 链接               |
+| `.zip` / `.iso`                         | **FileExplorer** | 双击挂载为文件夹浏览            |
+| `.xscr`                                 | **ScreenSaver**  | 屏保，`public/System/` 下有示例 |
+| `.wasm`                                 | **Terminal**     | 通过 `wapm` 运行                |
+| 其他文本类文件                          | **Vim**          |                                 |
 
 想给新扩展名指定默认应用，在 `extensions.ts` 的 `extensions` 表里加一行即可，例如：
 
@@ -138,15 +138,15 @@ Type=System
 
 字段说明：
 
-| 字段 | 作用 |
-| --- | --- |
-| `BaseURL` | 打开所用的**应用 ID**（即 [`contexts/process/directory.ts`](contexts/process/directory.ts) 里的键名，如 `Browser`、`Marked`、`VideoPlayer`） |
-| `URL` | 目标：虚拟文件系统路径（如 `/Users/Public`）或网页地址（用 Browser 打开） |
-| `IconFile` | 图标路径，见[第 7 节](#7-图标系统) |
-| `Comment` | 悬浮提示/描述文字 |
-| `Type=System` | 标记为系统快捷方式：不显示快捷方式小箭头角标，排序时置顶（可选） |
+| 字段          | 作用                                                                                                                                         |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `BaseURL`     | 打开所用的**应用 ID**（即 [`contexts/process/directory.ts`](contexts/process/directory.ts) 里的键名，如 `Browser`、`Marked`、`VideoPlayer`） |
+| `URL`         | 目标：虚拟文件系统路径（如 `/Users/Public`）或网页地址（用 Browser 打开）                                                                    |
+| `IconFile`    | 图标路径，见[第 7 节](#7-图标系统)                                                                                                           |
+| `Comment`     | 悬浮提示/描述文字                                                                                                                            |
+| `Type=System` | 标记为系统快捷方式：不显示快捷方式小箭头角标，排序时置顶（可选）                                                                             |
 
-用法：把 `.url` 文件放进 `Users/Public/Desktop/` 就在桌面生成图标，放进 `Users/Public/Start Menu/` 就出现在开始菜单。用户也可以在资源管理器里右键任意文件 → *创建快捷方式*。
+用法：把 `.url` 文件放进 `Users/Public/Desktop/` 就在桌面生成图标，放进 `Users/Public/Start Menu/` 就出现在开始菜单。用户也可以在资源管理器里右键任意文件 → _创建快捷方式_。
 
 ## 6. 自定义文件夹图标（desktop.ini）
 
@@ -204,6 +204,7 @@ IconFile=/System/Icons/documents.webp
    ```
 
    常用可选字段：`defaultSize`（初始窗口大小）、`backgroundColor`（窗口底色）、`libs`（启动时预加载的虚拟文件系统中的 JS/CSS，如 `/Program Files/...` 下的库）、`singleton`（全局单例窗口）、`autoSizing`、`hideTaskbarEntry` 等，完整定义见 [`contexts/process/types.ts`](contexts/process/types.ts)；
+
 3. 放置图标文件（见[第 7 节](#7-图标系统)）；
 4. 在 `public/Users/Public/Start Menu/` 添加 `MyApp.url`（见[第 5 节](#5-快捷方式url-文件)），它就会出现在开始菜单；如需文件关联，再在 `extensions.ts` 中把对应扩展名指向 `"MyApp"`。
 
@@ -219,4 +220,4 @@ IconFile=/System/Icons/documents.webp
 浏览器 IndexedDB 可写层里存有你之前的修改并遮盖了只读层。用 Power 清除会话，或清除站点数据。
 
 **开发环境怎么跑？**
-见 [README.md](README.md) 的"试一试"一节：`yarn install` → `yarn build:prebuild` → `yarn dev --webpack`（注意需要 `--webpack` 参数）。
+见 [README.md](README.md) 的"试一试"一节：`yarn install` → `yarn build:prebuild` → `yarn dev --turbopack`（使用 Turbopack）。

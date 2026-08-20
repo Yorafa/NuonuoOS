@@ -38,7 +38,7 @@ const config: PlaywrightTestConfig = {
   webServer: {
     command: OVERRIDE_URL
       ? ""
-      : `node node_modules/next/dist/bin/next dev --port ${port}`,
+      : `node node_modules/next/dist/bin/next dev --turbopack --port ${port}`,
     reuseExistingServer: Boolean(OVERRIDE_URL),
     url: OVERRIDE_URL || baseURL,
   },
