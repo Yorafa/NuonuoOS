@@ -80,6 +80,7 @@ const useWindowPeek = (id: string): string => {
   const previewTimer = useRef(0);
   const [imageSrc, setImageSrc] = useState("");
   const animate = useRef(true);
+  const lastPreviewRef = useRef<HTMLElement | undefined>(undefined);
 
   useEffect(() => {
     if (hidePeek || peekImage) {
@@ -89,16 +90,24 @@ const useWindowPeek = (id: string): string => {
     } else {
       const previewElement = peekElement || componentWindow;
       const keepAlive = ANIMATED_TAGS.has(previewElement?.tagName ?? "");
+      const isSamePreview =
+        !!previewElement && lastPreviewRef.current === previewElement;
 
-      if (!previewTimer.current && previewElement) {
-        previewTimer.current = window.setTimeout(
-          () =>
-            window.requestAnimationFrame(() =>
-              renderFrame(previewElement, animate, setImageSrc, keepAlive)
-            ),
-          document.querySelector(".peekWindow") ? 0 : MILLISECONDS_IN_SECOND / 2
-        );
-        animate.current = true;
+      // First mount: schedule an initial capture. Same preview (reactive
+      // churn in `process` state) reuses the existing timer/animation to
+      // avoid re-rasterizing for every process update.
+      if (previewElement && !isSamePreview) {
+        lastPreviewRef.current = previewElement;
+        if (!previewTimer.current) {
+          previewTimer.current = window.setTimeout(
+            () =>
+              window.requestAnimationFrame(() =>
+                renderFrame(previewElement, animate, setImageSrc, keepAlive)
+              ),
+            document.querySelector(".peekWindow") ? 0 : MILLISECONDS_IN_SECOND / 2
+          );
+          animate.current = true;
+        }
       }
     }
 
@@ -108,6 +117,7 @@ const useWindowPeek = (id: string): string => {
         previewTimer.current = 0;
       }
       animate.current = false;
+      lastPreviewRef.current = undefined;
     };
   }, [componentWindow, hidePeek, icon, peekElement, peekImage]);
 
