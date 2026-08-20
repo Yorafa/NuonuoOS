@@ -3,7 +3,6 @@ import { useProcesses } from "contexts/process";
 import {
   MAX_ICON_SIZE,
   MILLISECONDS_IN_SECOND,
-  ONE_TIME_PASSIVE_EVENT,
   PEEK_MAX_WIDTH,
 } from "utils/constants";
 import {
@@ -13,19 +12,27 @@ import {
   isCanvasDrawn,
 } from "utils/functions";
 
-const FPS = 15;
+const FPS = 5;
+const ANIMATED_TAGS = new Set(["VIDEO", "CANVAS"]);
 
 const renderFrame = async (
   previewElement: HTMLElement,
   animate: React.RefObject<boolean>,
-  callback: (url: string) => void
+  callback: (url: string) => void,
+  keepAlive: boolean
 ): Promise<void> => {
   if (!animate.current) return;
 
-  const nextFrame = (): number =>
-    window.requestAnimationFrame(() =>
-      renderFrame(previewElement, animate, callback)
+  const scheduleNext = (): void => {
+    if (!keepAlive || !animate.current) return;
+    window.setTimeout(
+      () =>
+        window.requestAnimationFrame(() =>
+          renderFrame(previewElement, animate, callback, keepAlive)
+        ),
+      MILLISECONDS_IN_SECOND / FPS
     );
+  };
   const htmlToImage = await getHtmlToImage();
   let dataCanvas: HTMLCanvasElement | undefined;
 
@@ -52,26 +59,16 @@ const renderFrame = async (
     // Ignore failure to capture
   }
 
-  if (dataCanvas && dataCanvas.width > 0 && dataCanvas.height > 0) {
-    if (isCanvasDrawn(dataCanvas)) {
-      const previewImage = new Image();
-      const dataUrl = dataCanvas.toDataURL();
-
-      previewImage.addEventListener(
-        "load",
-        () => {
-          if (!animate.current) return;
-          callback(dataUrl);
-          window.setTimeout(nextFrame, MILLISECONDS_IN_SECOND / FPS);
-        },
-        ONE_TIME_PASSIVE_EVENT
-      );
-      previewImage.decoding = "async";
-      previewImage.src = dataUrl;
-    } else {
-      nextFrame();
-    }
+  if (!dataCanvas || dataCanvas.width === 0 || dataCanvas.height === 0) {
+    scheduleNext();
+    return;
   }
+
+  if (isCanvasDrawn(dataCanvas) && animate.current) {
+    callback(dataCanvas.toDataURL());
+  }
+
+  scheduleNext();
 };
 
 const useWindowPeek = (id: string): string => {
@@ -91,12 +88,13 @@ const useWindowPeek = (id: string): string => {
       );
     } else {
       const previewElement = peekElement || componentWindow;
+      const keepAlive = ANIMATED_TAGS.has(previewElement?.tagName ?? "");
 
       if (!previewTimer.current && previewElement) {
         previewTimer.current = window.setTimeout(
           () =>
             window.requestAnimationFrame(() =>
-              renderFrame(previewElement, animate, setImageSrc)
+              renderFrame(previewElement, animate, setImageSrc, keepAlive)
             ),
           document.querySelector(".peekWindow") ? 0 : MILLISECONDS_IN_SECOND / 2
         );

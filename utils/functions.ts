@@ -435,38 +435,66 @@ export const calcInitialPosition = (
 };
 
 const GRID_TEMPLATE_ROWS = "grid-template-rows";
+const GRID_TEMPLATE_COLUMNS = "grid-template-columns";
+const GRID_COLUMN_GAP = "grid-column-gap";
+const GRID_ROW_GAP = "grid-row-gap";
+const GRID_PADDING_TOP = "padding-top";
+
+type GridLayout = {
+  columnCount: number;
+  columnGap: number;
+  columnWidth: number;
+  paddingTop: number;
+  rowCount: number;
+  rowGap: number;
+  rowHeight: number;
+};
+
+const readGridLayout = (gridElement: HTMLElement): GridLayout => {
+  const style = window.getComputedStyle(gridElement);
+  const gridTemplateRows = style
+    .getPropertyValue(GRID_TEMPLATE_ROWS)
+    .split(" ");
+  const gridTemplateColumns = style
+    .getPropertyValue(GRID_TEMPLATE_COLUMNS)
+    .split(" ");
+
+  return {
+    columnCount: gridTemplateColumns.length,
+    columnGap: pxToNum(style.getPropertyValue(GRID_COLUMN_GAP)),
+    columnWidth: pxToNum(gridTemplateColumns[0]),
+    paddingTop: pxToNum(style.getPropertyValue(GRID_PADDING_TOP)),
+    rowCount: gridTemplateRows.length,
+    rowGap: pxToNum(style.getPropertyValue(GRID_ROW_GAP)),
+    rowHeight: pxToNum(gridTemplateRows[0]),
+  };
+};
 
 const calcGridDropPosition = (
   gridElement: HTMLElement | null,
-  { x = 0, y = 0 }: DragPosition
+  { x = 0, y = 0 }: DragPosition,
+  layout?: GridLayout
 ): IconPosition => {
   if (!gridElement) return Object.create(null) as IconPosition;
 
-  const gridComputedStyle = window.getComputedStyle(gridElement);
-  const gridTemplateRows = gridComputedStyle
-    .getPropertyValue(GRID_TEMPLATE_ROWS)
-    .split(" ");
-  const gridTemplateColumns = gridComputedStyle
-    .getPropertyValue("grid-template-columns")
-    .split(" ");
-  const gridRowHeight = pxToNum(gridTemplateRows[0]);
-  const gridColumnWidth = pxToNum(gridTemplateColumns[0]);
-  const gridColumnGap = pxToNum(
-    gridComputedStyle.getPropertyValue("grid-column-gap")
-  );
-  const gridRowGap = pxToNum(
-    gridComputedStyle.getPropertyValue("grid-row-gap")
-  );
-  const paddingTop = pxToNum(gridComputedStyle.getPropertyValue("padding-top"));
+  const {
+    columnCount,
+    columnWidth,
+    columnGap,
+    rowCount,
+    rowHeight,
+    rowGap,
+    paddingTop,
+  } = layout ?? readGridLayout(gridElement);
 
   return {
     gridColumnStart: Math.min(
-      Math.ceil(x / (gridColumnWidth + gridColumnGap)),
-      gridTemplateColumns.length
+      Math.ceil(x / (columnWidth + columnGap)),
+      columnCount
     ),
     gridRowStart: Math.min(
-      Math.ceil((y - paddingTop) / (gridRowHeight + gridRowGap)),
-      gridTemplateRows.length
+      Math.ceil((y - paddingTop) / (rowHeight + rowGap)),
+      rowCount
     ),
   };
 };
@@ -529,40 +557,49 @@ export const updateIconPositionsIfEmpty = (
   url: string,
   gridElement: HTMLElement | null,
   iconPositions: IconPositions,
-  sortOrders: SortOrders
+  sortOrders: SortOrders,
+  layout?: GridLayout,
+  entryIndex?: Map<string, HTMLElement>
 ): IconPositions => {
   if (!gridElement) return iconPositions;
 
   const [fileOrder = []] = sortOrders[url] || [];
   const newIconPositions: IconPositions = {};
-  const gridComputedStyle = window.getComputedStyle(gridElement);
-  const gridTemplateRowCount = gridComputedStyle
-    .getPropertyValue(GRID_TEMPLATE_ROWS)
-    .split(" ").length;
+  const { rowCount: gridTemplateRowCount } =
+    layout ??
+    (gridElement
+      ? readGridLayout(gridElement)
+      : ({ rowCount: 1 } as GridLayout));
 
   fileOrder.forEach((entry, index) => {
     const entryUrl = join(url, entry);
 
     if (!iconPositions[entryUrl]) {
-      let gridEntry: Element | undefined;
+      let gridEntry: HTMLElement | undefined;
 
-      try {
-        gridEntry = [...gridElement.children].find((element) =>
-          element.querySelector(
-            `button[aria-label="${CSS.escape(entry.replace(SHORTCUT_EXTENSION, ""))}"]`
-          )
-        );
-      } catch {
-        // Ignore error getting element
+      if (entryIndex) {
+        gridEntry = entryIndex.get(entry.replace(SHORTCUT_EXTENSION, ""));
+      } else {
+        try {
+          const candidate = [...gridElement.children].find((element) =>
+            element.querySelector(
+              `button[aria-label="${CSS.escape(entry.replace(SHORTCUT_EXTENSION, ""))}"]`
+            )
+          );
+          if (candidate instanceof HTMLElement) gridEntry = candidate;
+        } catch {
+          // Ignore error getting element
+        }
       }
 
-      if (gridEntry instanceof HTMLElement) {
+      if (gridEntry) {
         const { x, y, height, width } = gridEntry.getBoundingClientRect();
 
-        newIconPositions[entryUrl] = calcGridDropPosition(gridElement, {
-          x: x + width / 2,
-          y: y + height / 2,
-        });
+        newIconPositions[entryUrl] = calcGridDropPosition(
+          gridElement,
+          { x: x + width / 2, y: y + height / 2 },
+          layout
+        );
       } else {
         const position = index + 1;
         const gridColumnStart = Math.ceil(position / gridTemplateRowCount);
@@ -585,7 +622,8 @@ const calcGridPositionOffset = (
   currentIconPositions: IconPositions,
   gridDropPosition: IconPosition,
   [, ...draggedEntries]: string[],
-  gridElement: HTMLElement
+  gridElement: HTMLElement,
+  gridTemplateRowCount: number
 ): IconPosition => {
   if (currentIconPositions[url] && currentIconPositions[targetUrl]) {
     return {
@@ -600,10 +638,6 @@ const calcGridPositionOffset = (
     };
   }
 
-  const gridComputedStyle = window.getComputedStyle(gridElement);
-  const gridTemplateRowCount = gridComputedStyle
-    .getPropertyValue(GRID_TEMPLATE_ROWS)
-    .split(" ").length;
   const {
     gridColumnStart: targetGridColumnStart,
     gridRowStart: targetGridRowStart,
@@ -670,13 +704,32 @@ export const updateIconPositions = (
 ): void => {
   if (!gridElement || draggedEntries.length === 0) return;
 
+  // Cache layout once per drag so child helpers don't each trigger a forced
+  // layout via getComputedStyle().
+  const layout = readGridLayout(gridElement);
+  const entryIndex = new Map<string, HTMLElement>();
+  for (const child of gridElement.children) {
+    if (child instanceof HTMLElement) {
+      const button = child.querySelector("button");
+      const ariaLabel = button?.getAttribute("aria-label");
+      if (ariaLabel) entryIndex.set(ariaLabel, child);
+    } else {
+      // intentionally ignore non-element children
+    }
+  }
   const updatedIconPositions = updateIconPositionsIfEmpty(
     directory,
     gridElement,
     iconPositions,
-    sortOrders
+    sortOrders,
+    layout,
+    entryIndex
   );
-  const gridDropPosition = calcGridDropPosition(gridElement, dragPosition);
+  const gridDropPosition = calcGridDropPosition(
+    gridElement,
+    dragPosition,
+    layout
+  );
   const conflictingIcon = Object.entries(updatedIconPositions).find(
     ([, { gridColumnStart, gridRowStart }]) =>
       gridColumnStart === gridDropPosition.gridColumnStart &&
@@ -707,7 +760,8 @@ export const updateIconPositions = (
                   updatedIconPositions,
                   gridDropPosition,
                   adjustDraggedEntries,
-                  gridElement
+                  gridElement,
+                  layout.rowCount
                 ),
           ];
         })
