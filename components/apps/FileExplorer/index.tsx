@@ -125,7 +125,6 @@ const FileExplorer: FC<ComponentProcessProps> = ({ id }) => {
     <StyledFileExplorer>
       <Navigation
         addressBarRef={addressBarRef}
-        hideSearch={Boolean(mountUrl)}
         id={id}
         searchBarRef={searchBarRef}
       />

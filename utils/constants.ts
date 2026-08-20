@@ -127,15 +127,6 @@ export const TEXT_EDITORS = ["Vim"];
 
 export const CURSOR_FILE_EXTENSIONS = new Set([".ani", ".cur"]);
 
-export const SUMMARIZABLE_FILE_EXTENSIONS = new Set([
-  ".html",
-  ".htm",
-  ".whtml",
-  ".md",
-  ".txt",
-  ".pdf",
-]);
-
 export const EDITABLE_IMAGE_FILE_EXTENSIONS = new Set([
   ".bmp",
   ".gif",
@@ -189,8 +180,6 @@ export const PREVENT_SCROLL = { preventScroll: true };
 
 export const PROCESS_DELIMITER = "__";
 
-export const SAVE_PATH = `${HOME}/Snapshots`;
-
 export const PICUTRES_PATH = `${HOME}/Pictures`;
 
 export const SHORTCUT_APPEND = " - Shortcut";
@@ -204,10 +193,6 @@ export const SYSTEM_PATHS = new Set(["/.deletedFiles.log"]);
 export const DESKTOP_PATH = `${HOME}/Desktop`;
 
 export const START_MENU_PATH = `${HOME}/Start Menu`;
-
-export const AI_TITLE = "Talos";
-
-export const AI_WINDOW_ID = "ai-chat-window";
 
 export const SYSTEM_SHORTCUT_DIRECTORIES = new Set([DESKTOP_PATH]);
 
@@ -260,8 +245,6 @@ export const VIDEO_FILE_EXTENSIONS = new Set([
   ".ogv",
   ".webm",
 ]);
-
-export const DYNAMIC_PREFIX = ["nostr:"];
 
 export const EXTENSIONS_WITH_ICON = new Set([".ani", ".cur", ".exe", ".ico"]);
 
@@ -362,7 +345,6 @@ export const PACKAGE_DATA = {
   author: {
     email: "dustinbrett@gmail.com",
     name: "Dustin Brett",
-    npub: "npub10uc7hg6wdxhhd7ee8x9c5lr9d0ux7272rv2m0mc03ds54q7quxjss02r3p",
     url: "https://dustinbrett.com",
   },
   description: "Desktop environment in the browser",

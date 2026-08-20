@@ -2,7 +2,7 @@ import { type Locator } from "@playwright/test";
 import { type SessionData } from "contexts/session/types";
 
 declare global {
-  // eslint-disable-next-line vars-on-top, no-var
+  // eslint-disable-next-line vars-on-top
   var capturedConsoleLogs: string[] | undefined;
 
   interface Window {
@@ -17,10 +17,12 @@ export const EXCLUDED_CONSOLE_LOGS = (
   // Generic messages
   const excludedConsoleLogs = [
     "[HMR] connected",
+    "WebSocket connection to",
     "No available adapters.",
     "not used within a few seconds",
     "[Fast Refresh] rebuilding",
     "[Fast Refresh] done in",
+    "Download the React DevTools for a better development experience",
     "[Fast Refresh] performing full reload",
     "Cannot update a component (`Unknown`) while rendering a different component",
     "browserContext.",
@@ -115,7 +117,7 @@ export const TASKBAR_ENTRY_PEEK_SELECTOR = `${TASKBAR_ENTRY_SELECTOR}>div:not([t
 export const TASKBAR_ENTRY_PEEK_IMAGE_SELECTOR = `${TASKBAR_ENTRY_PEEK_SELECTOR}>img`;
 export const SEARCH_MENU_SELECTOR = `${DESKTOP_SELECTOR}>nav#searchMenu`;
 export const SEARCH_MENU_INPUT_SELECTOR = `${SEARCH_MENU_SELECTOR} input[placeholder='Type here to search']`;
-export const SEARCH_MENU_RESULTS_SELECTOR = `${SEARCH_MENU_SELECTOR}>div>.content>div>.list>figure:first-child>ol`;
+export const SEARCH_MENU_RESULTS_SELECTOR = `${SEARCH_MENU_SELECTOR} .results`;
 export const SEARCH_BUTTON_SELECTOR = `${TASKBAR_SELECTOR}>[title='Type here to search']`;
 export const START_BUTTON_SELECTOR = `${TASKBAR_SELECTOR}>[title=Start]`;
 export const START_MENU_SELECTOR = `${DESKTOP_SELECTOR}>nav#startMenu`;
@@ -205,9 +207,8 @@ export const DESKTOP_MENU_ITEMS: MenuItems = {
 
 export const CLOCK_MENU_ITEMS = [/^Local time$/, /^Server time$/];
 
-export const TASKBAR_ENTRIES_MENU_ITEMS = (hasWebGpu: boolean): RegExp[] => [
+export const TASKBAR_ENTRIES_MENU_ITEMS = [
   /^Enter full screen$/,
-  ...(hasWebGpu ? [/^Show Talos button$/] : []),
   /^Show the desktop$/,
 ];
 
@@ -234,7 +235,6 @@ export const START_MENU_APPS = [
   /^Video Player$/,
   /^Vim$/,
 ];
-
 
 export const TEST_APP_CONTAINER_APP = "Marked";
 export const TEST_APP_CONTAINER_APP_TITLE = (file: string | null): string =>

@@ -68,10 +68,10 @@ const interpolate = (
 };
 
 const useLanguageState = (): LanguageContextValue => {
-  const [locale, setLocaleState] = useState<Locale>(currentLocale);
+  const [locale, setLocale] = useState<Locale>(currentLocale);
 
-  const setLocale = useCallback((nextLocale: Locale): void => {
-    setLocaleState(nextLocale);
+  const changeLocale = useCallback((nextLocale: Locale): void => {
+    setLocale(nextLocale);
     setLocaleGlobal(nextLocale);
     window.localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
   }, []);
@@ -90,7 +90,10 @@ const useLanguageState = (): LanguageContextValue => {
     setLocaleGlobal(locale);
   }, [locale]);
 
-  return useMemo(() => ({ locale, setLocale, t }), [locale, setLocale, t]);
+  return useMemo(
+    () => ({ locale, setLocale: changeLocale, t }),
+    [locale, changeLocale, t]
+  );
 };
 
 export const useLanguage = (): LanguageContextValue =>

@@ -28,8 +28,6 @@ import {
 } from "contexts/fileSystem/core";
 import useAsyncFs, {
   type AsyncFS,
-  type EmscriptenFS,
-  type ExtendedEmscriptenFileSystem,
   type RootFileSystem,
 } from "contexts/fileSystem/useAsyncFs";
 import { useProcesses } from "contexts/process";
@@ -103,7 +101,6 @@ type FileSystemContextState = AsyncFS & {
     existingHandle?: FileSystemDirectoryHandle
   ) => Promise<string>;
   mkdirRecursive: (path: string) => Promise<void>;
-  mountEmscriptenFs: (FS: EmscriptenFS, fsName?: string) => Promise<string>;
   mountFs: (url: string) => Promise<void>;
   mountHttpRequestFs: (
     mountPoint: string,
@@ -264,41 +261,6 @@ const useFileSystemContextState = (): FileSystemContextState => {
       }
     },
     []
-  );
-  const mountEmscriptenFs = useCallback(
-    async (FS: EmscriptenFS, fsName?: string) =>
-      new Promise<string>((resolve, reject) => {
-        import("public/System/BrowserFS/extrafs.min.js").then((ExtraFS) => {
-          const {
-            FileSystem: { Emscripten },
-          } = ExtraFS as typeof IBrowserFS;
-
-          Emscripten?.Create({ FS }, (error, newFs) => {
-            const emscriptenFS =
-              newFs as unknown as ExtendedEmscriptenFileSystem;
-
-            if (error || !newFs || !emscriptenFS._FS?.DB_NAME) {
-              reject(new Error("Error while mounting Emscripten FS."));
-              return;
-            }
-
-            const dbName =
-              fsName ||
-              `${emscriptenFS._FS?.DB_NAME().replace(/\/+$/, "")}${
-                emscriptenFS._FS?.DB_STORE_NAME
-              }`;
-
-            try {
-              rootFs?.mount?.(join("/", dbName), newFs);
-            } catch {
-              // Ignore error during mounting
-            }
-
-            resolve(dbName);
-          });
-        });
-      }),
-    [rootFs]
   );
   const mountHttpRequestFs = useCallback(
     async (
@@ -697,7 +659,6 @@ const useFileSystemContextState = (): FileSystemContextState => {
     deletePath,
     mapFs,
     mkdirRecursive,
-    mountEmscriptenFs,
     mountFs,
     mountHttpRequestFs,
     moveEntries,

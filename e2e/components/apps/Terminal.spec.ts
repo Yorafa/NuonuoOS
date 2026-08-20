@@ -1,9 +1,6 @@
 import { expect, test } from "@playwright/test";
 import directory from "contexts/process/directory";
-import {
-  ROOT_PUBLIC_TEST_FILE,
-  TERMINAL_BASE_CD,
-} from "e2e/constants";
+import { ROOT_PUBLIC_TEST_FILE, TERMINAL_BASE_CD } from "e2e/constants";
 import {
   captureConsoleLogs,
   disableWallpaper,
@@ -22,11 +19,14 @@ import {
   windowsAreVisible,
 } from "e2e/functions";
 
-test.beforeEach(captureConsoleLogs());
-test.beforeEach(disableWallpaper);
-test.beforeEach(async ({ page }) => loadApp({ app: "Terminal" })({ page }));
-test.beforeEach(windowsAreVisible);
-test.beforeEach(terminalHasRows);
+test.beforeEach(async ({ browserName, page }) => {
+  const fixtures = { browserName, page };
+  captureConsoleLogs()(fixtures);
+  await disableWallpaper(fixtures);
+  await loadApp({ app: "Terminal" })(fixtures);
+  await windowsAreVisible(fixtures);
+  await terminalHasRows(fixtures);
+});
 
 test.describe("has file system access", () => {
   test.describe("has current directory", () => {

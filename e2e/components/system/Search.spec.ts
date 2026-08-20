@@ -11,11 +11,14 @@ import {
   typeInTaskbarSearchBar,
 } from "e2e/functions";
 
-test.beforeEach(captureConsoleLogs());
-test.beforeEach(disableWallpaper);
-test.beforeEach(loadApp());
-test.beforeEach(async ({ page }) => clickSearchButton({ page }));
-test.beforeEach(searchMenuIsVisible);
+test.beforeEach(async ({ browserName, page }) => {
+  const fixtures = { browserName, page };
+  captureConsoleLogs()(fixtures);
+  await disableWallpaper(fixtures);
+  await loadApp()(fixtures);
+  await clickSearchButton(fixtures);
+  await searchMenuIsVisible(fixtures);
+});
 
 test.describe("can close", () => {
   test("via button", async ({ page }) => {

@@ -1,5 +1,4 @@
 import { basename, dirname, extname, join } from "path";
-type Position = { x: number; y: number };
 import type HtmlToImage from "html-to-image";
 import { type DragPosition } from "components/system/Files/FileManager/useDraggableEntries";
 import { type Size } from "components/system/Window/RndWindow/useResizable";
@@ -28,6 +27,8 @@ import {
   TIMESTAMP_DATE_FORMAT,
   USER_ICON_PATH,
 } from "utils/constants";
+
+type Position = { x: number; y: number };
 
 export const bufferToBlob = (buffer: Buffer, type?: string): Blob =>
   new Blob([buffer as BlobPart], type ? { type } : undefined);

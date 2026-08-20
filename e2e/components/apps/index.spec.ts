@@ -10,8 +10,11 @@ import {
 } from "e2e/functions";
 import { TRANSITIONS_IN_MILLISECONDS } from "utils/constants";
 
-test.beforeEach(captureConsoleLogs("apps"));
-test.beforeEach(disableWallpaper);
+test.beforeEach(async ({ browserName, page }) => {
+  const fixtures = { browserName, page };
+  captureConsoleLogs("apps")(fixtures);
+  await disableWallpaper(fixtures);
+});
 
 test.describe("can open app", () => {
   const apps = Object.entries(directory).filter(

@@ -79,13 +79,8 @@ const useFileContextMenu = (
 ): ContextMenuCapture => {
   const { close, minimize, open, url: changeUrl } = useProcesses();
   const processesRef = useProcessesRef();
-  const {
-    setCursor,
-    setForegroundId,
-    setIconPositions,
-    setWallpaper,
-    updateRecentFiles,
-  } = useSession();
+  const { setCursor, setForegroundId, setIconPositions, setWallpaper } =
+    useSession();
   const baseName = basename(path);
   const isFocusedEntry = useMemo(
     () => focusedEntries.includes(baseName),
@@ -107,6 +102,7 @@ const useFileContextMenu = (
   const { openTransferDialog } = useTransferDialog();
   const { onContextMenuCapture, ...contextMenuHandlers } = useMemo(
     () =>
+      // eslint-disable-next-line react-hooks/refs -- getItems only runs when the context menu opens (event handler), not during render.
       contextMenu?.(() => {
         const urlExtension = getExtension(url);
         const { process: extensionProcesses = [] } =
@@ -593,7 +589,7 @@ const useFileContextMenu = (
             url !== "/" &&
             !url.startsWith("http:") &&
             !url.startsWith("https:") &&
-            !url.startsWith("nostr:")
+            !url.includes("://")
           ) {
             const isFolder = urlExtension === "" || urlExtension === ".zip";
 
@@ -663,8 +659,7 @@ const useFileContextMenu = (
       processesRef,
       readFile,
       readOnly,
-      rootFs?.mntMap,
-      rootFs?.mountList,
+      rootFs,
       setCursor,
       setForegroundId,
       setIconPositions,
@@ -673,7 +668,6 @@ const useFileContextMenu = (
       stats,
       unMapFs,
       updateFolder,
-      updateRecentFiles,
       url,
     ]
   );

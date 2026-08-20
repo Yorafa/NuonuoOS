@@ -58,7 +58,6 @@ const useSessionContextState = (): SessionContextState => {
   const [themeName, setThemeName] = useState(DEFAULT_THEME);
   const [clockSource, setClockSource] = useState(DEFAULT_CLOCK_SOURCE);
   const [cursor, setCursor] = useState<string | undefined>();
-  const [aiEnabled, setAiEnabled] = useState(false);
   const [closeEffect, setCloseEffect] = useState(DEFAULT_CLOSE_EFFECT);
   const [windowStates, setWindowStates] = useState(
     Object.create(null) as WindowStates
@@ -213,7 +212,6 @@ const useSessionContextState = (): SessionContextState => {
         writeFile(
           SESSION_FILE,
           JSON.stringify({
-            aiEnabled,
             clockSource,
             closeEffect,
             cursor,
@@ -232,7 +230,6 @@ const useSessionContextState = (): SessionContextState => {
       });
     }
   }, [
-    aiEnabled,
     clockSource,
     closeEffect,
     cursor,
@@ -272,7 +269,6 @@ const useSessionContextState = (): SessionContextState => {
           if (session.clockSource) setClockSource(session.clockSource);
           if (session.closeEffect) setCloseEffect(session.closeEffect);
           if (session.cursor) setCursor(session.cursor);
-          if (session.aiEnabled) setAiEnabled(session.aiEnabled);
           if (session.themeName) setThemeName(session.themeName);
           if (session.wallpaperImage) {
             setWallpaper(session.wallpaperImage, session.wallpaperFit);
@@ -369,7 +365,6 @@ const useSessionContextState = (): SessionContextState => {
   useEffect(() => setCurrentCloseEffect(closeEffect), [closeEffect]);
 
   return {
-    aiEnabled,
     clockSource,
     closeEffect,
     cursor,
@@ -380,7 +375,6 @@ const useSessionContextState = (): SessionContextState => {
     removeFromStack,
     runHistory,
     sessionLoaded,
-    setAiEnabled,
     setClockSource,
     setCloseEffect,
     setCursor,

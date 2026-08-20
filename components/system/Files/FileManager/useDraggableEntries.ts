@@ -55,8 +55,6 @@ const useDraggableEntries = (
     },
     []
   );
-  const isMainContainer =
-    fileManagerRef.current?.parentElement?.tagName === "MAIN";
   const updateDragImage = useCallback(async () => {
     if (fileManagerRef.current) {
       const focusedElements = [
@@ -200,10 +198,10 @@ const useDraggableEntries = (
 
           event.nativeEvent.dataTransfer?.setDragImage(
             dragImageRef.current,
-            isMainContainer
+            isDesktop
               ? capturedImageOffset.current.x
               : event.nativeEvent.offsetX,
-            isMainContainer
+            isDesktop
               ? capturedImageOffset.current.y
               : event.nativeEvent.offsetY
           );
@@ -237,7 +235,6 @@ const useDraggableEntries = (
       focusEntry,
       focusedEntries,
       isDesktop,
-      isMainContainer,
       onDragging,
     ]
   );
@@ -257,7 +254,7 @@ const useDraggableEntries = (
     draggable: true,
     onDragEnd: onDragEnd(entryUrl),
     onDragStart: onDragStart(entryUrl, file, renaming),
-    style: isMainContainer ? iconPositions[join(entryUrl, file)] : undefined,
+    style: isDesktop ? iconPositions[join(entryUrl, file)] : undefined,
   });
 };
 

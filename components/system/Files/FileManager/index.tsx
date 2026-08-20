@@ -81,6 +81,8 @@ const FileManager: FC<FileManagerProps> = ({
   const [columns, setColumns] = useState<ColumnsObject | undefined>(() =>
     isDetailsView ? DEFAULT_COLUMNS : undefined
   );
+  const [previousIsDetailsView, setPreviousIsDetailsView] =
+    useState(isDetailsView);
   const [currentUrl, setCurrentUrl] = useState(url);
   const [renaming, setRenaming] = useState("");
   const [mounted, setMounted] = useState<boolean>(false);
@@ -216,6 +218,7 @@ const FileManager: FC<FileManagerProps> = ({
   useEffect(() => {
     if (url !== currentUrl) {
       folderActions.resetFiles();
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Reset local state when the directory prop changes; render-phase adjustment cannot run resetFiles()/focusedOnLoad side effects.
       setCurrentUrl(url);
       setPermission("denied");
       focusedOnLoad.current = false;
@@ -235,9 +238,12 @@ const FileManager: FC<FileManagerProps> = ({
     }
   }, [foregroundId, id, isDesktop, isStartMenu, loading]);
 
-  useEffect(() => {
+  // Adjust the columns state when the view changes (React's recommended
+  // render-phase adjustment instead of an effect).
+  if (isDetailsView !== previousIsDetailsView) {
+    setPreviousIsDetailsView(isDetailsView);
     setColumns(isDetailsView ? DEFAULT_COLUMNS : undefined);
-  }, [isDetailsView]);
+  }
 
   return (
     <>

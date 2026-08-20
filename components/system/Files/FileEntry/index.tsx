@@ -282,12 +282,12 @@ const FileEntry: FC<FileEntryProps> = ({
   const [tooltip, setTooltip] = useState<string>();
   const doubleClickHandler = useCallback(() => {
     if (
-      openInFileExplorer &&
       fileManagerId &&
+      (isDirectory || openInFileExplorer) &&
       !window.globalKeyStates?.ctrlKey &&
       !MOUNTABLE_EXTENSIONS.has(urlExt)
     ) {
-      changeUrl(fileManagerId, url);
+      changeUrl(fileManagerId, isDirectory ? path : url);
       blurEntry();
     } else if (openInFileExplorer && listView) {
       setShowInFileManager((currentState) => !currentState);
@@ -299,8 +299,10 @@ const FileEntry: FC<FileEntryProps> = ({
     changeUrl,
     fileManagerId,
     icon,
+    isDirectory,
     isDynamicIcon,
     listView,
+    path,
     openFile,
     openInFileExplorer,
     pid,

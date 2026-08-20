@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useProcesses } from "contexts/process";
 
 type History = {
@@ -15,6 +15,7 @@ const useHistory = (url: string, id: string): History => {
   const [currentUrl, setCurrentUrl] = useState(url);
   const [history, setHistory] = useState<string[]>(() => [url]);
   const [position, setPosition] = useState<number>(0);
+  const [previousUrl, setPreviousUrl] = useState(url);
   const moveHistory = useCallback(
     (step: number): void => {
       const newPosition = position + step;
@@ -26,13 +27,14 @@ const useHistory = (url: string, id: string): History => {
     [changeUrl, history, id, position]
   );
 
-  useEffect(() => {
-    if (url !== currentUrl) {
-      setPosition(position + 1);
-      setCurrentUrl(url);
-      setHistory([...history.slice(0, position + 1), url]);
-    }
-  }, [currentUrl, history, position, url]);
+  // Adjust local state when the url prop changes (React's recommended
+  // "adjusting state during render" pattern instead of an effect).
+  if (url !== previousUrl) {
+    setPreviousUrl(url);
+    setPosition(position + 1);
+    setCurrentUrl(url);
+    setHistory([...history.slice(0, position + 1), url]);
+  }
 
   return {
     canGoBack: position > 0,

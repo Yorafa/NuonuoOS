@@ -11,10 +11,19 @@ type StyledWindowProps = {
 const StyledWindow = styled(motion.section)<StyledWindowProps>`
   background-color: ${({ $backgroundColor, theme }) =>
     $backgroundColor || theme.colors.window.background};
+  border-bottom: 2px solid rgb(0 0 0);
+  border-left: 2px solid rgb(255 255 255);
+  border-right: 2px solid rgb(0 0 0);
+
+  /* Dreamcore Retro Windows 98 raised bevel on the window frame. */
+  border-top: 2px solid rgb(255 255 255);
   box-shadow: ${({ $isForeground, theme }) =>
     $isForeground
       ? theme.colors.window.shadow
       : theme.colors.window.shadowInactive};
+  box-shadow:
+    inset -1px -1px 0 rgb(128 128 128),
+    inset 1px 1px 0 rgb(223 223 223);
   contain: strict;
   height: 100%;
   outline: ${({ $isForeground, theme }) =>

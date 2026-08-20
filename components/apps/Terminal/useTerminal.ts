@@ -209,7 +209,7 @@ const useTerminal = ({
     }
   }, [foregroundId, id, loading, terminal]);
 
-  useResizeObserver(containerRef.current, autoFit);
+  useResizeObserver(containerRef, autoFit);
 };
 
 export default useTerminal;

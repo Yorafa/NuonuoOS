@@ -15,12 +15,18 @@ import {
   windowsAreVisible,
 } from "e2e/functions";
 
-test.beforeEach(captureConsoleLogs());
-test.beforeEach(disableWallpaper);
+test.beforeEach(async ({ browserName, page }) => {
+  const fixtures = { browserName, page };
+  captureConsoleLogs()(fixtures);
+  await disableWallpaper(fixtures);
+});
 
 test.describe("app container", () => {
-  test.beforeEach(loadContainerTestApp);
-  test.beforeEach(windowsAreVisible);
+  test.beforeEach(async ({ browserName, page }) => {
+    const fixtures = { browserName, page };
+    await loadContainerTestApp(fixtures);
+    await windowsAreVisible(fixtures);
+  });
 
   test("can drop", async ({ browserName, headless, page }) => {
     test.skip(

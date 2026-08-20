@@ -32,15 +32,6 @@ const colors = {
   taskbar: {
     active: "rgb(0, 0, 128)",
     activeForeground: "rgb(16, 64, 192)",
-    ai: {
-      balanced: ["rgb(112, 203, 255)", "rgb(40, 112, 234)", "rgb(0, 95, 184)"],
-      creative: [
-        "rgb(215, 167, 187)",
-        "rgb(145, 72, 135)",
-        "rgb(139, 37, 126)",
-      ],
-      precise: ["rgb(167, 224, 235)", "rgb(0, 104, 128)", "rgb(0, 83, 102)"],
-    },
     // Classic Win98 taskbar: brushed silver/grey 3D bevel.
     background:
       "linear-gradient(to bottom, #c0c0c0 0%, #c0c0c0 8%, #a0a0a0 50%, #808080 100%)",
@@ -57,9 +48,11 @@ const colors = {
   text: "#000000",
   titleBar: {
     // Classic Win98 active title bar gradient blue.
-    background: "linear-gradient(90deg, rgb(0, 0, 128) 0%, rgb(16, 64, 192) 100%)",
+    background:
+      "linear-gradient(90deg, rgb(0, 0, 128) 0%, rgb(16, 64, 192) 100%)",
     backgroundHover: "rgb(26, 62, 150)",
-    backgroundInactive: "linear-gradient(90deg, rgb(128, 128, 128) 0%, rgb(160, 160, 160) 100%)",
+    backgroundInactive:
+      "linear-gradient(90deg, rgb(128, 128, 128) 0%, rgb(160, 160, 160) 100%)",
     buttonInactive: "rgb(128, 128, 128)",
     closeHover: "rgb(232, 17, 35)",
     text: "#FFFFFF",

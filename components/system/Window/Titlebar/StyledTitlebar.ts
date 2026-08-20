@@ -1,36 +1,29 @@
-import styled, { type DefaultTheme } from "styled-components";
+import styled from "styled-components";
 
 type StyledTitlebarProps = {
   $foreground: boolean;
 };
 
+// Classic Windows 98 active title bar gradient.
 const activeTitlebarGradient = `
   linear-gradient(
-    180deg,
-    rgb(41, 88, 173) 0%,
-    rgb(10, 36, 106) 14%,
-    rgb(30, 88, 168) 55%,
-    rgb(70, 130, 205) 88%,
-    rgb(120, 165, 220) 100%
+    90deg,
+    rgb(0, 0, 128) 0%,
+    rgb(16, 64, 192) 100%
   )
 `;
 
+// Classic Windows 98 inactive title bar gradient.
 const inactiveTitlebarGradient = `
   linear-gradient(
-    180deg,
-    rgb(150, 160, 174) 0%,
-    rgb(122, 134, 148) 50%,
-    rgb(140, 150, 164) 100%
+    90deg,
+    rgb(128, 128, 128) 0%,
+    rgb(160, 160, 160) 100%
   )
 `;
 
-const styledBorder = ({
-  $foreground,
-  theme,
-}: StyledTitlebarProps & { theme: DefaultTheme }): string =>
-  $foreground
-    ? `1px solid ${theme.colors.titleBar.background}`
-    : `1px solid ${theme.colors.titleBar.backgroundInactive}`;
+const styledBorder = ({ $foreground }: StyledTitlebarProps): string =>
+  $foreground ? "2px solid rgb(255, 255, 255)" : "2px solid rgb(192, 192, 192)";
 
 const StyledTitlebar = styled.header<StyledTitlebarProps>`
   background-image: ${({ $foreground }) =>
@@ -57,7 +50,7 @@ const StyledTitlebar = styled.header<StyledTitlebarProps>`
     figure {
       align-items: center;
       display: flex;
-      margin-left: 8px;
+      margin-left: 4px;
       min-width: inherit;
       pointer-events: none;
       position: relative;
@@ -84,20 +77,18 @@ const StyledTitlebar = styled.header<StyledTitlebarProps>`
 
   nav {
     display: flex;
+    padding-right: 2px;
 
     button {
-      background: linear-gradient(
-        180deg,
-        rgb(238, 245, 252) 0%,
-        rgb(196, 213, 232) 45%,
-        rgb(160, 183, 210) 100%
-      );
-      border-bottom-color: rgb(72, 92, 120);
-      border-left-color: rgb(255, 255, 255);
-      border-right-color: rgb(72, 92, 120);
-      border-style: outset;
-      border-top-color: rgb(255, 255, 255);
-      border-width: 1px;
+      /* Classic Win98 raised bevel button. */
+      background: rgb(192 192 192);
+      border-bottom: 1px solid rgb(0 0 0);
+      border-left: 1px solid rgb(255 255 255);
+      border-right: 1px solid rgb(0 0 0);
+      border-top: 1px solid rgb(255 255 255);
+      box-shadow:
+        inset -1px -1px 0 rgb(128 128 128),
+        inset 1px 1px 0 rgb(223 223 223);
       box-sizing: content-box;
       display: flex;
       margin: 2px 2px 2px 0;
@@ -119,33 +110,30 @@ const StyledTitlebar = styled.header<StyledTitlebarProps>`
       }
 
       &:hover {
-        background-color: ${({ theme }) =>
-          theme.colors.titleBar.backgroundHover};
-        filter: brightness(1.06);
+        background-color: rgb(208 208 208);
       }
 
       &:active {
-        border-style: inset;
-        background: linear-gradient(
-          180deg,
-          rgb(150, 172, 200) 0%,
-          rgb(180, 200, 224) 100%
-        );
+        border-bottom: 1px solid rgb(255 255 255);
+        border-left: 1px solid rgb(0 0 0);
+        border-right: 1px solid rgb(255 255 255);
+
+        /* Classic Win98 pressed/inset bevel. */
+        border-top: 1px solid rgb(0 0 0);
+        box-shadow:
+          inset 1px 1px 0 rgb(128 128 128),
+          inset -1px -1px 0 rgb(223 223 223);
 
         &.close {
-          background: linear-gradient(
-            180deg,
-            rgb(200, 60, 70) 0%,
-            rgb(232, 140, 70) 100%
-          );
+          background: rgb(232 17 35);
         }
       }
 
       &:disabled {
-        opacity: 0.5;
+        opacity: 50%;
 
         &:hover {
-          filter: none;
+          background: rgb(192 192 192);
         }
       }
     }

@@ -92,7 +92,7 @@ const StatusBar: FC<StatusBarProps> = ({
   }, [updateShowSelected]);
 
   useResizeObserver(
-    statusBarRef.current,
+    statusBarRef,
     useCallback<ResizeObserverCallback>(
       ([{ contentRect: { width = 0 } = {} }]) => updateShowSelected(width),
       [updateShowSelected]

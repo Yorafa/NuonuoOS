@@ -1,13 +1,9 @@
 import { expect, test } from "@playwright/test";
-import {
-  START_MENU_APPS,
-  START_MENU_SIDEBAR_SELECTOR,
-} from "e2e/constants";
+import { START_MENU_APPS, START_MENU_SIDEBAR_SELECTOR } from "e2e/constants";
 import {
   captureConsoleLogs,
   clickDesktop,
   clickStartButton,
-  clickStartMenuEntry,
   contextMenuEntryIsVisible,
   contextMenuHasCount,
   desktopEntriesAreVisible,
@@ -24,11 +20,14 @@ import {
   startMenuSidebarEntryIsVisible,
 } from "e2e/functions";
 
-test.beforeEach(captureConsoleLogs());
-test.beforeEach(disableWallpaper);
-test.beforeEach(loadApp());
-test.beforeEach(async ({ page }) => clickStartButton({ page }));
-test.beforeEach(startMenuIsVisible);
+test.beforeEach(async ({ browserName, page }) => {
+  const fixtures = { browserName, page };
+  captureConsoleLogs()(fixtures);
+  await disableWallpaper(fixtures);
+  await loadApp()(fixtures);
+  await clickStartButton(fixtures);
+  await startMenuIsVisible(fixtures);
+});
 
 test.describe("has sidebar", () => {
   test("has buttons", async ({ page }) => {

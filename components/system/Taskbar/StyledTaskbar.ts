@@ -5,9 +5,13 @@ const TASKBAR_Z_INDEX = 100000;
 
 const StyledTaskbar = styled.nav`
   background: ${({ theme }) => theme.colors.taskbar.background};
+
+  /* Classic Win98 raised top bevel: light line above, dark below. */
+  border-top: 1px solid rgb(255 255 255);
   bottom: 0;
-  border-top: 1px solid hsl(216 30% 92% / 90%);
-  box-shadow: 0 -1px 0 hsl(216 25% 28% / 35%);
+  box-shadow:
+    inset 0 1px 0 rgb(223 223 223),
+    0 -1px 0 rgb(0 0 0);
   contain: size layout;
   height: ${TASKBAR_HEIGHT}px;
   left: 0;

@@ -26,12 +26,15 @@ import {
   windowsAreVisible,
 } from "e2e/functions";
 
-test.beforeEach(captureConsoleLogs());
-test.beforeEach(disableWallpaper);
-test.beforeEach(loadTestApp);
-test.beforeEach(windowsAreVisible);
-test.beforeEach(windowAnimationIsFinished);
-test.beforeEach(fileExplorerEntriesAreVisible);
+test.beforeEach(async ({ browserName, page }) => {
+  const fixtures = { browserName, page };
+  captureConsoleLogs()(fixtures);
+  await disableWallpaper(fixtures);
+  await loadTestApp(fixtures);
+  await windowsAreVisible(fixtures);
+  await windowAnimationIsFinished(fixtures);
+  await fileExplorerEntriesAreVisible(fixtures);
+});
 
 test("has title", async ({ page }) =>
   windowTitlebarTextIsVisible(TEST_APP_TITLE_TEXT, { page }));

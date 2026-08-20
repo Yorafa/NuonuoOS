@@ -1,5 +1,5 @@
 import { type Position } from "react-rnd";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createSelectionStyling } from "components/system/Files/FileManager/Selection/functions";
 import { type FocusEntryFunctions } from "components/system/Files/FileManager/useFocusableEntries";
 import { type Size } from "components/system/Window/RndWindow/useResizable";
@@ -95,10 +95,10 @@ const useSelection = (
       setSize(Object.create(null) as Size);
       setPosition(Object.create(null) as Position);
     };
-    const originalScrollHeight = containerRef.current?.scrollHeight || 0;
-    const originalScrollWidth = containerRef.current?.scrollWidth || 0;
     const onMouseLeave = (): void => {
       if (selection.isSelecting) {
+        const originalScrollHeight = containerRef.current?.scrollHeight || 0;
+        const originalScrollWidth = containerRef.current?.scrollWidth || 0;
         const externalMouseMove = (event: MouseEvent): void => {
           onMouseMove(event as unknown as React.MouseEvent<HTMLElement>);
 
@@ -142,8 +142,13 @@ const useSelection = (
       position,
       size
     );
-    sizeRef.current = size;
   }
+
+  useEffect(() => {
+    if (isSelecting) {
+      sizeRef.current = size;
+    }
+  }, [isSelecting, size]);
 
   return selection;
 };

@@ -54,10 +54,6 @@ const sizes = {
     size: 320,
   },
   taskbar: {
-    ai: {
-      buttonWidth: "40px",
-      chatWidth: 415,
-    },
     blur: "5px",
     button: {
       iconSize: "15px",

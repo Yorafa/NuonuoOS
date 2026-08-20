@@ -14,7 +14,6 @@ import {
   BASE_2D_CONTEXT_OPTIONS,
   DECODED_VIDEO_FILE_EXTENSIONS,
   DYNAMIC_EXTENSION,
-  DYNAMIC_PREFIX,
   FOLDER_BACK_ICON,
   FOLDER_FRONT_ICON,
   FOLDER_ICON,
@@ -431,10 +430,7 @@ export const getInfoWithExtension = (
               subIcons,
               url,
             });
-          } else if (
-            DYNAMIC_EXTENSION.has(urlExt) ||
-            DYNAMIC_PREFIX.some((prefix) => url.startsWith(prefix))
-          ) {
+          } else if (DYNAMIC_EXTENSION.has(urlExt)) {
             const isCachedUrl = DYNAMIC_EXTENSION.has(urlExt);
             const cachedIconPath = join(
               ICON_CACHE,
@@ -616,7 +612,6 @@ export const getInfoWithExtension = (
             containerElement.style.overflow = "hidden";
             containerElement.style.opacity = "0";
             containerElement.style.userSelect = "none";
-            // eslint-disable-next-line deprecation/deprecation
             containerElement.style.webkitUserSelect = "none";
 
             containerElement.innerHTML = contents.toString();

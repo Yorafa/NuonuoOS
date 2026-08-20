@@ -20,6 +20,7 @@ const useTaskbarContextMenu = (onStartButton = false): ContextMenuCapture => {
 
   return useMemo(
     () =>
+      // eslint-disable-next-line react-hooks/refs -- getItems only runs when the context menu opens (event handler), not during render.
       contextMenu?.(() => {
         const processArray = Object.entries(processesRef.current);
         const allWindowsMinimized =

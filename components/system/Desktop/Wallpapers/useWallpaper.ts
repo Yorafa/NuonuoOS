@@ -3,10 +3,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { bgPositionSize } from "components/system/Desktop/Wallpapers/constants";
 import { useFileSystem } from "contexts/fileSystem";
 import { useSession } from "contexts/session";
-import {
-  IMAGE_FILE_EXTENSIONS,
-  NATIVE_IMAGE_FORMATS,
-} from "utils/constants";
+import { NATIVE_IMAGE_FORMATS } from "utils/constants";
 import {
   bufferToUrl,
   cleanUpBufferUrl,
@@ -18,29 +15,21 @@ const useWallpaper = (
   desktopRef: React.RefObject<HTMLElement | null>
 ): void => {
   const { exists, readFile } = useFileSystem();
-  const { sessionLoaded, setWallpaper, wallpaperImage, wallpaperFit } =
-    useSession();
+  const { sessionLoaded, wallpaperImage, wallpaperFit } = useSession();
   const { colors } = useTheme();
   const wallpaperLoadAbortRef = useRef<AbortController>(undefined);
 
-  const resetWallpaper = useCallback(
-    (): void => {
-      document.documentElement.style.removeProperty("--after-background");
-      document.documentElement.style.removeProperty("--before-background");
-    },
-    []
-  );
+  const resetWallpaper = useCallback((): void => {
+    document.documentElement.style.removeProperty("--after-background");
+    document.documentElement.style.removeProperty("--before-background");
+  }, []);
 
   const loadFileWallpaper = useCallback(async () => {
-    if (
-      !desktopRef.current ||
-      !wallpaperImage
-    ) {
+    if (!desktopRef.current || !wallpaperImage) {
       resetWallpaper();
       return;
     }
 
-    let loadController: AbortController | undefined;
     let [, currentWallpaperUrl] =
       /url\((.*)\)/.exec(
         document.documentElement.style.getPropertyValue(
@@ -119,10 +108,6 @@ const useWallpaper = (
     } else {
       resetWallpaper();
     }
-
-    return () => {
-      loadController?.abort();
-    };
   }, [
     colors,
     desktopRef,

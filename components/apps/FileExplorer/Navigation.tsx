@@ -7,11 +7,13 @@ import {
   Forward,
   Up,
 } from "components/apps/FileExplorer/NavigationIcons";
+import SearchBar from "components/apps/FileExplorer/SearchBar";
 import StyledNavigation from "components/apps/FileExplorer/StyledNavigation";
 import useTitlebarContextMenu from "components/system/Window/Titlebar/useTitlebarContextMenu";
 import { useMenu } from "contexts/menu";
 import { useProcesses } from "contexts/process";
 import useHistory from "hooks/useHistory";
+import useResizeObserver from "hooks/useResizeObserver";
 import Button from "styles/common/Button";
 import { ROOT_NAME } from "utils/constants";
 import { haltEvent, label } from "utils/functions";
@@ -19,11 +21,9 @@ import {
   type MenuState,
   type CaptureTriggerEvent,
 } from "contexts/menu/useMenuContextState";
-import useResizeObserver from "hooks/useResizeObserver";
 
 type NavigationProps = {
   addressBarRef: React.RefObject<HTMLInputElement | null>;
-  hideSearch: boolean;
   id: string;
   searchBarRef: React.RefObject<HTMLInputElement | null>;
 };
@@ -31,9 +31,8 @@ type NavigationProps = {
 const CONTEXT_MENU_OFFSET = 3;
 
 const Navigation: FC<NavigationProps> = ({
-  hideSearch,
-  id,
   addressBarRef,
+  id,
   searchBarRef,
 }) => {
   const {
@@ -82,7 +81,7 @@ const Navigation: FC<NavigationProps> = ({
     setIsRecentMenuOpen(recentItemsMenu === menu.items);
   }, [menu.items, recentItemsMenu]);
 
-  useResizeObserver(navRef.current, resizeCallback);
+  useResizeObserver(navRef, resizeCallback);
 
   return (
     <StyledNavigation
@@ -152,6 +151,7 @@ const Navigation: FC<NavigationProps> = ({
         <Up />
       </Button>
       <AddressBar ref={addressBarRef} id={id} />
+      <SearchBar ref={searchBarRef} id={id} />
     </StyledNavigation>
   );
 };

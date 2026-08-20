@@ -4,20 +4,19 @@ import { TASKBAR_HEIGHT } from "utils/constants";
 const TaskbarPanel = (
   height: number,
   width: number,
-  left = 0,
-  hasBorder = false
+  left = 0
 ): RuleSet<object> => css`
   /* Classic Win98 raised bevel panel. */
-  background-color: rgb(192, 192, 192);
-  border-top: 1px solid rgb(255, 255, 255);
-  border-left: 1px solid rgb(255, 255, 255);
-  border-right: 1px solid rgb(0, 0, 0);
-  border-bottom: 1px solid rgb(0, 0, 0);
-  box-shadow:
-    inset -1px -1px 0 rgb(128, 128, 128),
-    inset 1px 1px 0 rgb(223, 223, 223),
-    2px 2px 6px rgba(0, 0, 0, 40%);
+  background-color: rgb(192 192 192);
+  border-bottom: 1px solid rgb(0 0 0);
+  border-left: 1px solid rgb(255 255 255);
+  border-right: 1px solid rgb(0 0 0);
+  border-top: 1px solid rgb(255 255 255);
   bottom: ${TASKBAR_HEIGHT}px;
+  box-shadow:
+    inset -1px -1px 0 rgb(128 128 128),
+    inset 1px 1px 0 rgb(223 223 223),
+    2px 2px 6px rgb(0 0 0 / 40%);
   contain: strict;
   display: flex;
   height: 100%;

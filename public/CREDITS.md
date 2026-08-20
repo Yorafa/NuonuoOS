@@ -53,7 +53,6 @@
 - [playlist-parser](https://github.com/nickdesaulniers/javascript-playlist-parser) — 解析 M3U/PLS 等播放列表格式
 - [QOI Decoder](https://gist.github.com/nicolaslegland/f0577cb49b1e56b729a2c0fc0aa151ba) — QOI 图像格式解码器
 - [resedit](https://github.com/jet2jet/resedit-js) — 编辑 Windows PE 可执行文件的资源(图标、版本信息)
-- [rtf.js](https://github.com/tbluemel/rtf.js) — RTF 富文本格式解析和渲染
 - [SheetJS](https://github.com/SheetJS/sheetjs) — Excel/CSV 电子表格文件解析和生成
 - [UAParser.js](https://github.com/faisalman/ua-parser-js) — 解析 User-Agent 字符串,识别浏览器/OS/设备
 - [UTIF.js](https://github.com/photopea/UTIF.js) — TIFF 图像格式解码库
@@ -63,14 +62,14 @@
 
 - [Marked](https://github.com/markedjs/marked) — Markdown 解析器,将 Markdown 转为 HTML
   - [DOMPurify](https://github.com/cure53/DOMPurify) — XSS 过滤库,净化 HTML 防止脚本注入
-- [nostr-tools](https://github.com/nbd-wtf/nostr-tools) — Nostr 协议客户端工具库
 - [opentype.js](https://github.com/opentypejs/opentype.js) — OpenType/TrueType 字体解析和渲染
 - [PDF.js](https://github.com/mozilla/pdf.js) — PDF 文档渲染引擎
 - [Print.js](https://github.com/crabbly/print.js) — 浏览器端打印 HTML/PDF/图片
 - [quickjs-emscripten](https://github.com/justjake/quickjs-emscripten) — WebAssembly 版 QuickJS 引擎,浏览器内执行 JS 沙箱
 - [t-rex-runner](https://github.com/wayou/t-rex-runner) — Chrome 离线恐龙跑酷小游戏
 - [Video.js](https://github.com/videojs/video.js) — HTML5 视频播放器框架
-- [Vim.js](https://github.com/coolwanglu/vim.js) — WebAssembly 版 Vim 编辑器
+- [CodeMirror](https://codemirror.net/) — 浏览器端代码编辑器框架
+- [CodeMirror Vim](https://github.com/replit/codemirror-vim) — CodeMirror 的 Vim 键位与编辑模式支持
 - [Xterm.js](https://github.com/xtermjs/xterm.js) — 终端模拟器前端组件
 
 ## 服务

@@ -6,7 +6,6 @@ import {
   TASKBAR_ENTRY_MENU_ITEMS,
   TEST_APP_ICON,
   TEST_APP_TITLE,
-  WEBGPU_HEADLESS_NOT_SUPPORTED_BROWSERS,
 } from "e2e/constants";
 import {
   calendarIsVisible,
@@ -42,12 +41,18 @@ import {
   windowIsTransparent,
 } from "e2e/functions";
 
-test.beforeEach(captureConsoleLogs());
-test.beforeEach(disableWallpaper);
+test.beforeEach(async ({ browserName, page }) => {
+  const fixtures = { browserName, page };
+  captureConsoleLogs()(fixtures);
+  await disableWallpaper(fixtures);
+});
 
 test.describe("elements", () => {
-  test.beforeEach(loadApp());
-  test.beforeEach(taskbarIsVisible);
+  test.beforeEach(async ({ browserName, page }) => {
+    const fixtures = { browserName, page };
+    await loadApp()(fixtures);
+    await taskbarIsVisible(fixtures);
+  });
 
   test.describe("has start button", () => {
     test.beforeEach(startButtonIsVisible);
@@ -94,10 +99,13 @@ test.describe("elements", () => {
 });
 
 test.describe("entries", () => {
-  test.beforeEach(loadTestApp);
-  test.beforeEach(taskbarIsVisible);
-  test.beforeEach(taskbarEntriesAreVisible);
-  test.beforeEach(fileExplorerEntriesAreVisible);
+  test.beforeEach(async ({ browserName, page }) => {
+    const fixtures = { browserName, page };
+    await loadTestApp(fixtures);
+    await taskbarIsVisible(fixtures);
+    await taskbarEntriesAreVisible(fixtures);
+    await fileExplorerEntriesAreVisible(fixtures);
+  });
 
   test.describe("has entry", () => {
     test.beforeEach(async ({ page }) =>
@@ -171,11 +179,8 @@ test.describe("entries", () => {
       await contextMenuIsVisible({ page });
     });
 
-    test("has items", async ({ browserName, page }) => {
-      const entries = TASKBAR_ENTRIES_MENU_ITEMS(
-        !WEBGPU_HEADLESS_NOT_SUPPORTED_BROWSERS.has(browserName) &&
-          !process.env.CI
-      );
+    test("has items", async ({ page }) => {
+      const entries = TASKBAR_ENTRIES_MENU_ITEMS;
 
       await contextMenuHasCount(entries.length, { page });
 

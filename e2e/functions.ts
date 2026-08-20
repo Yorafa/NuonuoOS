@@ -583,6 +583,17 @@ export const contextMenuEntryIsVisible = async (
     page.locator(CONTEXT_MENU_ENTRIES_SELECTOR).getByLabel(label, EXACT)
   ).toBeVisible();
 
+export const contextMenuEntryWithTooltipIsVisible = async (
+  label: RegExp | string,
+  tooltip: RegExp | string,
+  { page }: TestProps
+): Promise<void> =>
+  expect(
+    page
+      .getByRole("listitem", { exact: true, name: tooltip })
+      .getByLabel(label, EXACT)
+  ).toBeVisible();
+
 export const desktopEntryIsHidden = async (
   label: RegExp,
   { page }: TestProps
@@ -990,4 +1001,3 @@ export const loadContainerTestApp = async ({
   page,
 }: TestProps): Promise<Response | null> =>
   loadApp({ app: TEST_APP_CONTAINER_APP })({ page });
-

@@ -26,10 +26,13 @@ import {
   selectArea,
 } from "e2e/functions";
 
-test.beforeEach(captureConsoleLogs());
-test.beforeEach(disableWallpaper);
-test.beforeEach(loadApp());
-test.beforeEach(desktopIsVisible);
+test.beforeEach(async ({ browserName, page }) => {
+  const fixtures = { browserName, page };
+  captureConsoleLogs()(fixtures);
+  await disableWallpaper(fixtures);
+  await loadApp()(fixtures);
+  await desktopIsVisible(fixtures);
+});
 
 test("has file entry", desktopEntriesAreVisible);
 
@@ -55,8 +58,11 @@ test.describe("has selection", () => {
 });
 
 test.describe("has context menu", () => {
-  test.beforeEach(async ({ page }) => clickDesktop({ page }, true));
-  test.beforeEach(contextMenuIsVisible);
+  test.beforeEach(async ({ browserName, page }) => {
+    const fixtures = { browserName, page };
+    await clickDesktop(fixtures, true);
+    await contextMenuIsVisible(fixtures);
+  });
 
   test("has items", async ({ browserName, page }) => {
     const MENU_ITEMS = filterMenuItems(DESKTOP_MENU_ITEMS, browserName);
@@ -122,7 +128,6 @@ test.describe("has context menu", () => {
     });
   });
 
-
   test("can view page source", async ({ page }) => {
     await clickContextMenuEntry(/^View page source$/, { page });
     await appIsOpen(/^index.html - Vim$/, page);
@@ -149,5 +154,4 @@ test.describe("has keyboard shortcuts", () => {
     await pressDesktopKeys("Shift+F10", { page });
     await appIsOpen(/^Terminal$/, page);
   });
-
 });

@@ -1,14 +1,15 @@
 import { type PlaywrightTestConfig, devices } from "@playwright/test";
 
-const OVERRIDE_URL = "";
-const { CI, PORT = 3000 } = process.env;
+const OVERRIDE_URL = process.env.PLAYWRIGHT_URL || "";
+const { CI, PORT = "3000" } = process.env;
+const port = Number(PORT) > 0 ? Number(PORT) : 3000;
 
 const {
   "Desktop Chrome": chrome,
   "Desktop Firefox": firefox,
   "Desktop Safari": safari,
 } = devices;
-const baseURL = OVERRIDE_URL || `http://localhost:${PORT}`;
+const baseURL = OVERRIDE_URL || `http://127.0.0.1:${port}`;
 const config: PlaywrightTestConfig = {
   fullyParallel: true,
   projects: [
@@ -35,7 +36,9 @@ const config: PlaywrightTestConfig = {
     video: "retain-on-failure",
   },
   webServer: {
-    command: OVERRIDE_URL ? "" : CI ? "yarn serve" : "yarn dev",
+    command: OVERRIDE_URL
+      ? ""
+      : `node node_modules/next/dist/bin/next dev --port ${port}`,
     reuseExistingServer: Boolean(OVERRIDE_URL),
     url: OVERRIDE_URL || baseURL,
   },

@@ -169,6 +169,7 @@ const useCommandInterpreter = (
     [readdir]
   );
   const commandInterpreter = useCallback(
+    // eslint-disable-next-line react-hooks/immutability -- The interpreter mutates the `cd` ref and only runs from user command input, not render.
     async (
       command = "",
       printLn = localEcho?.println.bind(localEcho) || console.info,
@@ -192,6 +193,7 @@ const useCommandInterpreter = (
 
           output.length = 0;
 
+          // eslint-disable-next-line react-hooks/immutability -- Self-recursion resolves at call time (user input), never during render.
           return commandInterpreter(
             `${trimmedPipeCommand}${results ? ` ${results}` : ""}`,
             isLastCommand ? undefined : (line) => stdout(`${line}\n`),
@@ -247,6 +249,7 @@ const useCommandInterpreter = (
               const checkNewPath = async (newPath: string): Promise<void> => {
                 if (!(await lstat(newPath)).isDirectory()) {
                   printLn("The directory name is invalid.");
+                  // eslint-disable-next-line react-hooks/immutability -- `cd` is a ref object; its `.current` is written from user commands, never during render.
                 } else if (cd.current !== newPath) {
                   // eslint-disable-next-line no-param-reassign
                   cd.current = newPath;
@@ -410,10 +413,7 @@ const useCommandInterpreter = (
                       0,
                       10
                     );
-                    const time = formatLsTime(mDate).padStart(
-                      8,
-                      "0"
-                    );
+                    const time = formatLsTime(mDate).padStart(8, "0");
                     const isDirectory = fileStats.isDirectory();
 
                     totalSize += isDirectory ? 0 : fileStats.size;

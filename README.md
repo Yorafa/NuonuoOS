@@ -135,9 +135,10 @@
 - 键盘快捷键(音量、快进、缩放、全屏)
 - 音频与播放列表文件(**_.mp3, .m3u, .asx, .pls_**)
 
-### [Vim](https://github.com/coolwanglu/vim.js)
+### [Vim](https://github.com/replit/codemirror-vim)
 
-- 代码/文本编辑器
+- 基于 CodeMirror 的代码/文本编辑器
+- Vim 模式、`:w` 与 Ctrl-S 保存
 - 支持所有文件类型
 
 # 试一试 🚀

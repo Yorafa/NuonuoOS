@@ -9,8 +9,7 @@ type StyledTaskbarButtonProps = {
 
 const StyledTaskbarButton = styled(Button)<StyledTaskbarButtonProps>`
   background-color: ${({ $active, $highlight, theme }) =>
-    $active &&
-    ($highlight ? theme.colors.taskbar.foreground : "hsla(0, 0%, 25%, 50%)")};
+    $active && $highlight ? theme.colors.taskbar.foreground : ""};
   display: flex;
   fill: ${({ theme }) => theme.colors.taskbar.button.color};
   height: 100%;
@@ -27,48 +26,44 @@ const StyledTaskbarButton = styled(Button)<StyledTaskbarButtonProps>`
     height: ${({ theme }) => theme.sizes.taskbar.button.iconSize};
   }
 
-  // Retro Windows 98 Start button: raised 3D bevel sitting in the taskbar.
+  /* Classic Win98 Start button: raised grey 3D bevel. */
   ${({ $highlight }) =>
     $highlight
       ? `
-        background: linear-gradient(
-          180deg,
-          rgb(255, 255, 255) 0%,
-          rgb(214, 226, 240) 30%,
-          rgb(172, 195, 220) 65%,
-          rgb(126, 152, 182) 100%
-        );
-        border-bottom-color: rgb(58, 74, 96);
-        border-left-color: rgb(255, 255, 255);
-        border-right-color: rgb(58, 74, 96);
-        border-style: outset;
-        border-top-color: rgb(255, 255, 255);
-        border-width: 1px;
-        box-shadow: inset 1px 1px 0 rgb(255 255 255 / 80%),
-          inset -1px -1px 0 rgb(40 52 68 / 45%);
+        background: rgb(192, 192, 192);
+        border-top: 1px solid rgb(255, 255, 255);
+        border-left: 1px solid rgb(255, 255, 255);
+        border-right: 1px solid rgb(0, 0, 0);
+        border-bottom: 1px solid rgb(0, 0, 0);
+        box-shadow:
+          inset -1px -1px 0 rgb(128, 128, 128),
+          inset 1px 1px 0 rgb(223, 223, 223);
         left: 0;
         margin: 2px 4px 2px 2px;
-        width: 34px;
+        width: 54px;
+        font-weight: 700;
       `
       : ""}
 
   &:hover {
     background-color: ${({ $active, theme }) =>
       $active ? theme.colors.taskbar.foreground : theme.colors.taskbar.hover};
-
-    svg {
-      fill: ${({ $highlight, theme }) =>
-        $highlight ? theme.colors.highlight : undefined};
-    }
   }
 
   &:active {
-    background-color: hsl(0 0% 20% / 70%);
-
-    svg {
-      fill: ${({ $highlight }) =>
-        $highlight ? "hsla(207, 100%, 60%, 80%)" : undefined};
-    }
+    ${({ $highlight }) =>
+      $highlight
+        ? `
+          background: rgb(192, 192, 192);
+          border-top: 1px solid rgb(0, 0, 0);
+          border-left: 1px solid rgb(0, 0, 0);
+          border-right: 1px solid rgb(255, 255, 255);
+          border-bottom: 1px solid rgb(255, 255, 255);
+          box-shadow:
+            inset 1px 1px 0 rgb(128, 128, 128),
+            inset -1px -1px 0 rgb(223, 223, 223);
+        `
+        : "background-color: hsl(0 0% 20% / 70%);"}
   }
 `;
 

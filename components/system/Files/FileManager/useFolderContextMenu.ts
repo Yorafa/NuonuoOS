@@ -11,13 +11,11 @@ import { useMenu } from "contexts/menu";
 import {
   type CaptureTriggerEvent,
   type ContextMenuCapture,
-  type MenuItem,
 } from "contexts/menu/useMenuContextState";
 import { useProcesses } from "contexts/process";
 import { useLanguage } from "contexts/language";
 import { useSession } from "contexts/session";
 import { useProcessesRef } from "hooks/useProcessesRef";
-import { useWebGPUCheck } from "hooks/useWebGPUCheck";
 import {
   DESKTOP_PATH,
   FOLDER_ICON,
@@ -209,7 +207,6 @@ const useFolderContextMenu = (
       }
     });
   }, [readFile, updateFolder, writeFile]);
-  const hasWebGPU = useWebGPUCheck();
   const processesRef = useProcessesRef();
   const updateDesktopIconPositions = useCallback(
     (names: string[], event?: CaptureTriggerEvent) => {
@@ -526,9 +523,8 @@ const useFolderContextMenu = (
       addToFolder,
       canCapture,
       captureScreen,
-        contextMenu,
+      contextMenu,
       exists,
-      hasWebGPU,
       iconPositions,
       isAscending,
       isDesktop,
@@ -541,14 +537,15 @@ const useFolderContextMenu = (
       pasteToFolder,
       processesRef,
       rootFs?.mntMap,
-        setForegroundId,
+      setForegroundId,
       sortBy,
+      t,
       updateDesktopIconPositions,
       updateFolder,
       updateRecentFiles,
       updateSorting,
       url,
-        writeFile,
+      writeFile,
     ]
   );
 };

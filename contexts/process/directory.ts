@@ -162,7 +162,6 @@ const directory: Processes = {
       width: 595,
     },
     icon: "/System/Icons/vim.webp",
-    libs: ["/Program Files/Vim.js/vim.js"],
     singleton: true,
     title: "Vim",
   },

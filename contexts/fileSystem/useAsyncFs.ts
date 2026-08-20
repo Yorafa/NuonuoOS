@@ -3,7 +3,6 @@ import { type FSModule } from "browserfs/dist/node/core/FS";
 import Stats, { FileType } from "browserfs/dist/node/core/node_fs_stats";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type * as IBrowserFS from "browserfs";
-import type EmscriptenFileSystem from "browserfs/dist/node/backend/Emscripten";
 import type MountableFileSystem from "browserfs/dist/node/backend/MountableFileSystem";
 import {
   ICON_CACHE,
@@ -33,15 +32,6 @@ export type AsyncFS = {
 };
 
 const { BFSRequire, configure } = BrowserFS as typeof IBrowserFS;
-
-export type EmscriptenFS = {
-  DB_NAME: () => string;
-  DB_STORE_NAME: string;
-};
-
-export type ExtendedEmscriptenFileSystem = Omit<EmscriptenFileSystem, "_FS"> & {
-  _FS?: EmscriptenFS;
-};
 
 export type Mount = {
   _data?: Buffer;

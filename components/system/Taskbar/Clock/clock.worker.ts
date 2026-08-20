@@ -1,18 +1,18 @@
-import { type Size } from "components/system/Window/RndWindow/useResizable";
-
-type OffscreenRenderProps = {
-  canvas: OffscreenCanvas;
-  clockSize?: Size;
-  devicePixelRatio: number;
-};
 import {
   type LocaleTimeDate,
   formatLocaleDateTime,
   CLOCK_TEXT_HEIGHT_OFFSET,
 } from "components/system/Taskbar/Clock/functions";
 import { getNtpAdjustedTime } from "components/system/Taskbar/Clock/ntp";
+import { type Size } from "components/system/Window/RndWindow/useResizable";
 import { type ClockSource } from "contexts/session/types";
 import formats from "styles/defaultTheme/formats";
+
+type OffscreenRenderProps = {
+  canvas: OffscreenCanvas;
+  clockSize?: Size;
+  devicePixelRatio: number;
+};
 
 const MILLISECONDS_IN_SECOND = 1000;
 

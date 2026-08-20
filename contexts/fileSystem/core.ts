@@ -1,9 +1,6 @@
 import { extname, join } from "path";
 import { type openDB } from "idb";
-import {
-  type Mount,
-  type ExtendedEmscriptenFileSystem,
-} from "contexts/fileSystem/useAsyncFs";
+import { type Mount } from "contexts/fileSystem/useAsyncFs";
 import index from "public/.index/fs.9p.json";
 import {
   FS_HANDLES,
@@ -201,9 +198,7 @@ export const getFileSystemHandles = async (): Promise<FileSystemHandles> => {
 };
 
 export const isMountedFolder = (mount?: Mount): boolean =>
-  typeof mount === "object" &&
-  (MOUNTABLE_FS_TYPES.has(mount.getName()) ||
-    (mount as ExtendedEmscriptenFileSystem)._FS?.DB_STORE_NAME === "FILE_DATA");
+  typeof mount === "object" && MOUNTABLE_FS_TYPES.has(mount.getName());
 
 export const getMountUrl = (
   url: string,

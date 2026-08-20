@@ -10,12 +10,15 @@ import {
   taskbarIsVisible,
 } from "e2e/functions";
 
-test.beforeEach(captureConsoleLogs());
-test.beforeEach(loadApp());
-test.beforeEach(desktopEntriesAreVisible);
-test.beforeEach(taskbarIsVisible);
-test.beforeEach(startButtonIsVisible);
-test.beforeEach(clockCanvasMaybeIsVisible);
+test.beforeEach(async ({ browserName, page }) => {
+  const fixtures = { browserName, page };
+  captureConsoleLogs()(fixtures);
+  await loadApp()(fixtures);
+  await desktopEntriesAreVisible(fixtures);
+  await taskbarIsVisible(fixtures);
+  await startButtonIsVisible(fixtures);
+  await clockCanvasMaybeIsVisible(fixtures);
+});
 
 test("can pass accessibility scan", async ({ page }) =>
   expect(

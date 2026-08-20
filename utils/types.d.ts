@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
-
 type FC<T = Record<string, unknown>> = (
   props: React.PropsWithChildren<T>
 ) => React.JSX.Element | null;
@@ -35,11 +33,4 @@ declare module "stockfish/bin/*.js" {
 declare module "stockfish/bin/*.wasm" {
   const content: string;
   export default content;
-}
-
-declare module "@chrisoakman/chessboard2/dist/chessboard2.min.mjs" {
-  export const Chessboard2: (
-    target: HTMLElement,
-    config?: import("components/apps/Chess/types").Chessboard2Config
-  ) => import("components/apps/Chess/types").Chessboard2Instance;
 }

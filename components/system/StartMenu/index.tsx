@@ -5,7 +5,6 @@ import FileManager from "components/system/Files/FileManager";
 import Sidebar from "components/system/StartMenu/Sidebar";
 import StyledStartMenu from "components/system/StartMenu/StyledStartMenu";
 import {
-  SEARCH_BUTTON_TITLE,
   START_BUTTON_TITLE,
   maybeCloseTaskbarMenu,
 } from "components/system/Taskbar/functions";
@@ -17,7 +16,6 @@ import {
   THIN_SCROLLBAR_WIDTH,
   THIN_SCROLLBAR_WIDTH_NON_WEBKIT,
 } from "utils/constants";
-import { getNavButtonByTitle } from "hooks/useGlobalKeyboardShortcuts";
 
 type StartMenuProps = {
   toggleStartMenu: (showMenu?: boolean) => void;

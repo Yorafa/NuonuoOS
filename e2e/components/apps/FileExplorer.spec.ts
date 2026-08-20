@@ -31,6 +31,7 @@ import {
   TEST_SEARCH,
   TEST_SEARCH_RESULT,
   WINDOW_RESIZE_HANDLE_WIDTH,
+  WINDOW_SELECTOR,
 } from "e2e/constants";
 import {
   appIsOpen,
@@ -45,6 +46,7 @@ import {
   clickFirstDesktopEntry,
   contextMenuEntryIsHidden,
   contextMenuEntryIsVisible,
+  contextMenuEntryWithTooltipIsVisible,
   contextMenuHasCount,
   contextMenuIsHidden,
   contextMenuIsVisible,
@@ -78,11 +80,14 @@ import {
 } from "e2e/functions";
 import { UNKNOWN_ICON } from "components/system/Files/FileManager/icons";
 
-test.beforeEach(captureConsoleLogs());
-test.beforeEach(disableWallpaper);
-test.beforeEach(async ({ page }) => loadApp({ app: "FileExplorer" })({ page }));
-test.beforeEach(windowsAreVisible);
-test.beforeEach(fileExplorerEntriesAreVisible);
+test.beforeEach(async ({ browserName, page }) => {
+  const fixtures = { browserName, page };
+  captureConsoleLogs()(fixtures);
+  await disableWallpaper(fixtures);
+  await loadApp({ app: "FileExplorer" })(fixtures);
+  await windowsAreVisible(fixtures);
+  await fileExplorerEntriesAreVisible(fixtures);
+});
 
 test("has address bar", async ({ page }) => {
   await fileExplorerAddressBarHasValue(TEST_APP_TITLE, { page });
@@ -109,7 +114,11 @@ test("can search", async ({ page }) => {
   await typeInFileExplorerSearchBox(TEST_SEARCH, { page });
   await expect(() => contextMenuIsVisible({ page })).toPass();
 
-  await contextMenuEntryIsVisible(TEST_SEARCH_RESULT, { page });
+  await contextMenuEntryWithTooltipIsVisible(
+    TEST_SEARCH_RESULT,
+    `/${TEST_ROOT_FILE_TEXT}`,
+    { page }
+  );
 });
 
 test.describe("has files & folders", () => {
@@ -311,18 +320,18 @@ test.describe("has files & folders", () => {
     await expect(entryInfo).toContainText(/^\d+ items$/);
     await expect(selectedInfo).toContainText(/^1 item selected|\d{3} bytes$/);
 
-    expect(
-      await page.locator(FILE_EXPLORER_ENTRIES_FOCUSED_SELECTOR).count()
-    ).toEqual(1);
+    await expect(
+      page.locator(FILE_EXPLORER_ENTRIES_FOCUSED_SELECTOR)
+    ).toHaveCount(1);
 
     await page.keyboard.down("Control");
     await clickFileExplorerEntry(TEST_ROOT_FILE_2, { page });
 
     await expect(selectedInfo).toContainText(/^2 items selected|\d{3} KB$/);
 
-    expect(
-      await page.locator(FILE_EXPLORER_ENTRIES_FOCUSED_SELECTOR).count()
-    ).toEqual(2);
+    await expect(
+      page.locator(FILE_EXPLORER_ENTRIES_FOCUSED_SELECTOR)
+    ).toHaveCount(2);
   });
 
   test("has tooltip", async ({ page }) => {
@@ -472,6 +481,7 @@ test.describe("has navigation", () => {
     expect(async () => {
       await clickFileExplorerEntry(/^System$/, { page }, false, 2);
       await windowTitlebarTextIsVisible(/^System$/, { page });
+      await expect(page.locator(WINDOW_SELECTOR)).toHaveCount(1);
     }).toPass()
   );
 

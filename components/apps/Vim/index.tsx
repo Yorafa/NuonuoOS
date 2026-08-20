@@ -1,145 +1,196 @@
-import { basename, dirname, extname } from "path";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { basename, dirname } from "path";
+import { basicSetup } from "codemirror";
+import { vim, Vim } from "@replit/codemirror-vim";
+import { EditorState } from "@codemirror/state";
+import { EditorView } from "@codemirror/view";
+import { memo, useEffect, useRef, useState } from "react";
 import StyledVim from "components/apps/Vim/StyledVim";
-import { type QueueItem } from "components/apps/Vim/types";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
-import useEmscriptenMount from "components/system/Files/FileManager/useEmscriptenMount";
 import useFileDrop from "components/system/Files/FileManager/useFileDrop";
 import useTitle from "components/system/Window/useTitle";
 import { useFileSystem } from "contexts/fileSystem";
 import { useProcesses } from "contexts/process";
 import { DEFAULT_TEXT_FILE_SAVE_PATH } from "utils/constants";
-import { haltEvent, loadFiles } from "utils/functions";
 
-const Vim: FC<ComponentProcessProps> = ({ id }) => {
+const VimEditor: FC<ComponentProcessProps> = ({ id }) => {
   const {
     closeWithTransition,
     processes: { [id]: process },
   } = useProcesses();
   const { readFile, updateFolder, writeFile } = useFileSystem();
-  const mountEmFs = useEmscriptenMount();
   const { prependFileToTitle } = useTitle(id);
-  const { libs = [], url = "" } = process || {};
-  const [updateQueue, setUpdateQueue] = useState<QueueItem[]>([]);
-  const loading = useRef(false);
-  const loadVim = useCallback(async () => {
+  const { url = "" } = process || {};
+  const editorElementRef = useRef<HTMLDivElement>(undefined);
+  const editorViewRef = useRef<EditorView>(undefined);
+  const dirtyRef = useRef(false);
+  const [dirty, setDirty] = useState(false);
+  const [status, setStatus] = useState("Loading...");
+  const [error, setError] = useState("");
+  const fileDrop = useFileDrop({ id });
+
+  useEffect(() => {
+    let disposed = false;
     const saveUrl = url || DEFAULT_TEXT_FILE_SAVE_PATH;
-    const [, ...pathParts] = saveUrl.split("/");
-    let prependPath = "";
 
-    if (pathParts.length === 1) {
-      prependPath = "/root";
-    }
+    dirtyRef.current = false;
+    setDirty(false);
+    setError("");
+    setStatus("Loading...");
 
-    window.VimWrapperModule = {};
+    const setEditorDirty = (value: boolean): void => {
+      dirtyRef.current = value;
+      setDirty(value);
+    };
 
-    await loadFiles(libs, false, !!window.VimWrapperModule);
+    const save = async (content: string): Promise<boolean> => {
+      if (disposed) return false;
 
-    const fileData = url ? await readFile(saveUrl) : Buffer.from("");
+      setStatus("Saving...");
 
-    window.VimWrapperModule?.init?.({
-      VIMJS_ALLOW_EXIT: true,
-      arguments: [`${prependPath}${saveUrl}`],
-      containerWindow: document
-        .querySelector("#vimjs-container")
-        ?.closest("section"),
-      memoryInitializerPrefixURL: "/Program Files/Vim.js/",
-      postRun: [
-        () => {
-          loading.current = false;
-          mountEmFs(
-            window.VimWrapperModule?.VimModule?.FS,
-            url ? `Vim_${basename(url, extname(url))}` : id
-          );
-        },
-      ],
-      preRun: [
-        () => {
-          let walkedPath = "";
+      try {
+        if (!(await writeFile(saveUrl, Buffer.from(content), true))) {
+          throw new Error("Unable to save file.");
+        }
 
-          [prependPath, ...pathParts].forEach(
-            (pathPart, index, { [index + 1]: nextPart }) => {
-              if (nextPart && index + 1 !== pathParts.length) {
-                window.VimWrapperModule?.VimModule?.FS_createPath?.(
-                  walkedPath,
-                  nextPart,
-                  true,
-                  true
-                );
-                walkedPath += `/${nextPart}`;
-              } else if (walkedPath) {
-                window.VimWrapperModule?.VimModule?.FS_createDataFile?.(
-                  walkedPath,
-                  pathPart,
-                  fileData,
-                  true,
-                  true
-                );
-              } else {
-                walkedPath = pathPart;
-              }
-            }
-          );
-        },
-      ],
-      print: console.info,
-      printErr: console.info,
-      quitCallback: () => closeWithTransition(id),
-      writeCallback: (data) =>
-        setUpdateQueue((currentQueue) => [
-          ...currentQueue,
-          {
-            buffer: Buffer.from(data),
-            url: saveUrl,
-          },
-        ]),
-    });
+        await updateFolder(dirname(saveUrl), basename(saveUrl));
 
-    prependFileToTitle(basename(saveUrl));
+        if (!disposed) {
+          setEditorDirty(false);
+          setStatus("Saved");
+          prependFileToTitle(basename(saveUrl));
+        }
+
+        return true;
+      } catch {
+        if (!disposed) {
+          setStatus("Save failed");
+          setError("Unable to save this file.");
+        }
+
+        return false;
+      }
+    };
+
+    const loadEditor = async (): Promise<void> => {
+      try {
+        const content = url ? (await readFile(saveUrl)).toString() : "";
+
+        if (disposed || !editorElementRef.current) return;
+
+        Vim.defineEx("write", "w", (cm) => {
+          save(cm.getValue()).catch(() => false);
+        });
+        Vim.defineEx("quit", "q", (_cm, params) => {
+          if (!dirtyRef.current || params.input.includes("!")) {
+            closeWithTransition(id);
+          } else {
+            setStatus("No write since last change");
+            setError("Use :q! to discard changes.");
+          }
+        });
+        Vim.defineEx("wq", "wq", (cm) => {
+          save(cm.getValue())
+            .then((saved) => {
+              if (saved) closeWithTransition(id);
+            })
+            .catch(() => false);
+        });
+        Vim.defineEx("xit", "x", (cm) => {
+          const saveAndQuit = dirtyRef.current
+            ? save(cm.getValue())
+            : Promise.resolve(true);
+
+          saveAndQuit
+            .then((saved) => {
+              if (saved) closeWithTransition(id);
+            })
+            .catch(() => false);
+        });
+
+        const view = new EditorView({
+          parent: editorElementRef.current,
+          state: EditorState.create({
+            doc: content,
+            extensions: [
+              vim({ status: true }),
+              basicSetup,
+              EditorView.updateListener.of(({ docChanged }) => {
+                if (docChanged && !disposed) {
+                  setEditorDirty(true);
+                  setStatus("Modified");
+                  prependFileToTitle(basename(saveUrl), true);
+                }
+              }),
+              EditorView.domEventHandlers({
+                keydown: (event, currentView) => {
+                  if (
+                    (event.ctrlKey || event.metaKey) &&
+                    event.key.toLowerCase() === "s"
+                  ) {
+                    event.preventDefault();
+                    save(currentView.state.doc.toString()).catch(() => false);
+                    return true;
+                  }
+
+                  return false;
+                },
+              }),
+            ],
+          }),
+        });
+
+        editorViewRef.current = view;
+        view.focus();
+        setStatus("Ready");
+        prependFileToTitle(basename(saveUrl));
+      } catch (loadError: unknown) {
+        if (!disposed) {
+          const message =
+            loadError instanceof Error ? ` (${loadError.message})` : "";
+
+          setStatus("Load failed");
+          setError(`Unable to open this file.${message}`);
+        }
+      }
+    };
+
+    loadEditor().catch(() => false);
+
+    return () => {
+      disposed = true;
+      editorViewRef.current?.destroy();
+      editorViewRef.current = undefined;
+    };
   }, [
     closeWithTransition,
     id,
-    libs,
-    mountEmFs,
     prependFileToTitle,
     readFile,
+    updateFolder,
     url,
+    writeFile,
   ]);
-
-  useEffect(() => {
-    if (updateQueue.length > 0) {
-      [...updateQueue].forEach(({ buffer, url: saveUrl }) => {
-        writeFile(saveUrl, buffer, true);
-        updateFolder(dirname(saveUrl), basename(saveUrl));
-      });
-      setUpdateQueue([]);
-    }
-  }, [updateFolder, updateQueue, writeFile]);
-
-  useEffect(() => {
-    if (!loading.current) {
-      loading.current = true;
-      loadVim();
-    }
-
-    return () => {
-      if (
-        !loading &&
-        window.VimWrapperModule?.VimModule?.asmLibraryArg?._vimjs_prepare_exit()
-      ) {
-        window.VimWrapperModule?.VimModule?.exit?.();
-      }
-    };
-  }, [loadVim]);
 
   return (
     <StyledVim>
-      <div id="vimjs-container" {...useFileDrop({ id })}>
-        <canvas id="vimjs-canvas" onContextMenuCapture={haltEvent} />
+      <div
+        ref={(element) => {
+          editorElementRef.current = element ?? undefined;
+        }}
+        aria-label="Vim editor"
+        className="vim-editor"
+        {...fileDrop}
+      />
+      <div aria-live="polite" className="vim-status">
+        <span>{error || status}</span>
+        <span>
+          {dirty
+            ? "Modified · :w save · :q! discard"
+            : "Ctrl-S / :w save · :q quit"}
+        </span>
       </div>
-      <div id="vimjs-font-test" />
     </StyledVim>
   );
 };
 
-export default memo(Vim);
+export default memo(VimEditor);
