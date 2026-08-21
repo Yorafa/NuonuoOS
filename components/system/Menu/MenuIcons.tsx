@@ -5,7 +5,7 @@ type SvgProps = {
   className?: string;
 };
 
-export const ChevronRight = memo<SvgProps>(({ className }) => (
+const ChevronRightInner = ({ className }: SvgProps): React.JSX.Element => (
   <svg
     className={className}
     viewBox="0 0 32 32"
@@ -13,9 +13,11 @@ export const ChevronRight = memo<SvgProps>(({ className }) => (
   >
     <path d="M8.047 30.547L22.578 16 8.047 1.453 9.453.047 25.422 16 9.453 31.953l-1.406-1.406z" />
   </svg>
-));
+);
 
-export const Checkmark = memo<SvgProps>(({ className }) => {
+export const ChevronRight = memo(ChevronRightInner);
+
+const CheckmarkInner = ({ className }: SvgProps): React.JSX.Element => {
   const { colors } = useTheme();
 
   return (
@@ -31,9 +33,11 @@ export const Checkmark = memo<SvgProps>(({ className }) => {
       />
     </svg>
   );
-});
+};
 
-export const Circle = memo<SvgProps>(({ className }) => (
+export const Checkmark = memo(CheckmarkInner);
+
+const CircleInner = ({ className }: SvgProps): React.JSX.Element => (
   <svg
     className={className}
     viewBox="0 0 32 32"
@@ -41,7 +45,9 @@ export const Circle = memo<SvgProps>(({ className }) => (
   >
     <path d="M16 10q1.234 0 2.328.469t1.914 1.289 1.289 1.914T22 16q0 1.25-.469 2.336t-1.289 1.906-1.914 1.289T16 22q-1.25 0-2.336-.469t-1.906-1.289-1.289-1.906T10 16q0-1.234.469-2.328t1.289-1.914 1.906-1.289T16 10z" />
   </svg>
-));
+);
+
+export const Circle = memo(CircleInner);
 
 export const Share = memo(() => (
   <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">

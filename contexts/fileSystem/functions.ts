@@ -1,11 +1,9 @@
 import { join } from "path";
-import type HTTPRequest from "browserfs/dist/node/backend/HTTPRequest";
-import type IndexedDBFileSystem from "browserfs/dist/node/backend/IndexedDB";
-import type OverlayFS from "browserfs/dist/node/backend/OverlayFS";
-import type InMemoryFileSystem from "browserfs/dist/node/backend/InMemory";
+import { isDirectory, type FileSystem } from "@zenfs/core";
 import { type FileSystemObserver } from "contexts/fileSystem/useFileSystemContextState";
 import { FS_HANDLES } from "utils/constants";
-import { type RootFileSystem } from "contexts/fileSystem/useAsyncFs";
+import { type RootFileSystem } from "contexts/fileSystem/zenfs";
+import { ZENFS_STORE_NAME } from "contexts/fileSystem/FileSystemConfig";
 import {
   KEYVAL_STORE_NAME,
   getFileSystemHandles,
@@ -95,49 +93,69 @@ export const requestPermission = async (
   return false;
 };
 
-export const resetStorage = (rootFs?: RootFileSystem): Promise<void> =>
-  new Promise((resolve, reject) => {
-    setTimeout(reject, 750);
+const emptyFileSystemAt = async (
+  fileSystem: FileSystem,
+  directory: string
+): Promise<void> => {
+  const entries = await fileSystem.readdir(directory);
 
-    window.localStorage.clear();
-    window.sessionStorage.clear();
+  await Promise.all(
+    entries.map(async (entry) => {
+      const path = join(directory, entry);
+      const stats = await fileSystem.stat(path);
 
-    const clearFs = (): void => {
-      const overlayFs = rootFs?._getFs("/")?.fs as OverlayFS;
-      const overlayedFileSystems = overlayFs?.getOverlayedFileSystems();
-      const readable = overlayedFileSystems?.readable as HTTPRequest;
-      const writable = overlayedFileSystems?.writable as
-        | IndexedDBFileSystem
-        | InMemoryFileSystem;
-
-      readable?.empty();
-
-      if (writable?.getName() === "InMemory" || !writable?.empty) {
-        resolve();
+      if (isDirectory(stats)) {
+        await emptyFileSystemAt(fileSystem, path);
+        await fileSystem.rmdir(path);
       } else {
-        writable.empty((apiError) => (apiError ? reject(apiError) : resolve()));
+        await fileSystem.unlink(path);
       }
-    };
+    })
+  );
+};
 
-    if (window.indexedDB) {
-      import("idb").then(async ({ deleteDB }) => {
-        try {
-          const dbs = window.indexedDB.databases
-            ? (await window.indexedDB.databases())
-                .filter(
-                  ({ name }) => typeof name === "string" && name !== "browserfs"
-                )
-                .map(({ name }) => name as string)
-            : KNOWN_IDB_DBS;
+const emptyFileSystem = async (fileSystem: FileSystem): Promise<void> => {
+  const entries = await fileSystem.readdir("/");
 
-          await Promise.all(dbs.map((name) => deleteDB(name)));
-        } catch {
-          // Ignore errors deleting databases
-        } finally {
-          clearFs();
-        }
-      });
-    } else {
-      clearFs();
+  await Promise.all(
+    entries.map(async (entry) => {
+      const path = join("/", entry);
+      const stats = await fileSystem.stat(path);
+
+      if (isDirectory(stats)) {
+        await emptyFileSystemAt(fileSystem, path);
+        await fileSystem.rmdir(path);
+      } else {
+        await fileSystem.unlink(path);
+      }
+    })
+  );
+};
+
+export const resetStorage = async (rootFs?: RootFileSystem): Promise<void> => {
+  window.localStorage.clear();
+  window.sessionStorage.clear();
+
+  if (window.indexedDB) {
+    try {
+      const dbs = window.indexedDB.databases
+        ? (await window.indexedDB.databases())
+            .filter(
+              ({ name }) =>
+                typeof name === "string" && name !== ZENFS_STORE_NAME
+            )
+            .map(({ name }) => name as string)
+        : KNOWN_IDB_DBS;
+
+      const { deleteDB } = await import("idb");
+      await Promise.all(dbs.map((name) => deleteDB(name)));
+    } catch {
+      // Ignore errors deleting databases
     }
-  });
+  }
+
+  if (rootFs?.writable) {
+    await emptyFileSystem(rootFs.writable);
+    await rootFs.writable.sync();
+  }
+};

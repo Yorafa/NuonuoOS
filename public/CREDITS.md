@@ -13,7 +13,7 @@
 
 ## 核心库
 
-- [BrowserFS](https://github.com/jvilk/BrowserFS) — 浏览器端文件系统,在内存/IndexedDB 中模拟 Node.js fs API
+- [ZenFS](https://github.com/zen-fs/core) — 浏览器端文件系统,通过 Fetch、IndexedDB 和 Web File System Access 后端提供 Node.js 兼容 API
 - [Framer Motion](https://github.com/framer/motion) — React 动画库,提供声明式过渡和手势支持
 - [react-rnd](https://github.com/bokuweb/react-rnd) — 可拖拽、可调整大小的 React 窗口组件
 

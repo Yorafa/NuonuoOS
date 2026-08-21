@@ -9,13 +9,19 @@ const contextFactory = <T,>(
 } => {
   const Context = createContext(Object.create(null) as T);
 
+  const ProviderInner = ({
+    children,
+  }: {
+    children?: React.ReactNode;
+  }): React.JSX.Element => (
+    <Context value={useContextState()}>
+      {children}
+      {ContextComponent}
+    </Context>
+  );
+
   return {
-    Provider: memo<FC>(({ children }) => (
-      <Context value={useContextState()}>
-        {children}
-        {ContextComponent}
-      </Context>
-    )),
+    Provider: memo(ProviderInner),
     useContext: () => useContext(Context),
   };
 };

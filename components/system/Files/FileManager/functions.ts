@@ -1,5 +1,5 @@
 import { basename, dirname, extname, join } from "path";
-import type Stats from "browserfs/dist/node/core/node_fs_stats";
+import { type Stats } from "@zenfs/core";
 import {
   type FileReaders,
   type ObjectReader,
@@ -24,6 +24,10 @@ import { getExtension, haltEvent, toSorted } from "utils/functions";
 import { get9pSize } from "contexts/fileSystem/core";
 
 export type FileStat = Stats & {
+  atimeMs?: number;
+  birthtimeMs?: number;
+  ctimeMs?: number;
+  mtimeMs?: number;
   systemShortcut?: boolean;
 };
 

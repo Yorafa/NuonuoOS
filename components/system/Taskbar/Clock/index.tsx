@@ -1,23 +1,16 @@
 import { useTheme } from "styled-components";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { importCalendar } from "components/system/Taskbar/functions";
-import { measureText } from "components/system/Files/FileEntry/functions";
 import StyledClock from "components/system/Taskbar/Clock/StyledClock";
 import {
   formatLocaleDateTime,
   type LocaleTimeDate,
 } from "components/system/Taskbar/Clock/functions";
 import useClockContextMenu from "components/system/Taskbar/Clock/useClockContextMenu";
-import { type Size } from "components/system/Window/RndWindow/useResizable";
 import { useSession } from "contexts/session";
 import useWorker from "hooks/useWorker";
-import {
-  CLOCK_CANVAS_BASE_WIDTH,
-  FOCUSABLE_ELEMENT,
-  ONE_TIME_PASSIVE_EVENT,
-  TASKBAR_HEIGHT,
-} from "utils/constants";
-import { createOffscreenCanvas } from "utils/functions";
+import { CLOCK_CANVAS_BASE_WIDTH, FOCUSABLE_ELEMENT } from "utils/constants";
+import { measureText } from "components/system/Files/FileEntry/functions";
 import { useMenuPreload } from "hooks/useMenuPreload";
 
 type ClockWorkerResponse = LocaleTimeDate | "source";
@@ -34,7 +27,6 @@ const Clock: FC<ClockProps> = ({ setClockWidth, toggleCalendar, width }) => {
   const [now, setNow] = useState<LocaleTimeDate>(() =>
     formatLocaleDateTime(new Date())
   );
-  const [offscreenCanvasReady, setOffscreenCanvasReady] = useState(false);
   const { date, time } = now;
   const { clockSource } = useSession();
   const clockWorkerInit = useCallback(
@@ -46,38 +38,21 @@ const Clock: FC<ClockProps> = ({ setClockWidth, toggleCalendar, width }) => {
         ),
         { name: "Clock" }
       ),
-    // NOTE: Need `clockSource` in the dependency array to ensure the worker is rebuilt
+    // Recreate the worker when the configured clock source changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [clockSource]
-  );
-  const offScreenClockCanvas = useRef<OffscreenCanvas>(undefined);
-  const supportsOffscreenCanvas = useMemo(
-    () => typeof window !== "undefined" && "OffscreenCanvas" in window,
-    []
   );
   const updateTime = useCallback(
     ({ data, target: clockWorker }: MessageEvent<ClockWorkerResponse>) => {
       if (data === "source") {
         (clockWorker as Worker).postMessage(clockSource);
       } else {
-        setNow((currentNow) =>
-          !offScreenClockCanvas.current || currentNow.date !== data.date
-            ? data
-            : currentNow
-        );
+        setNow(data);
       }
     },
     [clockSource]
   );
-  const clockContextMenu = useClockContextMenu(toggleCalendar);
-  const currentWorker = useWorker<ClockWorkerResponse>(
-    clockWorkerInit,
-    updateTime
-  );
-  const clockSize = useRef<Size>({
-    height: TASKBAR_HEIGHT,
-    width,
-  });
+  useWorker<ClockWorkerResponse>(clockWorkerInit, updateTime);
   const {
     formats: { systemFont },
     sizes: {
@@ -95,73 +70,18 @@ const Clock: FC<ClockProps> = ({ setClockWidth, toggleCalendar, width }) => {
       ),
     [fontSize, systemFont]
   );
-  const clockCallbackRef = useCallback(
-    (clockContainer: HTMLDivElement | null) => {
-      if (!clockContainer) {
-        setOffscreenCanvasReady(false);
-        return;
-      }
-
-      if (!offScreenClockCanvas.current && currentWorker.current) {
-        [...clockContainer.children].forEach((element) => element.remove());
-
-        clockSize.current.width = getMeasuredWidth();
-        setClockWidth(clockSize.current.width);
-
-        offScreenClockCanvas.current = createOffscreenCanvas(
-          clockContainer,
-          window.devicePixelRatio,
-          clockSize.current
-        );
-        setOffscreenCanvasReady(true);
-
-        currentWorker.current.postMessage(
-          {
-            canvas: offScreenClockCanvas.current,
-            devicePixelRatio: window.devicePixelRatio,
-          },
-          [offScreenClockCanvas.current]
-        );
-      }
-    },
-    // NOTE: Need `now` in the dependency array to ensure the clock is updated
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentWorker, now]
-  );
+  const clockContextMenu = useClockContextMenu(toggleCalendar);
   const menuPreloadHandler = useMenuPreload(importCalendar);
 
   useEffect(() => {
-    offScreenClockCanvas.current = undefined;
-    // eslint-disable-next-line react-hooks-addons/no-unused-deps
-  }, [clockSource]);
-
-  useEffect(() => {
-    if (supportsOffscreenCanvas) {
-      const monitorPixelRatio = (): void =>
-        window
-          .matchMedia(`(resolution: ${window.devicePixelRatio}x)`)
-          .addEventListener(
-            "change",
-            () => {
-              currentWorker.current?.postMessage({
-                clockSize: clockSize.current,
-                devicePixelRatio: window.devicePixelRatio,
-              });
-              monitorPixelRatio();
-            },
-            ONE_TIME_PASSIVE_EVENT
-          );
-
-      monitorPixelRatio();
-    } else setClockWidth(getMeasuredWidth());
-  }, [currentWorker, getMeasuredWidth, setClockWidth, supportsOffscreenCanvas]);
+    setClockWidth(getMeasuredWidth());
+  }, [getMeasuredWidth, setClockWidth]);
 
   // eslint-disable-next-line unicorn/no-null
   if (!time) return null;
 
   return (
     <StyledClock
-      ref={supportsOffscreenCanvas ? clockCallbackRef : undefined}
       $width={width}
       aria-label="Clock"
       onClick={() => toggleCalendar()}
@@ -172,7 +92,7 @@ const Clock: FC<ClockProps> = ({ setClockWidth, toggleCalendar, width }) => {
       {...FOCUSABLE_ELEMENT}
       {...menuPreloadHandler}
     >
-      {supportsOffscreenCanvas && offscreenCanvasReady ? undefined : time}
+      {time}
     </StyledClock>
   );
 };

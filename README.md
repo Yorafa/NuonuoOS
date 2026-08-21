@@ -10,14 +10,14 @@
 
 # 系统 🧠
 
-### [文件系统](https://github.com/jvilk/BrowserFS)
+### [文件系统](https://github.com/zen-fs/core)
 
 - 文件资源管理器
   - 后退、前进、最近位置、上一级、地址栏、搜索
   - 缩略图与详细信息视图
 - [拖放](https://developer.mozilla.org/zh-CN/docs/Web/API/HTML_Drag_and_Drop_API)文件支持(内部与外部)
   - 加载进度对话框
-- ZIP([写入支持](https://www.npmjs.com/package/fflate)),[ZIP](https://github.com/jvilk/BrowserFS/blob/master/src/backends/ZipFS.ts)/[ISO](https://github.com/jvilk/BrowserFS/blob/master/src/backends/IsoFS.ts) 读取支持,[7Z/GZ/RAR/TAR 等解压](https://github.com/use-strict/7z-wasm)支持
+- ZIP([写入支持](https://www.npmjs.com/package/fflate)),[ZIP/ISO](https://github.com/zen-fs/archives) 读取支持,[7Z/GZ/RAR/TAR 等解压](https://github.com/use-strict/7z-wasm)支持
 - 写入 [IndexedDb](https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API)
 - 框选/批量操作,拖拽排序与整理
 - 音乐、图片、视频的动态自动缓存图标

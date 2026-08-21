@@ -1,5 +1,4 @@
 import { join } from "path";
-import { type FSModule } from "browserfs/dist/node/core/FS";
 import {
   type AuthCallback,
   type GitAuth,
@@ -8,6 +7,7 @@ import {
   type default as index,
 } from "isomorphic-git";
 import { type ParsedArgs } from "minimist";
+import { type FSModule } from "contexts/fileSystem/zenfs";
 import { help } from "components/apps/Terminal/functions";
 
 const corsProxy = "https://cors.isomorphic-git.org";

@@ -1,4 +1,4 @@
-import type Stats from "browserfs/dist/node/core/node_fs_stats";
+import { type Stats } from "@zenfs/core";
 import { useCallback, useState, useRef, useEffect, memo } from "react";
 import { useTheme } from "styled-components";
 import StyledColumnRow from "components/system/Files/FileEntry/StyledColumnRow";

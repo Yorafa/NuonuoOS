@@ -1,8 +1,8 @@
 import { basename, dirname, extname, join, relative } from "path";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { type AsyncZipOptions, type AsyncZippable } from "fflate";
-import { type ApiError } from "browserfs/dist/node/core/api_error";
-import type Stats from "browserfs/dist/node/core/node_fs_stats";
+import { type Stats } from "@zenfs/core";
+import { type ZenFSError } from "contexts/fileSystem/zenfs";
 import useTransferDialog, {
   type ObjectReader,
 } from "components/system/Dialogs/Transfer/useTransferDialog";
@@ -288,7 +288,7 @@ const useFolder = (
             setFiles(Object.create(null) as Files);
           }
         } catch (error) {
-          if ((error as ApiError).code === "ENOENT") {
+          if ((error as ZenFSError).code === "ENOENT") {
             closeProcessesByUrl(directory);
           }
         }
@@ -656,7 +656,7 @@ const useFolder = (
             );
           }
         } catch (error) {
-          const { code, path } = error as ApiError;
+          const { code, path } = error as ZenFSError;
 
           if (path && code === "ENOENT") {
             setPasteList(

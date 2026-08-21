@@ -23,7 +23,17 @@ const DICTIONARIES: Record<Locale, Record<string, string>> = {
 // Module-level locale variable — allows non-React utility functions
 // (Intl.DateTimeFormat formatters, etc.) to access the current locale
 // without threading it through every function call signature.
-let currentLocale: Locale = DEFAULT_LOCALE;
+const getStoredLocale = (): Locale => {
+  try {
+    const stored = globalThis.localStorage?.getItem(LOCALE_STORAGE_KEY);
+
+    return stored === "en" || stored === "zh-CN" ? stored : DEFAULT_LOCALE;
+  } catch {
+    return DEFAULT_LOCALE;
+  }
+};
+
+let currentLocale: Locale = getStoredLocale();
 
 export const getLocale = (): Locale => currentLocale;
 
@@ -33,14 +43,6 @@ const setLocaleGlobal = (locale: Locale): void => {
     document.documentElement.lang = locale;
   }
 };
-
-// Read persisted locale on module init (client-side only)
-if (typeof window !== "undefined") {
-  const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-  if (stored === "en" || stored === "zh-CN") {
-    currentLocale = stored;
-  }
-}
 
 // Initialize html lang on load
 if (typeof document !== "undefined") {
@@ -73,7 +75,7 @@ const useLanguageState = (): LanguageContextValue => {
   const changeLocale = useCallback((nextLocale: Locale): void => {
     setLocale(nextLocale);
     setLocaleGlobal(nextLocale);
-    window.localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
+    globalThis.localStorage?.setItem(LOCALE_STORAGE_KEY, nextLocale);
   }, []);
 
   const t = useCallback(
@@ -99,6 +101,14 @@ const useLanguageState = (): LanguageContextValue => {
 export const useLanguage = (): LanguageContextValue =>
   useContext(LanguageContext);
 
-export const LanguageProvider = memo<FC>(({ children }) => (
+type LanguageProviderProps = {
+  children?: React.ReactNode;
+};
+
+const LanguageProviderInner = ({
+  children,
+}: LanguageProviderProps): React.JSX.Element => (
   <LanguageContext value={useLanguageState()}>{children}</LanguageContext>
-));
+);
+
+export const LanguageProvider = memo(LanguageProviderInner);

@@ -20,7 +20,7 @@ export const SURF_TO_MISC = {
   url: "http://surf.to/misc",
 };
 
-export const HOME_PAGE = "https://www.google.com/webhp?igu=1";
+export const HOME_PAGE = "https://yorafa.com/";
 
 /**
  * External Browser navigation allows these registrable domains and their

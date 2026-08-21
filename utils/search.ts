@@ -1,10 +1,9 @@
 import { basename, extname } from "path";
 import { useEffect, useState } from "react";
 import { type Index } from "lunr";
-import type OverlayFS from "browserfs/dist/node/backend/OverlayFS";
-import { type FileSystem } from "browserfs/dist/node/core/file_system";
+import { isDirectory, type FileSystem } from "@zenfs/core";
 import { useFileSystem } from "contexts/fileSystem";
-import { type RootFileSystem } from "contexts/fileSystem/useAsyncFs";
+import { type RootFileSystem } from "contexts/fileSystem/zenfs";
 import SEARCH_EXTENSIONS from "scripts/searchExtensions.json";
 import {
   DISBALE_AUTO_INPUT_FEATURES,
@@ -124,47 +123,44 @@ const mergeWithDynamicFirst = (
   ];
 };
 
-const walkWritable = (fileSystem: FileSystem, dir: string): Promise<string[]> =>
-  new Promise((resolve) => {
-    fileSystem.readdir(dir, async (readErr, entries = []) => {
-      if (readErr) {
-        resolve([]);
-        return;
+const walkWritable = async (
+  fileSystem: FileSystem,
+  dir: string
+): Promise<string[]> => {
+  let entries: string[];
+
+  try {
+    entries = await fileSystem.readdir(dir);
+  } catch {
+    return [];
+  }
+
+  const results = await Promise.all(
+    entries.map(async (entry) => {
+      const fullPath = dir === "/" ? `/${entry}` : `${dir}/${entry}`;
+
+      try {
+        const stats = await fileSystem.stat(fullPath);
+
+        return isDirectory(stats)
+          ? await walkWritable(fileSystem, fullPath)
+          : [fullPath];
+      } catch {
+        return [];
       }
+    })
+  );
 
-      const results = await Promise.all(
-        entries.map(
-          (entry) =>
-            // eslint-disable-next-line promise/param-names
-            new Promise<string[]>((resolveEntry) => {
-              const fullPath = dir === "/" ? `/${entry}` : `${dir}/${entry}`;
-
-              fileSystem.stat(fullPath, false, async (statErr, stats) =>
-                resolveEntry(
-                  statErr || !stats
-                    ? []
-                    : stats.isDirectory()
-                      ? await walkWritable(fileSystem, fullPath)
-                      : [fullPath]
-                )
-              );
-            })
-        )
-      );
-
-      resolve(results.flat());
-    });
-  });
+  return results.flat();
+};
 
 const buildDynamicIndex = async (
   readFile: (path: string) => Promise<Buffer>,
   rootFs?: RootFileSystem
 ): Promise<Index> => {
-  const overlayFs = rootFs?._getFs("/")?.fs as OverlayFS;
-  const overlayedFileSystems = overlayFs?.getOverlayedFileSystems();
-  const writable = overlayedFileSystems?.writable;
-
-  const writableFiles = writable ? await walkWritable(writable, "/") : [];
+  const writableFiles = rootFs?.writable
+    ? await walkWritable(rootFs.writable, "/")
+    : [];
   const filesToIndex = writableFiles.filter((path) => {
     const ext = getExtension(path);
 

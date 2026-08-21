@@ -30,7 +30,7 @@ export const GoTo = memo(() => (
 
 type DownProps = { flip?: boolean };
 
-export const Down = memo<DownProps>(({ flip }) => {
+const DownInner = ({ flip }: DownProps): React.JSX.Element => {
   const style = useMemo(
     () =>
       flip ? { transform: "scaleY(-1)", transition: "all 0.2s" } : undefined,
@@ -42,7 +42,9 @@ export const Down = memo<DownProps>(({ flip }) => {
       <path d="m28.109 5.453 3.781 3.766L15.999 25.11.108 9.219l3.781-3.766 12.109 12.109L28.107 5.453z" />
     </svg>
   );
-});
+};
+
+export const Down = memo(DownInner);
 
 export const Up = memo(() => {
   const style = useMemo(() => ({ marginTop: "-1px" }), []);

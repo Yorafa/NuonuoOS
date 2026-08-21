@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { type ApiError } from "browserfs/dist/node/core/api_error";
+import { type ZenFSError } from "contexts/fileSystem/zenfs";
 import { type SortBy } from "components/system/Files/FileManager/useSortBy";
 import { useFileSystem } from "contexts/fileSystem";
 import {
@@ -205,45 +205,63 @@ const useSessionContextState = (): SessionContextState => {
     [readdir, sortOrders]
   );
   const loadingDebounceRef = useRef(0);
-
-  useEffect(() => {
-    if (!loadingDebounceRef.current && sessionLoaded && !haltSession) {
-      maybeRequestIdleCallback(() => {
-        writeFile(
-          SESSION_FILE,
-          JSON.stringify({
-            clockSource,
-            closeEffect,
-            cursor,
-            iconPositions,
-            recentFiles,
-            runHistory,
-            sortOrders,
-            themeName,
-            views,
-            wallpaperFit,
-            wallpaperImage,
-            windowStates,
-          }),
-          true
-        );
-      });
-    }
-  }, [
+  // Latest session payload, refreshed on every render. The write callback
+  // reads this lazily so it always serialises the most recent state instead
+  // of the snapshot captured when the idle callback was scheduled.
+  const sessionPayloadRef = useRef<SessionData>({} as SessionData);
+  sessionPayloadRef.current = {
     clockSource,
     closeEffect,
     cursor,
-    haltSession,
     iconPositions,
     recentFiles,
     runHistory,
-    sessionLoaded,
     sortOrders,
     themeName,
     views,
     wallpaperFit,
     wallpaperImage,
     windowStates,
+  };
+  // Coalesce session auto-saves. Each state change re-runs this effect and
+  // each `writeFile` triggers a CopyOnWrite copy up that fetches the full
+  // readable file from network. Without gating, dragging icons / moving
+  // windows writes /session.json many times in quick succession.
+  const sessionWritePendingRef = useRef(false);
+
+  useEffect(() => {
+    if (loadingDebounceRef.current || !sessionLoaded || haltSession) return;
+    if (sessionWritePendingRef.current) return;
+    sessionWritePendingRef.current = true;
+
+    maybeRequestIdleCallback(() => {
+      sessionWritePendingRef.current = false;
+      writeFile(
+        SESSION_FILE,
+        JSON.stringify(sessionPayloadRef.current),
+        true
+      ).catch(() => {
+        // Swallow transient write failures so a single missed IndexedDB
+        // transaction does not block later state changes from retrying.
+      });
+    });
+    // sessionPayloadRef.current captures the latest values on every render;
+    // the deps below intentionally trigger re-evaluation of this effect.
+  }, [
+    /* effect dep */ clockSource,
+    /* effect dep */ closeEffect,
+    /* effect dep */ cursor,
+    haltSession,
+    /* effect dep */ iconPositions,
+    /* effect dep */ recentFiles,
+    /* effect dep */ runHistory,
+    sessionLoaded,
+    /* effect dep */ sortOrders,
+    /* effect dep */ themeName,
+    /* effect dep */ views,
+    /* effect dep */ wallpaperFit,
+    /* effect dep */ wallpaperImage,
+    /* effect dep */ windowStates,
     writeFile,
   ]);
 
@@ -345,7 +363,7 @@ const useSessionContextState = (): SessionContextState => {
             setRecentFiles(DEFAULT_SESSION?.recentFiles || []);
           }
         } catch (error) {
-          if ((error as ApiError)?.code === "ENOENT") {
+          if ((error as ZenFSError)?.code === "ENOENT") {
             deletePath(SESSION_FILE);
           }
         }

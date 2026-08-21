@@ -2482,6 +2482,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^26.0.0":
+  version: 26.2.0
+  resolution: "@types/node@npm:26.2.0"
+  dependencies:
+    undici-types: "npm:~8.3.0"
+  checksum: 10c0/f8566d88162241eb55a46f7e4ea097188eab0aaafefea7a58e63adab8c4144eb98c08b7911452c846104c339a0f82282f5e1ed4b26b578d60709614fe2843f4d
+  languageName: node
+  linkType: hard
+
 "@types/normalize-package-data@npm:^2.4.0":
   version: 2.4.4
   resolution: "@types/normalize-package-data@npm:2.4.4"
@@ -3190,6 +3199,50 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zenfs/archives@npm:^1.4.3":
+  version: 1.4.3
+  resolution: "@zenfs/archives@npm:1.4.3"
+  dependencies:
+    fflate: "npm:^0.8.2"
+  peerDependencies:
+    "@zenfs/core": ^2.6.0
+    kerium: ^1.4.2
+    memium: ^1.0.0
+    utilium: ^3.0.0
+  checksum: 10c0/2678247815f64fa0584a18290a2b41c0a6b4fef6cff492c6a970590fa8aaf2ac60de68886fbf8e241d41c874969d370ccb5d0570f3b091aa626fd16770a6305a
+  languageName: node
+  linkType: hard
+
+"@zenfs/core@npm:^2.6.3":
+  version: 2.6.3
+  resolution: "@zenfs/core@npm:2.6.3"
+  dependencies:
+    "@types/node": "npm:^26.0.0"
+    buffer: "npm:^6.0.3"
+    eventemitter3: "npm:^5.0.1"
+    kerium: "npm:^1.4.2"
+    memium: "npm:^1.0.0"
+    readable-stream: "npm:^4.5.2"
+    utilium: "npm:^3.0.0"
+  bin:
+    make-index: scripts/make-index.js
+    zci: scripts/ci-cli.js
+    zenfs-test: scripts/test.js
+  checksum: 10c0/c9672976dbbf7a2685fcac1981ec8d7f7ec04503ad52c9667007e9f2e3866ab83feb53f479c2dc36913ee4296b4e1835d355151504409bec7ff20831fab3d8c0
+  languageName: node
+  linkType: hard
+
+"@zenfs/dom@npm:^1.2.10":
+  version: 1.2.10
+  resolution: "@zenfs/dom@npm:1.2.10"
+  peerDependencies:
+    "@zenfs/core": ^2.6.0
+    kerium: ^1.4.2
+    utilium: ^3.0.0
+  checksum: 10c0/79aa3a23ca149ddf04b935370cafff2637dae16164b9d50afecd6384c9a5a63b8a0299cc431b1f3d40d7d1a58b231dd3c70d535c67e12111dd670fccac534f1d
+  languageName: node
+  linkType: hard
+
 "abbrev@npm:^5.0.0":
   version: 5.0.0
   resolution: "abbrev@npm:5.0.0"
@@ -3630,15 +3683,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:~2.6.1":
-  version: 2.6.4
-  resolution: "async@npm:2.6.4"
-  dependencies:
-    lodash: "npm:^4.17.14"
-  checksum: 10c0/0ebb3273ef96513389520adc88e0d3c45e523d03653cc9b66f5c46f4239444294899bfd13d2b569e7dbfde7da2235c35cf5fd3ece9524f935d41bbe4efccdad0
-  languageName: node
-  linkType: hard
-
 "available-typed-arrays@npm:^1.0.7":
   version: 1.0.7
   resolution: "available-typed-arrays@npm:1.0.7"
@@ -3832,18 +3876,6 @@ __metadata:
   dependencies:
     fill-range: "npm:^7.1.1"
   checksum: 10c0/7c6dfd30c338d2997ba77500539227b9d1f85e388a5f43220865201e407e076783d0881f2d297b9f80951b4c957fcf0b51c1d2d24227631643c3f7c284b0aa04
-  languageName: node
-  linkType: hard
-
-"browserfs@https://github.com/jvilk/BrowserFS.git#a96aa2d":
-  version: 2.0.0
-  resolution: "browserfs@https://github.com/jvilk/BrowserFS.git#commit=a96aa2d417995dac7d376987839bc4e95e218e06"
-  dependencies:
-    async: "npm:~2.6.1"
-    pako: "npm:~1.0.6"
-  bin:
-    make_http_index: ./dist/scripts/make_http_index.js
-  checksum: 10c0/eddd3eee5b79651fd0f0c2361153403526db22fc946613d37e398160b0c505529665b2da1f47ecd8ff80e1b0f88e4b385727bd508619bbc787c228f7d0451ae9
   languageName: node
   linkType: hard
 
@@ -4617,8 +4649,10 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^8.46.1"
     "@typescript-eslint/parser": "npm:^8.46.1"
     "@wasmer/wasm-transformer": "npm:^0.12.0"
+    "@zenfs/archives": "npm:^1.4.3"
+    "@zenfs/core": "npm:^2.6.3"
+    "@zenfs/dom": "npm:^1.2.10"
     ani-cursor: "npm:^0.0.5"
-    browserfs: "https://github.com/jvilk/BrowserFS.git#a96aa2d"
     canvas-confetti: "npm:^1.9.3"
     codemirror: "npm:^6.0.2"
     decode-ico: "npm:^0.4.1"
@@ -4654,10 +4688,12 @@ __metadata:
     isomorphic-git: "npm:^1.34.0"
     jest: "npm:^30.2.0"
     jest-environment-jsdom: "npm:^30.2.0"
+    kerium: "npm:^1.4.2"
     libheif-js: "npm:^1.19.8"
     lint-staged: "npm:^16.2.4"
     lunr: "npm:^2.3.9"
     mediainfo.js: "npm:0.3.6"
+    memium: "npm:^1.0.1"
     minimist: "npm:^1.2.8"
     motion: "npm:^12.23.24"
     multiformats: "npm:^13.4.1"
@@ -4686,6 +4722,7 @@ __metadata:
     ts-prune: "npm:^0.10.3"
     typescript: "npm:^5.9.3"
     utif: "https://github.com/photopea/UTIF.js"
+    utilium: "npm:^3.0.0"
     wasi-js: "npm:^1.7.3"
     xlsx: "npm:^0.18.5"
     xterm: "npm:^5.3.0"
@@ -8568,6 +8605,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"kerium@npm:^1.3.2, kerium@npm:^1.4.2":
+  version: 1.4.2
+  resolution: "kerium@npm:1.4.2"
+  dependencies:
+    utilium: "npm:^3.0.0"
+  checksum: 10c0/a989c4ee0b3cc83ca4e7b95b223ef6c8fac89193f70eb479a1c89e9ffb841670c73194747e527458b3e5a43e3e9222d1e268cf4ef6f4c5911bfc0fb4723d6f87
+  languageName: node
+  linkType: hard
+
 "keyv@npm:^4.5.4":
   version: 4.5.4
   resolution: "keyv@npm:4.5.4"
@@ -8710,7 +8756,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.14, lodash@npm:^4.17.21":
+"lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -8827,6 +8873,16 @@ __metadata:
   bin:
     mediainfo.js: dist/esm/cli.js
   checksum: 10c0/aecb7a949923c86384988009669701aaa187ca77bdf5d83d87afacc5a088b21e1343a7477201bfac3e97f75730c81561a9078c28b0911ff6d7be0de0f10d30ff
+  languageName: node
+  linkType: hard
+
+"memium@npm:^1.0.0, memium@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "memium@npm:1.0.1"
+  dependencies:
+    kerium: "npm:^1.3.2"
+    utilium: "npm:^3.0.0"
+  checksum: 10c0/70ff0fc784e83dd7e44e507f0655dbfc7b4d51638fb59231c7c22be6bdb61c476459060f1ccef014a9f92707455be2f94cc2be29842f2d43bdf2ae57f5d33cce
   languageName: node
   linkType: hard
 
@@ -9580,7 +9636,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pako@npm:^1.0.10, pako@npm:^1.0.5, pako@npm:~1.0.6":
+"pako@npm:^1.0.10, pako@npm:^1.0.5":
   version: 1.0.11
   resolution: "pako@npm:1.0.11"
   checksum: 10c0/86dd99d8b34c3930345b8bbeb5e1cd8a05f608eeb40967b293f72fe469d0e9c88b783a8777e4cc7dc7c91ce54c5e93d88ff4b4f060e6ff18408fd21030d9ffbe
@@ -10231,6 +10287,19 @@ __metadata:
     process: "npm:^0.11.10"
     string_decoder: "npm:^1.3.0"
   checksum: 10c0/a2c80e0e53aabd91d7df0330929e32d0a73219f9477dbbb18472f6fdd6a11a699fc5d172a1beff98d50eae4f1496c950ffa85b7cc2c4c196963f289a5f39275d
+  languageName: node
+  linkType: hard
+
+"readable-stream@npm:^4.5.2":
+  version: 4.7.0
+  resolution: "readable-stream@npm:4.7.0"
+  dependencies:
+    abort-controller: "npm:^3.0.0"
+    buffer: "npm:^6.0.3"
+    events: "npm:^3.3.0"
+    process: "npm:^0.11.10"
+    string_decoder: "npm:^1.3.0"
+  checksum: 10c0/fd86d068da21cfdb10f7a4479f2e47d9c0a9b0c862fc0c840a7e5360201580a55ac399c764b12a4f6fa291f8cee74d9c4b7562e0d53b3c4b2769f2c98155d957
   languageName: node
   linkType: hard
 
@@ -12178,6 +12247,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici-types@npm:~8.3.0":
+  version: 8.3.0
+  resolution: "undici-types@npm:8.3.0"
+  checksum: 10c0/c8aa7e2fbebfce519654dafadc0ece59be888d2ccaf180fb4495da875e7b536d2456345c384069c7e6f3e9c9ab7435f074957da306f142343eee86ff8048855a
+  languageName: node
+  linkType: hard
+
 "undici@npm:^8.4.1":
   version: 8.10.0
   resolution: "undici@npm:8.10.0"
@@ -12319,6 +12395,22 @@ __metadata:
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
   checksum: 10c0/41a5bdd214df2f6c3ecf8622745e4a366c4adced864bc3c833739791aeeeb1838119af7daed4ba36428114b5c67dcda034a79c882e97e43c03e66a4dd7389942
+  languageName: node
+  linkType: hard
+
+"utilium@npm:^3.0.0":
+  version: 3.5.1
+  resolution: "utilium@npm:3.5.1"
+  dependencies:
+    eventemitter3: "npm:^5.0.1"
+  peerDependencies:
+    "@xterm/xterm": ^6.0.0
+  peerDependenciesMeta:
+    "@xterm/xterm":
+      optional: true
+  bin:
+    lice: scripts/lice.js
+  checksum: 10c0/1eab9b8c23df6667238e560febd6118848678e4bdc3b1545ac150031bdddaf0118bc28d3b569686038162b12adc95d6d65e629568b820a212860cfaf5c356977
   languageName: node
   linkType: hard
 

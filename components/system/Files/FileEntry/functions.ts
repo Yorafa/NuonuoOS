@@ -1,12 +1,11 @@
 import { basename, dirname, join } from "path";
 import ini from "ini";
-import { type FSModule } from "browserfs/dist/node/core/FS";
-import type Stats from "browserfs/dist/node/core/node_fs_stats";
+import { type Stats } from "@zenfs/core";
+import { type FSModule, type RootFileSystem } from "contexts/fileSystem/zenfs";
 import extensions from "components/system/Files/FileEntry/extensions";
 import { type FileInfo } from "components/system/Files/FileEntry/useFileInfo";
 import { type FileStat } from "components/system/Files/FileManager/functions";
 import { get9pModifiedTime, isMountedFolder } from "contexts/fileSystem/core";
-import { type RootFileSystem } from "contexts/fileSystem/useAsyncFs";
 import processDirectory from "contexts/process/directory";
 import { getLocale } from "contexts/language";
 import {
@@ -74,12 +73,23 @@ type VideoElementWithSeek = HTMLVideoElement & {
   seekToNextFrame: () => Promise<void>;
 };
 
+const getTimeMilliseconds = (
+  date: Date | undefined,
+  milliseconds: number | undefined
+): number =>
+  typeof milliseconds === "number" ? milliseconds : (date?.getTime() ?? 0);
+
 export const isExistingFile = (
-  { birthtimeMs, ctimeMs }: Stats = {} as Stats
-): boolean => Boolean(birthtimeMs && birthtimeMs === ctimeMs);
+  { birthtime, birthtimeMs, ctime, ctimeMs }: FileStat = {} as FileStat
+): boolean => {
+  const creationTime = getTimeMilliseconds(birthtime, birthtimeMs);
+  const changeTime = getTimeMilliseconds(ctime, ctimeMs);
+
+  return Boolean(creationTime && creationTime === changeTime);
+};
 
 export const getModifiedTime = (path: string, stats: FileStat): number => {
-  const { mtimeMs } = stats;
+  const modifiedTime = getTimeMilliseconds(stats.mtime, stats.mtimeMs);
 
   if (isExistingFile(stats)) {
     const storedMtime = get9pModifiedTime(path);
@@ -87,7 +97,7 @@ export const getModifiedTime = (path: string, stats: FileStat): number => {
     if (storedMtime > 0) return storedMtime;
   }
 
-  return mtimeMs;
+  return modifiedTime;
 };
 
 export const getIconFromIni = (
@@ -223,7 +233,7 @@ export const getCachedIconUrl = async (
             (readError, cachedIconData = Buffer.from("")) => {
               if (cachedIconData.length >= SMALLEST_PNG_SIZE) {
                 resolve(bufferToUrl(cachedIconData));
-              } else if (!readError) fs.unlink(cachedIconPath);
+              } else if (!readError) fs.unlink(cachedIconPath, () => false);
             }
           );
         }
