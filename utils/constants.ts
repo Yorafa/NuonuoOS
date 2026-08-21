@@ -343,9 +343,9 @@ export const TASKBAR_HEIGHT = 30;
 export const PACKAGE_DATA = {
   alias: "李糯糯のOS",
   author: {
-    email: "dustinbrett@gmail.com",
-    name: "Dustin Brett",
-    url: "https://dustinbrett.com",
+    email: "noreply@yorafa.com",
+    name: "Thomas Wang",
+    url: "https://yorafa.com",
   },
   description: "Desktop environment in the browser",
   license: "MIT",

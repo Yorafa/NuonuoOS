@@ -1,11 +1,13 @@
 import {
   memo,
+  Profiler,
   useCallback,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
+import { renderProfilerCallback } from "components/system/RenderCostProfiler";
 import StyledPeekWindow from "components/system/Taskbar/TaskbarEntry/Peek/StyledPeekWindow";
 import usePeekTransition from "components/system/Taskbar/TaskbarEntry/Peek/usePeekTransition";
 import useWindowPeek from "components/system/Taskbar/TaskbarEntry/Peek/useWindowPeek";
@@ -33,7 +35,9 @@ const Play = memo(() => (
   </svg>
 ));
 
-const PeekWindow: FC<PeekWindowProps> = ({ id }) => {
+const PeekWindow = ({
+  id,
+}: PeekWindowProps): React.ReactElement | undefined => {
   const {
     minimize,
     processes: { [id]: process },
@@ -66,7 +70,7 @@ const PeekWindow: FC<PeekWindowProps> = ({ id }) => {
     }
   }, [image]);
 
-  return image ? (
+  const content = image && (
     <StyledPeekWindow
       ref={peekRef}
       $offsetX={offsetX}
@@ -114,8 +118,14 @@ const PeekWindow: FC<PeekWindowProps> = ({ id }) => {
         </div>
       )}
     </StyledPeekWindow>
-  ) : // eslint-disable-next-line unicorn/no-null
-  null;
+  );
+  if (!content) return undefined;
+
+  return (
+    <Profiler id="PeekWindow" onRender={renderProfilerCallback}>
+      {content}
+    </Profiler>
+  );
 };
 
 export default memo(PeekWindow);

@@ -1,4 +1,5 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, Profiler } from "react";
+import { renderProfilerCallback } from "components/system/RenderCostProfiler";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
 import StyledPeekViewport from "components/system/Taskbar/TaskbarEntry/Peek/StyledPeekViewport";
 import RndWindow from "components/system/Window/RndWindow";
@@ -35,20 +36,22 @@ const Window: FC<ComponentProcessProps> = ({ children, id }) => {
   );
 
   return (
-    <RndWindow id={id} zIndex={zIndex}>
-      <StyledWindow
-        $backgroundBlur={backgroundBlur}
-        $backgroundColor={backgroundColor}
-        $isForeground={isForeground}
-        {...focusableProps}
-        {...windowTransitions}
-      >
-        <StyledPeekViewport ref={linkViewportEntry}>
-          {!hideTitlebar && <Titlebar id={id} />}
-          {children}
-        </StyledPeekViewport>
-      </StyledWindow>
-    </RndWindow>
+    <Profiler id={`Window-${id}`} onRender={renderProfilerCallback}>
+      <RndWindow id={id} zIndex={zIndex}>
+        <StyledWindow
+          $backgroundBlur={backgroundBlur}
+          $backgroundColor={backgroundColor}
+          $isForeground={isForeground}
+          {...focusableProps}
+          {...windowTransitions}
+        >
+          <StyledPeekViewport ref={linkViewportEntry}>
+            {!hideTitlebar && <Titlebar id={id} />}
+            {children}
+          </StyledPeekViewport>
+        </StyledWindow>
+      </RndWindow>
+    </Profiler>
   );
 };
 

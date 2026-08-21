@@ -12,7 +12,7 @@ import {
   isCanvasDrawn,
 } from "utils/functions";
 
-const FPS = 5;
+const FPS = 2;
 const ANIMATED_TAGS = new Set(["VIDEO", "CANVAS"]);
 
 const renderFrame = async (
@@ -104,7 +104,9 @@ const useWindowPeek = (id: string): string => {
               window.requestAnimationFrame(() =>
                 renderFrame(previewElement, animate, setImageSrc, keepAlive)
               ),
-            document.querySelector(".peekWindow") ? 0 : MILLISECONDS_IN_SECOND / 2
+            document.querySelector(".peekWindow")
+              ? 0
+              : MILLISECONDS_IN_SECOND / 2
           );
           animate.current = true;
         }

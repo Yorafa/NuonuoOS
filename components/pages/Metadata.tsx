@@ -3,7 +3,11 @@ import Head from "next/head";
 import { useFaviconAndTitle } from "components/pages/hooks/useFaviconAndTitle";
 import { useCursor } from "components/pages/hooks/useCursor";
 import desktopIcons from "public/.index/desktopIcons.json";
-import { HIGH_PRIORITY_ELEMENT, PACKAGE_DATA } from "utils/constants";
+import {
+  DEFAULT_WALLPAPER,
+  HIGH_PRIORITY_ELEMENT,
+  PACKAGE_DATA,
+} from "utils/constants";
 import {
   getExtension,
   getMimeType,
@@ -64,6 +68,7 @@ const Metadata: FC = () => {
         title={`RSS Feed for ${alias}`}
         type="application/rss+xml"
       />
+      <link as="image" href={DEFAULT_WALLPAPER} rel="preload" />
       {PreloadIcons}
       {CustomCursor}
     </Head>

@@ -2,7 +2,7 @@
 
 ## _浏览器中的桌面环境_
 
-![截图](https://raw.githubusercontent.com/DustinBrett/daedalOS/refs/heads/main/public/screenshot.png?raw=true)
+![截图](public/screenshot.png)
 
 > 本项目 Fork 自 [DustinBrett/daedalOS](https://github.com/DustinBrett/daedalOS) 并在其基础上修改而成:移除了重型应用与 AI 功能,换装 Win98 风格银色任务栏、斜角开始按钮与深蓝标题栏的经典皮肤。感谢原作者 [Dustin Brett](https://github.com/DustinBrett) 的开源贡献。
 >
@@ -146,7 +146,7 @@
 ##### 环境要求
 
 - [Node.js](https://nodejs.org/zh-cn/download)
-- [Yarn](https://yarnpkg.com/)
+- [Yarn 4 (Berry)](https://yarnpkg.com/)（通过 Corepack 启用：corepack enable）
 
 ##### 开发
 
@@ -179,4 +179,4 @@ docker run -dp 3000:3000 --rm --name daedalos daedalos
 
 ##### 备注
 
-- 如果在 `yarn install` 期间收到 `digital envelope routines::unsupported` 错误,需要将 `NODE_OPTIONS` 设置为 `--openssl-legacy-provider`([1](https://github.com/DustinBrett/daedalOS/blob/main/Dockerfile#L3),[2](https://github.com/DustinBrett/daedalOS/blob/main/.github/workflows/main.yml#L17),[3](https://stackoverflow.com/a/69699772/5895982))
+- 项目使用 [Yarn 4 (Berry)](https://yarnpkg.com/)，通过 Corepack 管理。运行 `corepack enable` 后即可使用 `yarn` 命令。

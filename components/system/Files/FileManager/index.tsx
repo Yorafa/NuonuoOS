@@ -1,6 +1,15 @@
 import { basename, join } from "path";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  Profiler,
+  useRef,
+  useState,
+} from "react";
 import dynamic from "next/dynamic";
+import { renderProfilerCallback } from "components/system/RenderCostProfiler";
 import StyledLoading from "components/system/Apps/StyledLoading";
 import StatusBar from "components/system/Files/FileManager/StatusBar";
 import {
@@ -246,83 +255,90 @@ const FileManager: FC<FileManagerProps> = ({
   }
 
   return (
-    <>
-      {loading && <StyledLoading $hasColumns={isDetailsView} />}
-      {!loading && isEmptyFolder && <StyledEmpty $hasColumns={isDetailsView} />}
-      <StyledFileManager
-        ref={fileManagerRef}
-        $isEmptyFolder={isEmptyFolder}
-        $scrollable={!hideScrolling}
-        onKeyDownCapture={loading ? undefined : onKeyDown}
-        {...(loading || readOnly
-          ? { onContextMenu: haltEvent }
-          : {
-              $selecting: isSelecting,
-              ...fileDrop,
-              ...folderContextMenu,
-              ...selectionEvents,
-            })}
-        {...FOCUSABLE_ELEMENT}
-      >
-        {isDetailsView && columns && (
-          <Columns
-            columns={columns}
+    <Profiler id="FileManager" onRender={renderProfilerCallback}>
+      <>
+        {loading && <StyledLoading $hasColumns={isDetailsView} />}
+        {!loading && isEmptyFolder && (
+          <StyledEmpty $hasColumns={isDetailsView} />
+        )}
+        <StyledFileManager
+          ref={fileManagerRef}
+          $isEmptyFolder={isEmptyFolder}
+          $scrollable={!hideScrolling}
+          onKeyDownCapture={loading ? undefined : onKeyDown}
+          {...(loading || readOnly
+            ? { onContextMenu: haltEvent }
+            : {
+                $selecting: isSelecting,
+                ...fileDrop,
+                ...folderContextMenu,
+                ...selectionEvents,
+              })}
+          {...FOCUSABLE_ELEMENT}
+        >
+          {isDetailsView && columns && (
+            <Columns
+              columns={columns}
+              directory={url}
+              files={files}
+              setColumns={setColumns}
+            />
+          )}
+          {!loading && (
+            <>
+              {isSelecting && <StyledSelection style={selectionStyling} />}
+              <Profiler id="FileEntries" onRender={renderProfilerCallback}>
+                {fileKeys.map((file) => (
+                  <StyledFileEntry
+                    key={file}
+                    $desktop={isDesktop}
+                    $selecting={isSelecting}
+                    $visible={!isLoading}
+                    {...(!readOnly &&
+                      draggableEntry(url, file, renaming === file))}
+                    {...(renaming === "" && { onKeyDown: keyShortcuts(file) })}
+                    {...focusableEntry(file)}
+                  >
+                    <FileEntry
+                      columns={columns}
+                      fileActions={fileActions}
+                      fileManagerId={id}
+                      fileManagerRef={fileManagerRef}
+                      focusFunctions={focusFunctions}
+                      focusedEntries={focusedEntries}
+                      hasNewFolderIcon={isStartMenu}
+                      hideShortcutIcon={hideShortcutIcons}
+                      isDesktop={isDesktop}
+                      isHeading={isDesktop && files[file].systemShortcut}
+                      isLoadingFileManager={isLoading}
+                      loadIconImmediately={loadIconsImmediately}
+                      name={basename(file, SHORTCUT_EXTENSION)}
+                      path={join(url, file)}
+                      readOnly={readOnly}
+                      renaming={renaming === file}
+                      selectionRect={selectionRect}
+                      setRenaming={setRenaming}
+                      stats={files[file]}
+                      view={view}
+                    />
+                  </StyledFileEntry>
+                ))}
+              </Profiler>
+            </>
+          )}
+        </StyledFileManager>
+        {showStatusBar && (
+          <StatusBar
+            count={loading ? 0 : fileKeys.length}
             directory={url}
-            files={files}
-            setColumns={setColumns}
+            fileDrop={fileDrop}
+            selected={focusedEntries}
+            setView={setView}
+            view={view}
           />
         )}
-        {!loading && (
-          <>
-            {isSelecting && <StyledSelection style={selectionStyling} />}
-            {fileKeys.map((file) => (
-              <StyledFileEntry
-                key={file}
-                $desktop={isDesktop}
-                $selecting={isSelecting}
-                $visible={!isLoading}
-                {...(!readOnly && draggableEntry(url, file, renaming === file))}
-                {...(renaming === "" && { onKeyDown: keyShortcuts(file) })}
-                {...focusableEntry(file)}
-              >
-                <FileEntry
-                  columns={columns}
-                  fileActions={fileActions}
-                  fileManagerId={id}
-                  fileManagerRef={fileManagerRef}
-                  focusFunctions={focusFunctions}
-                  focusedEntries={focusedEntries}
-                  hasNewFolderIcon={isStartMenu}
-                  hideShortcutIcon={hideShortcutIcons}
-                  isDesktop={isDesktop}
-                  isHeading={isDesktop && files[file].systemShortcut}
-                  isLoadingFileManager={isLoading}
-                  loadIconImmediately={loadIconsImmediately}
-                  name={basename(file, SHORTCUT_EXTENSION)}
-                  path={join(url, file)}
-                  readOnly={readOnly}
-                  renaming={renaming === file}
-                  selectionRect={selectionRect}
-                  setRenaming={setRenaming}
-                  stats={files[file]}
-                  view={view}
-                />
-              </StyledFileEntry>
-            ))}
-          </>
-        )}
-      </StyledFileManager>
-      {showStatusBar && (
-        <StatusBar
-          count={loading ? 0 : fileKeys.length}
-          directory={url}
-          fileDrop={fileDrop}
-          selected={focusedEntries}
-          setView={setView}
-          view={view}
-        />
-      )}
-    </>
+      </>
+    </Profiler>
   );
 };
 

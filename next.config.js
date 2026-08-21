@@ -25,6 +25,8 @@ const nextConfig = {
     resolveAlias: {
       "node:buffer": "buffer",
       "node:stream": "readable-stream",
+      "MediaInfoModule.wasm":
+        "./public/System/mediainfo.js/MediaInfoModule.wasm",
     },
   },
 };

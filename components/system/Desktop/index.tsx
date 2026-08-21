@@ -1,4 +1,5 @@
-import { memo, useRef } from "react";
+import { memo, Profiler, useRef } from "react";
+import { renderProfilerCallback } from "components/system/RenderCostProfiler";
 import StyledDesktop from "components/system/Desktop/StyledDesktop";
 import useWallpaper from "components/system/Desktop/Wallpapers/useWallpaper";
 import FileManager from "components/system/Files/FileManager";
@@ -11,15 +12,17 @@ const Desktop: FC = ({ children }) => {
 
   return (
     <StyledDesktop ref={desktopRef}>
-      <FileManager
-        url={DESKTOP_PATH}
-        allowMovingDraggableEntries
-        hideLoading
-        hideScrolling
-        isDesktop
-        loadIconsImmediately
-      />
-      {children}
+      <Profiler id="Desktop" onRender={renderProfilerCallback}>
+        <FileManager
+          url={DESKTOP_PATH}
+          allowMovingDraggableEntries
+          hideLoading
+          hideScrolling
+          isDesktop
+          loadIconsImmediately
+        />
+        {children}
+      </Profiler>
     </StyledDesktop>
   );
 };

@@ -61,7 +61,7 @@ const RenderCostTracker = ({
   id,
   children,
   thresholdMs = 5,
-  enabled = true,
+  enabled = process.env.NODE_ENV !== "production",
   onSample,
 }: RenderCostTrackerProps): React.ReactElement => {
   const onSampleRef = useRef(onSample);
@@ -133,3 +133,17 @@ const RenderCostTracker = ({
 };
 
 export default RenderCostTracker;
+
+export const renderProfilerCallback: ProfilerOnRenderCallback = (
+  id,
+  phase,
+  actualDuration,
+  baseDuration,
+  _startTime,
+  _commitTime
+) => {
+  if (actualDuration < 5) return;
+  console.info(
+    `[render ${id}] ${phase} Δ=${actualDuration.toFixed(1)}ms base=${baseDuration.toFixed(1)}ms`
+  );
+};

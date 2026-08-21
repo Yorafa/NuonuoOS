@@ -89,6 +89,7 @@ module.exports = [
       playwright: require("eslint-plugin-playwright"),
       promise: require("eslint-plugin-promise"),
       react: require("eslint-plugin-react"),
+      "react-hooks": require("eslint-plugin-react-hooks"),
       "react-hooks-addons": require("eslint-plugin-react-hooks-addons"),
       regexp: require("eslint-plugin-regexp"),
       sonarjs: require("eslint-plugin-sonarjs"),
@@ -307,6 +308,7 @@ module.exports = [
   {
     ignores: [
       ".husky/_",
+      ".yarn",
       ".next",
       "node_modules",
       "out",

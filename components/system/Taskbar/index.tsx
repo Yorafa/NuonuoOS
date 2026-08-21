@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, Profiler, useState } from "react";
 import dynamic from "next/dynamic";
 import { AnimatePresence } from "motion/react";
 import {
@@ -12,6 +12,7 @@ import StartButton from "components/system/Taskbar/StartButton";
 import StyledTaskbar from "components/system/Taskbar/StyledTaskbar";
 import TaskbarEntries from "components/system/Taskbar/TaskbarEntries";
 import useTaskbarContextMenu from "components/system/Taskbar/useTaskbarContextMenu";
+import { renderProfilerCallback } from "components/system/RenderCostProfiler";
 import { CLOCK_CANVAS_BASE_WIDTH, FOCUSABLE_ELEMENT } from "utils/constants";
 
 const Calendar = dynamic(importCalendar);
@@ -46,35 +47,37 @@ const Taskbar: FC = () => {
   );
 
   return (
-    <>
-      <AnimatePresence initial={false} presenceAffectsLayout={false}>
-        {startMenuVisible && (
-          <StartMenu key="startMenu" toggleStartMenu={toggleStartMenu} />
-        )}
-        {searchVisible && <Search key="search" toggleSearch={toggleSearch} />}
-      </AnimatePresence>
-      <StyledTaskbar {...useTaskbarContextMenu()} {...FOCUSABLE_ELEMENT}>
-        <StartButton
-          startMenuVisible={startMenuVisible}
-          toggleStartMenu={toggleStartMenu}
-        />
-        <SearchButton
-          searchVisible={searchVisible}
-          toggleSearch={toggleSearch}
-        />
-        <TaskbarEntries clockWidth={clockWidth} />
-        <Clock
-          setClockWidth={setClockWidth}
-          toggleCalendar={toggleCalendar}
-          width={clockWidth}
-        />
-      </StyledTaskbar>
-      <AnimatePresence initial={false} presenceAffectsLayout={false}>
-        {calendarVisible && (
-          <Calendar key="calendar" toggleCalendar={toggleCalendar} />
-        )}
-      </AnimatePresence>
-    </>
+    <Profiler id="Taskbar" onRender={renderProfilerCallback}>
+      <>
+        <AnimatePresence initial={false} presenceAffectsLayout={false}>
+          {startMenuVisible && (
+            <StartMenu key="startMenu" toggleStartMenu={toggleStartMenu} />
+          )}
+          {searchVisible && <Search key="search" toggleSearch={toggleSearch} />}
+        </AnimatePresence>
+        <StyledTaskbar {...useTaskbarContextMenu()} {...FOCUSABLE_ELEMENT}>
+          <StartButton
+            startMenuVisible={startMenuVisible}
+            toggleStartMenu={toggleStartMenu}
+          />
+          <SearchButton
+            searchVisible={searchVisible}
+            toggleSearch={toggleSearch}
+          />
+          <TaskbarEntries clockWidth={clockWidth} />
+          <Clock
+            setClockWidth={setClockWidth}
+            toggleCalendar={toggleCalendar}
+            width={clockWidth}
+          />
+        </StyledTaskbar>
+        <AnimatePresence initial={false} presenceAffectsLayout={false}>
+          {calendarVisible && (
+            <Calendar key="calendar" toggleCalendar={toggleCalendar} />
+          )}
+        </AnimatePresence>
+      </>
+    </Profiler>
   );
 };
 

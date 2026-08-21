@@ -78,10 +78,19 @@ const useFocusableEntries = (
   }, []);
   const mouseDownPositionRef = useRef({ x: 0, y: 0 });
   const { formats, sizes } = useTheme();
+  const focusablePropsCacheRef = useRef(new Map<string, FocusedEntryProps>());
+
   const focusableEntry = useCallback(
     (file: string): FocusedEntryProps => {
       const isFocused = focusedEntries.includes(file);
-      const className = isFocused ? "focus-within" : undefined;
+      const cached = focusablePropsCacheRef.current.get(file);
+
+      if (
+        cached &&
+        cached.className === (isFocused ? "focus-within" : undefined)
+      ) {
+        return cached;
+      }
       const onMouseDown: React.MouseEventHandler = ({
         ctrlKey,
         pageX,
@@ -122,6 +131,8 @@ const useFocusableEntries = (
 
         mouseDownPositionRef.current = { x: 0, y: 0 };
       };
+      const className = isFocused ? "focus-within" : undefined;
+
       const textLabel = file.replace(SHORTCUT_EXTENSION, "");
       let $labelHeightOffset = 0;
 
@@ -150,7 +161,7 @@ const useFocusableEntries = (
         }
       }
 
-      return {
+      const props: FocusedEntryProps = {
         $labelHeightOffset,
         className,
         onBlurCapture,
@@ -158,6 +169,10 @@ const useFocusableEntries = (
         onMouseDown,
         onMouseUp,
       };
+
+      focusablePropsCacheRef.current.set(file, props);
+
+      return props;
     },
     [
       adjustLabelMargin,
