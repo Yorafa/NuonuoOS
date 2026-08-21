@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync, statSync } from "fs";
 import { join } from "path";
 import {
+  type Disposable,
   type ConsoleMessage,
   type Locator,
   type Page,
@@ -118,12 +119,14 @@ export const filterMenuItems = (
     typeof shown === "boolean" ? shown : shown(browserName),
   ]);
 
-export const disableOffscreenCanvas = ({ page }: TestProps): Promise<void> =>
+export const disableOffscreenCanvas = ({
+  page,
+}: TestProps): Promise<Disposable> =>
   page.addInitScript(() => {
     delete (window as Partial<Window & typeof globalThis>).OffscreenCanvas;
   });
 
-export const disableWallpaper = ({ page }: TestProps): Promise<void> =>
+export const disableWallpaper = ({ page }: TestProps): Promise<Disposable> =>
   page.addInitScript(() => {
     window.DEBUG_DISABLE_WALLPAPER = true;
   });

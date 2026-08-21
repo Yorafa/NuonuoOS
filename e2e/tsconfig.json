@@ -1,37 +1,22 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "allowUnreachableCode": false,
-    "baseUrl": ".",
+    "baseUrl": "..",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "incremental": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "lib": ["dom", "dom.iterable", "esnext", "webworker"],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "noEmit": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
-    "types": ["jest", "wicg-file-system-access"]
+    "types": ["node"]
   },
-  "exclude": [
-    ".next",
-    "e2e",
-    "node_modules",
-    "out",
-    "playwright-report",
-    "test-results"
-  ],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["./**/*.ts", "./**/*.tsx", "../contexts/session/types.ts"]
 }
