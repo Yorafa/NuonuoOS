@@ -2,7 +2,7 @@
 
 本指南面向想要**使用和定制**本项目的人，重点解答最常见的问题：_"我添加一个文件，怎么让它出现在桌面 / 文件管理器里？"_ 以及快捷方式、图标、默认打开方式、新增应用等自定义玩法。
 
-项目的整体功能介绍见 [README.md](README.md)。
+项目的整体功能介绍见 [FEATURES.md](FEATURES.md)，架构说明见 [README.md](README.md)。
 
 ---
 
@@ -96,7 +96,6 @@ daedalOS 在浏览器里模拟了一个操作系统，桌面、资源管理器�
 | `.md`                                   | **Marked**       | Markdown 渲染，可再用 Vim 编辑  |
 | `.pdf`                                  | **PDF**          |                                 |
 | `.htm` / `.html`                        | **Browser**      |                                 |
-| `.otf` / `.ttf` / `.woff`               | **OpenType**     | 字体预览                        |
 | 图片（png/jpg/webp/heic/jxl/qoi/tiff…） | **Photos**       | 部分格式可再用文本编辑器打开    |
 | 音频 / 视频 / 播放列表（`.m3u` 等）     | **VideoPlayer**  | 支持 YouTube 链接               |
 | `.zip` / `.iso`                         | **FileExplorer** | 双击挂载为文件夹浏览            |

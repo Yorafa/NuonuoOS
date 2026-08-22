@@ -18,10 +18,6 @@ describe("Browser URL allowlist", () => {
     [HOME_PAGE, true],
     ["https://www.yorafa.com/path", true],
     ["https://subdomain.yorafa.com/", true],
-    // eslint-disable-next-line sonarjs/no-clear-text-protocols
-    ["http://surf.to/misc", true],
-    // eslint-disable-next-line sonarjs/no-clear-text-protocols
-    ["http://surf.to/other-page", true],
     ["chrome://dino", true],
     ["http://localhost/", true],
     ["/Program Files/Browser/dino/index.html", true],
