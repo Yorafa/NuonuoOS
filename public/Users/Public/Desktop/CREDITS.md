@@ -62,7 +62,6 @@
 
 - [Marked](https://github.com/markedjs/marked) — Markdown 解析器,将 Markdown 转为 HTML
   - [DOMPurify](https://github.com/cure53/DOMPurify) — XSS 过滤库,净化 HTML 防止脚本注入
-- [opentype.js](https://github.com/opentypejs/opentype.js) — OpenType/TrueType 字体解析和渲染
 - [PDF.js](https://github.com/mozilla/pdf.js) — PDF 文档渲染引擎
 - [Print.js](https://github.com/crabbly/print.js) — 浏览器端打印 HTML/PDF/图片
 - [quickjs-emscripten](https://github.com/justjake/quickjs-emscripten) — WebAssembly 版 QuickJS 引擎,浏览器内执行 JS 沙箱

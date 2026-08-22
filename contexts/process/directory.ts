@@ -37,13 +37,6 @@ const directory: Processes = {
     ],
     title: "Marked",
   },
-  OpenType: {
-    Component: dynamic(() => import("components/apps/OpenType")),
-    backgroundColor: "#FFF",
-    icon: "/System/Icons/opentype.webp",
-    preferProcessIcon: true,
-    title: "OpenType",
-  },
   OpenWith: {
     Component: dynamic(() => import("components/system/Dialogs/OpenWith")),
     allowResizing: false,

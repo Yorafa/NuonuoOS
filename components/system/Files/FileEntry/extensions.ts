@@ -23,11 +23,6 @@ const types = {
     process: [],
     type: "Disc Image File",
   },
-  Font: {
-    icon: "font",
-    process: ["OpenType"],
-    type: "Font File",
-  },
   GraphicsEditor: {
     process: ["Photos"],
     type: "Picture File",
@@ -94,13 +89,10 @@ const extensions: Record<string, Extension> = {
   ".m3u8": types.MediaPlaylist,
   ".md": types.Markdown,
   ".mp3": types.Music,
-  ".otf": types.Font,
   ".pdf": types.PdfDocument,
   ".pls": types.AudioPlaylist,
   ".svg": types.SvgFile,
-  ".ttf": types.Font,
   ".wasm": types.WasmFile,
-  ".woff": types.Font,
   ".wsz": types.WinampSkin,
   ".zip": types.ZipFile,
 };
