@@ -12,6 +12,12 @@ import {
   isBeforeBg,
 } from "utils/functions";
 
+declare global {
+  interface Window {
+    DEBUG_DISABLE_WALLPAPER?: boolean;
+  }
+}
+
 const applyStaticWallpaper = (
   url: string,
   fit: WallpaperFit,
@@ -155,7 +161,7 @@ const useWallpaper = (
   ]);
 
   useEffect(() => {
-    if (sessionLoaded) {
+    if (sessionLoaded && !window.DEBUG_DISABLE_WALLPAPER) {
       wallpaperLoadAbortRef.current?.abort();
 
       if (wallpaperImage) {

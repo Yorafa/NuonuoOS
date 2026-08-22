@@ -56,10 +56,6 @@ export const FS_HANDLES = "FileSystemAccessHandles";
 
 export const HOME = "/Users/Public";
 
-export const PICTURES_FOLDER = `${HOME}/Pictures`;
-
-export const VIDEOS_FOLDER = `${HOME}/Videos`;
-
 export const INDEX_FILE = "/index.html";
 
 export const ICON_GIF_SECONDS = 2;
@@ -147,10 +143,6 @@ export const MILLISECONDS_IN_SECOND = 1000;
 
 export const MILLISECONDS_IN_MINUTE = 60000;
 
-export const MILLISECONDS_IN_HOUR = 3600000;
-
-export const MILLISECONDS_IN_DAY = 86400000;
-
 export const ZIP_EXTENSIONS = new Set([".jsdos", ".pk3", ".wsz", ".zip"]);
 
 export const MOUNTABLE_EXTENSIONS = new Set([".iso", ...ZIP_EXTENSIONS]);
@@ -165,8 +157,6 @@ export const SPREADSHEET_FORMATS = [
   ".xlsx",
 ];
 
-export const MP3_MIME_TYPE = "audio/mpeg";
-
 export const VIDEO_FALLBACK_MIME_TYPE = "video/mp4";
 
 export const NON_BREAKING_HYPHEN = "\u2011";
@@ -179,8 +169,6 @@ export const ONE_TIME_PASSIVE_EVENT = {
 export const PREVENT_SCROLL = { preventScroll: true };
 
 export const PROCESS_DELIMITER = "__";
-
-export const PICUTRES_PATH = `${HOME}/Pictures`;
 
 export const SHORTCUT_APPEND = " - Shortcut";
 
@@ -370,5 +358,3 @@ export const DISBALE_AUTO_INPUT_FEATURES = {
   autoCorrect: "off",
   spellCheck: false,
 };
-
-export const MAX_ZINDEX = 2147483647;

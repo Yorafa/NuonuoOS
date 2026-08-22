@@ -11,7 +11,6 @@ import {
 } from "contexts/session/types";
 import {
   DESKTOP_PATH,
-  HIGH_PRIORITY_REQUEST,
   ICON_CACHE,
   ICON_PATH,
   ICON_RES_MAP,
@@ -988,34 +987,8 @@ export const haltEvent = (
   }
 };
 
-export const createOffscreenCanvas = (
-  containerElement: HTMLElement,
-  devicePixelRatio = 1,
-  customSize: Size = Object.create(null) as Size
-): OffscreenCanvas => {
-  const canvas = document.createElement("canvas");
-  const height = Number(customSize?.height) || containerElement.offsetHeight;
-  const width = Number(customSize?.width) || containerElement.offsetWidth;
-
-  canvas.style.height = `${height}px`;
-  canvas.style.width = `${width}px`;
-
-  canvas.height = Math.floor(height * devicePixelRatio);
-  canvas.width = Math.floor(width * devicePixelRatio);
-
-  containerElement.append(canvas);
-
-  return canvas.transferControlToOffscreen();
-};
-
 export const getSearchParam = (param: string): string =>
   new URLSearchParams(window.location.search).get(param) || "";
-
-export const clsx = (classes: Record<string, boolean>): string =>
-  Object.entries(classes)
-    .filter(([, isActive]) => isActive)
-    .map(([className]) => className)
-    .join(" ");
 
 export const label = (value: string): React.HTMLAttributes<HTMLElement> => ({
   "aria-label": value,
@@ -1027,18 +1000,6 @@ export const isYouTubeUrl = (url: string): boolean =>
   !url.includes("youtube.com/@") &&
   !url.includes("/channel/") &&
   !url.includes("/c/");
-
-export const getYouTubeUrlId = (url: string): string => {
-  try {
-    const { pathname, searchParams } = new URL(url);
-
-    return searchParams.get("v") || pathname.split("/").pop() || "";
-  } catch {
-    // URL parsing failed
-  }
-
-  return "";
-};
 
 export const getMimeType = (url: string, ext?: string): string => {
   switch (ext ? ext.toLowerCase() : getExtension(url)) {
@@ -1262,16 +1223,6 @@ export const getGifJs = async (): Promise<GIFWithWorkers> => {
   }) as GIFWithWorkers;
 };
 
-export const jsonFetch = async <T extends Record<string, unknown>>(
-  url: string,
-  options?: RequestInit
-): Promise<T> => {
-  const response = await fetch(url, { ...HIGH_PRIORITY_REQUEST, ...options });
-  const json = (await response.json()) as T;
-
-  return json || {};
-};
-
 export const generatePrettyTimestamp = (): string =>
   new Intl.DateTimeFormat(getLocale(), TIMESTAMP_DATE_FORMAT)
     .format(new Date())
@@ -1288,18 +1239,6 @@ export const isBeforeBg = (): boolean =>
   document.documentElement.style.getPropertyValue(
     "--before-background-opacity"
   ) === "1";
-
-export const parseBgPosition = (position?: string): `${number}%` | "center" => {
-  if (typeof position === "string") {
-    const positionNum = Number.parseFloat(position);
-
-    if (!Number.isNaN(positionNum) && positionNum >= 0 && positionNum <= 100) {
-      return `${positionNum}%`;
-    }
-  }
-
-  return "center";
-};
 
 export const toSorted = <T>(
   array: T[],

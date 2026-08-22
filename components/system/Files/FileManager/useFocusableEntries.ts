@@ -18,6 +18,7 @@ type FocusableEntry = (file: string) => FocusedEntryProps;
 export type FocusEntryFunctions = {
   blurEntry: (entry?: string) => void;
   focusEntry: (entry: string) => void;
+  replaceFocusedEntries: (entries: string[]) => void;
 };
 
 type FocusableEntries = FocusEntryFunctions & {
@@ -48,6 +49,16 @@ const useFocusableEntries = (
         currentFocusedEntries.includes(entry)
           ? currentFocusedEntries
           : [...currentFocusedEntries, entry]
+      ),
+    []
+  );
+  const replaceFocusedEntries = useCallback(
+    (entries: string[]): void =>
+      setFocusedEntries((currentEntries) =>
+        currentEntries.length === entries.length &&
+        entries.every((entry) => currentEntries.includes(entry))
+          ? currentEntries
+          : entries
       ),
     []
   );
@@ -188,7 +199,13 @@ const useFocusableEntries = (
     ]
   );
 
-  return { blurEntry, focusEntry, focusableEntry, focusedEntries };
+  return {
+    blurEntry,
+    focusEntry,
+    focusableEntry,
+    focusedEntries,
+    replaceFocusedEntries,
+  };
 };
 
 export default useFocusableEntries;

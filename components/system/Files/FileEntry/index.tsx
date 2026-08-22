@@ -25,8 +25,6 @@ import useFile from "components/system/Files/FileEntry/useFile";
 import useFileContextMenu from "components/system/Files/FileEntry/useFileContextMenu";
 import useFileInfo from "components/system/Files/FileEntry/useFileInfo";
 import FileManager from "components/system/Files/FileManager";
-import { isSelectionIntersecting } from "components/system/Files/FileManager/Selection/functions";
-import { type SelectionRect } from "components/system/Files/FileManager/Selection/useSelection";
 import { type FileStat } from "components/system/Files/FileManager/functions";
 import useFileDrop from "components/system/Files/FileManager/useFileDrop";
 import { type FocusEntryFunctions } from "components/system/Files/FileManager/useFocusableEntries";
@@ -101,7 +99,6 @@ type FileEntryProps = {
   path: string;
   readOnly?: boolean;
   renaming: boolean;
-  selectionRect?: SelectionRect;
   setRenaming: React.Dispatch<React.SetStateAction<string>>;
   stats: FileStat;
   view: FileManagerViewNames;
@@ -130,8 +127,6 @@ const truncateName = (
   return nonBreakingName;
 };
 
-const focusing: string[] = [];
-
 const cacheQueue: (() => Promise<void>)[] = [];
 
 const FileEntry: FC<FileEntryProps> = ({
@@ -150,13 +145,12 @@ const FileEntry: FC<FileEntryProps> = ({
   path,
   readOnly,
   renaming,
-  selectionRect,
   setRenaming,
   stats,
   hasNewFolderIcon,
   view,
 }) => {
-  const { blurEntry, focusEntry } = focusFunctions;
+  const { blurEntry } = focusFunctions;
   const { url: changeUrl } = useProcesses();
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const isVisible = useIsVisible(buttonRef, fileManagerRef, isDesktop);
@@ -541,47 +535,19 @@ const FileEntry: FC<FileEntryProps> = ({
   );
 
   useLayoutEffect(() => {
-    if (buttonRef.current && fileManagerRef.current) {
-      const inFocusedEntries = focusedEntries.includes(fileName);
-      const inFocusing = focusing.includes(fileName);
-      const isFocused = inFocusedEntries || inFocusing;
+    const buttonElement = buttonRef.current;
 
-      if (inFocusedEntries && inFocusing) {
-        focusing.splice(focusing.indexOf(fileName), 1);
-      }
-
-      if (selectionRect) {
-        const selected = isSelectionIntersecting(
-          buttonRef.current.getBoundingClientRect(),
-          fileManagerRef.current.getBoundingClientRect(),
-          selectionRect,
-          fileManagerRef.current.scrollTop
-        );
-
-        if (selected && !isFocused) {
-          focusing.push(fileName);
-          focusEntry(fileName);
-          buttonRef.current.focus(PREVENT_SCROLL);
-        } else if (!selected && isFocused) {
-          blurEntry(fileName);
-        }
-      } else if (
-        isFocused &&
-        buttonRef.current !== document.activeElement &&
-        focusedEntries.length === 1 &&
-        !buttonRef.current.contains(document.activeElement)
-      ) {
-        buttonRef.current.focus(PREVENT_SCROLL);
-      }
+    if (
+      buttonElement &&
+      fileManagerRef.current &&
+      focusedEntries.length === 1 &&
+      focusedEntries[0] === fileName &&
+      buttonElement !== document.activeElement &&
+      !buttonElement.contains(document.activeElement)
+    ) {
+      buttonElement.focus(PREVENT_SCROLL);
     }
-  }, [
-    blurEntry,
-    fileManagerRef,
-    fileName,
-    focusEntry,
-    focusedEntries,
-    selectionRect,
-  ]);
+  }, [fileName, fileManagerRef, focusedEntries]);
 
   return (
     <>

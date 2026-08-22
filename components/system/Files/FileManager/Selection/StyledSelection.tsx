@@ -14,10 +14,17 @@ export const StyledSelectionComponent = styled.span`
   z-index: 2;
 `;
 
-const StyledSelection: FC<React.HTMLAttributes<HTMLSpanElement>> = (props) => (
+type StyledSelectionProps = React.HTMLAttributes<HTMLSpanElement> & {
+  ref?: React.Ref<HTMLSpanElement>;
+};
+
+const StyledSelection = ({
+  ref,
+  ...props
+}: StyledSelectionProps): React.JSX.Element => (
   <>
     <NoGlobalPointerEvents />
-    <StyledSelectionComponent {...props} />
+    <StyledSelectionComponent {...props} ref={ref} />
   </>
 );
 

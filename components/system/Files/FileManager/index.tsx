@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useId,
   Profiler,
   useRef,
   useState,
@@ -93,6 +94,8 @@ const FileManager: FC<FileManagerProps> = ({
   const [previousIsDetailsView, setPreviousIsDetailsView] =
     useState(isDetailsView);
   const [currentUrl, setCurrentUrl] = useState(url);
+  const instanceId = useId();
+  const profilerId = `${id || url}-${instanceId}`;
   const [renaming, setRenaming] = useState("");
   const [mounted, setMounted] = useState<boolean>(false);
   const fileManagerRef = useRef<HTMLOListElement | null>(null);
@@ -112,8 +115,12 @@ const FileManager: FC<FileManagerProps> = ({
     });
   const { lstat, mountFs, rootFs } = useFileSystem();
   const { StyledFileEntry, StyledFileManager } = FileManagerViews[view];
-  const { isSelecting, selectionRect, selectionStyling, selectionEvents } =
-    useSelection(fileManagerRef, focusedEntries, focusFunctions, isDesktop);
+  const { isSelecting, selectionEvents, selectionRef } = useSelection(
+    fileManagerRef,
+    focusedEntries,
+    focusFunctions,
+    isDesktop
+  );
   const draggableEntry = useDraggableEntries(
     focusedEntries,
     focusFunctions,
@@ -255,7 +262,10 @@ const FileManager: FC<FileManagerProps> = ({
   }
 
   return (
-    <Profiler id="FileManager" onRender={renderProfilerCallback}>
+    <Profiler
+      id={`FileManager-${profilerId}`}
+      onRender={renderProfilerCallback}
+    >
       <>
         {loading && <StyledLoading $hasColumns={isDetailsView} />}
         {!loading && isEmptyFolder && (
@@ -286,14 +296,18 @@ const FileManager: FC<FileManagerProps> = ({
           )}
           {!loading && (
             <>
-              {isSelecting && <StyledSelection style={selectionStyling} />}
-              <Profiler id="FileEntries" onRender={renderProfilerCallback}>
+              {isSelecting && <StyledSelection ref={selectionRef} />}
+              <Profiler
+                id={`FileEntries-${profilerId}`}
+                onRender={renderProfilerCallback}
+              >
                 {fileKeys.map((file) => (
                   <StyledFileEntry
                     key={file}
                     $desktop={isDesktop}
                     $selecting={isSelecting}
                     $visible={!isLoading}
+                    data-file={file}
                     {...(!readOnly &&
                       draggableEntry(url, file, renaming === file))}
                     {...(renaming === "" && { onKeyDown: keyShortcuts(file) })}
@@ -316,7 +330,6 @@ const FileManager: FC<FileManagerProps> = ({
                       path={join(url, file)}
                       readOnly={readOnly}
                       renaming={renaming === file}
-                      selectionRect={selectionRect}
                       setRenaming={setRenaming}
                       stats={files[file]}
                       view={view}
