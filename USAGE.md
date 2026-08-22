@@ -185,6 +185,29 @@ IconFile=/System/Icons/documents.webp
   - `/?app=Terminal` —— 启动指定应用；
   - `/?url=/CREDITS.md` —— 打开指定文件。
 
+### 更改桌面图标排版
+
+**只调整当前浏览器里的排版**：直接把桌面图标拖到目标网格位置；系统会自动把这些坐标写入本浏览器 IndexedDB 中的 `/session.json`。想恢复自动排序时，在桌面空白处右键 → **排序方式**，选择名称、大小、项目类型或修改日期；选择排序后会清除这些图标的自定义坐标。
+
+**给所有新访客预置默认排版**：先在运行中的系统里把图标拖到理想位置，用 开始菜单里的 Terminal 执行 `cat /session.json`（或用 Vim 打开该文件），复制其中的 `iconPositions`；再写入仓库的 [`public/session.json`](public/session.json)。坐标是桌面网格的 1-based 行列号：`gridColumnStart` 从左向右递增，`gridRowStart` 从上向下递增。
+
+```json
+{
+  "iconPositions": {
+    "/Users/Public/Desktop/Blog.url": {
+      "gridColumnStart": 1,
+      "gridRowStart": 1
+    },
+    "/Users/Public/Desktop/CREDITS.md": {
+      "gridColumnStart": 1,
+      "gridRowStart": 2
+    }
+  }
+}
+```
+
+修改后重新构建并部署站点，让新的默认会话进入前端包。已有访客的 IndexedDB 中可能已经保存了旧排版，因此他们需要点击 **Power** 清除会话才能看到新出厂布局。如果还想固定图标的基础排序顺序，可额外配置 `sortOrders`；未显式设置坐标的新增图标会按这个顺序自动排入网格。
+
 ## 9. 添加新应用
 
 1. 在 [`components/apps/`](components/apps) 下创建组件目录，如 `components/apps/MyApp/index.tsx`；
