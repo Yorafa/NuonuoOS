@@ -167,7 +167,7 @@ module.exports = [
       "import/no-duplicates": ["error", { "prefer-inline": true }],
       "import/no-extraneous-dependencies": [
         "error",
-        { devDependencies: ["*.config.ts", "e2e/**", "__tests__/**"] },
+        { devDependencies: ["*.config.ts", "test/**"] },
       ],
       "import/order": ["error", { "newlines-between": "never" }],
       "import/prefer-default-export": "off",
@@ -300,8 +300,9 @@ module.exports = [
     },
   },
   {
-    files: ["__tests__/**/*.spec.ts"],
+    files: ["test/jest/**/*.spec.{ts,tsx}"],
     rules: {
+      "playwright/no-duplicate-hooks": "off",
       "playwright/no-standalone-expect": "off",
     },
   },

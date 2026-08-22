@@ -6,7 +6,7 @@ import {
   TASKBAR_ENTRY_MENU_ITEMS,
   TEST_APP_ICON,
   TEST_APP_TITLE,
-} from "e2e/constants";
+} from "test/playwright/constants";
 import {
   calendarIsVisible,
   captureConsoleLogs,
@@ -39,7 +39,7 @@ import {
   windowIsMaximized,
   windowIsOpaque,
   windowIsTransparent,
-} from "e2e/functions";
+} from "test/playwright/functions";
 
 test.beforeEach(async ({ browserName, page }) => {
   const fixtures = { browserName, page };

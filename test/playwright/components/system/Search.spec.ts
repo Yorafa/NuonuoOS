@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { TEST_SEARCH, TEST_SEARCH_RESULT_TITLE } from "e2e/constants";
+import {
+  TEST_SEARCH,
+  TEST_SEARCH_RESULT_TITLE,
+} from "test/playwright/constants";
 import {
   captureConsoleLogs,
   clickSearchButton,
@@ -9,7 +12,7 @@ import {
   searchMenuIsVisible,
   searchResultEntryIsVisible,
   typeInTaskbarSearchBar,
-} from "e2e/functions";
+} from "test/playwright/functions";
 
 test.beforeEach(async ({ browserName, page }) => {
   const fixtures = { browserName, page };

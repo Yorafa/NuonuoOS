@@ -27,7 +27,7 @@
   },
   "exclude": [
     ".next",
-    "e2e",
+    "test/playwright",
     "node_modules",
     "out",
     "playwright-report",

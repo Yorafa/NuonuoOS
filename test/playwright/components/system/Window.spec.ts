@@ -3,7 +3,7 @@ import {
   DESKTOP_SELECTOR,
   TEST_APP_TITLE_TEXT,
   WINDOW_SELECTOR,
-} from "e2e/constants";
+} from "test/playwright/constants";
 import {
   captureConsoleLogs,
   clickCloseWindow,
@@ -24,7 +24,7 @@ import {
   windowIsTransparent,
   windowTitlebarTextIsVisible,
   windowsAreVisible,
-} from "e2e/functions";
+} from "test/playwright/functions";
 
 test.beforeEach(async ({ browserName, page }) => {
   const fixtures = { browserName, page };

@@ -23,6 +23,8 @@ export const EXCLUDED_CONSOLE_LOGS = (
     "[Fast Refresh] rebuilding",
     "[Fast Refresh] done in",
     "Download the React DevTools for a better development experience",
+    "[render ",
+    '"capturedAt":',
     "[Fast Refresh] performing full reload",
     "Cannot update a component (`Unknown`) while rendering a different component",
     "browserContext.",

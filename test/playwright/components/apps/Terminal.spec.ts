@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 import directory from "contexts/process/directory";
-import { ROOT_PUBLIC_TEST_FILE, TERMINAL_BASE_CD } from "e2e/constants";
+import {
+  ROOT_PUBLIC_TEST_FILE,
+  TERMINAL_BASE_CD,
+} from "test/playwright/constants";
 import {
   captureConsoleLogs,
   disableWallpaper,
@@ -17,7 +20,7 @@ import {
   windowIsHidden,
   windowTitlebarTextIsVisible,
   windowsAreVisible,
-} from "e2e/functions";
+} from "test/playwright/functions";
 
 test.beforeEach(async ({ browserName, page }) => {
   const fixtures = { browserName, page };

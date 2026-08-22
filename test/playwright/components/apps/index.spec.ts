@@ -1,13 +1,13 @@
 import { test } from "@playwright/test";
 import directory from "contexts/process/directory";
-import { TEST_APP_URL } from "e2e/constants";
+import { TEST_APP_URL } from "test/playwright/constants";
 import {
   captureConsoleLogs,
   disableWallpaper,
   loadApp,
   taskbarEntriesAreVisible,
   windowsAreVisible,
-} from "e2e/functions";
+} from "test/playwright/functions";
 import { TRANSITIONS_IN_MILLISECONDS } from "utils/constants";
 
 test.beforeEach(async ({ browserName, page }) => {

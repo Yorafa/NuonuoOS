@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { START_MENU_APPS, START_MENU_SIDEBAR_SELECTOR } from "e2e/constants";
+import {
+  START_MENU_APPS,
+  START_MENU_SIDEBAR_SELECTOR,
+} from "test/playwright/constants";
 import {
   captureConsoleLogs,
   clickDesktop,
@@ -18,7 +21,7 @@ import {
   startMenuIsHidden,
   startMenuIsVisible,
   startMenuSidebarEntryIsVisible,
-} from "e2e/functions";
+} from "test/playwright/functions";
 
 test.beforeEach(async ({ browserName, page }) => {
   const fixtures = { browserName, page };

@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import { ACCESSIBILITY_EXCEPTION_IDS } from "e2e/constants";
+import { ACCESSIBILITY_EXCEPTION_IDS } from "test/playwright/constants";
 import {
   captureConsoleLogs,
   clockCanvasMaybeIsVisible,
@@ -8,7 +8,7 @@ import {
   loadApp,
   startButtonIsVisible,
   taskbarIsVisible,
-} from "e2e/functions";
+} from "test/playwright/functions";
 
 test.beforeEach(async ({ browserName, page }) => {
   const fixtures = { browserName, page };

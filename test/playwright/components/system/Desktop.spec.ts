@@ -5,7 +5,7 @@ import {
   NEW_FILE_LABEL,
   NEW_FILE_LABEL_TEXT,
   NEW_FOLDER_LABEL,
-} from "e2e/constants";
+} from "test/playwright/constants";
 import {
   appIsOpen,
   captureConsoleLogs,
@@ -24,7 +24,7 @@ import {
   loadApp,
   pressDesktopKeys,
   selectArea,
-} from "e2e/functions";
+} from "test/playwright/functions";
 
 test.beforeEach(async ({ browserName, page }) => {
   const fixtures = { browserName, page };

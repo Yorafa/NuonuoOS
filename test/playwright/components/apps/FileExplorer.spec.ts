@@ -32,7 +32,7 @@ import {
   TEST_SEARCH_RESULT,
   WINDOW_RESIZE_HANDLE_WIDTH,
   WINDOW_SELECTOR,
-} from "e2e/constants";
+} from "test/playwright/constants";
 import {
   appIsOpen,
   captureConsoleLogs,
@@ -77,7 +77,7 @@ import {
   windowAnimationIsFinished,
   windowTitlebarTextIsVisible,
   windowsAreVisible,
-} from "e2e/functions";
+} from "test/playwright/functions";
 import { UNKNOWN_ICON } from "components/system/Files/FileManager/icons";
 
 test.beforeEach(async ({ browserName, page }) => {

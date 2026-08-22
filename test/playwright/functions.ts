@@ -56,7 +56,7 @@ import {
   TAB_SPACE_LENGTH,
   SHORTCUT_ICON_SELECTOR,
   DEFAULT_SESSION,
-} from "e2e/constants";
+} from "test/playwright/constants";
 
 type TestProps = {
   browserName?: string;
@@ -1004,3 +1004,9 @@ export const loadContainerTestApp = async ({
   page,
 }: TestProps): Promise<Response | null> =>
   loadApp({ app: TEST_APP_CONTAINER_APP })({ page });
+
+declare global {
+  interface Window {
+    DEBUG_DISABLE_WALLPAPER?: boolean;
+  }
+}

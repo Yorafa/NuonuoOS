@@ -4,7 +4,7 @@ import {
   DRAG_HEADLESS_NOT_SUPPORTED_BROWSERS,
   TEST_APP_CONTAINER_APP,
   TEST_APP_CONTAINER_APP_TITLE,
-} from "e2e/constants";
+} from "test/playwright/constants";
 import {
   captureConsoleLogs,
   desktopEntriesAreVisible,
@@ -13,7 +13,7 @@ import {
   loadContainerTestApp,
   windowTitlebarTextIsVisible,
   windowsAreVisible,
-} from "e2e/functions";
+} from "test/playwright/functions";
 
 test.beforeEach(async ({ browserName, page }) => {
   const fixtures = { browserName, page };

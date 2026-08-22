@@ -29,7 +29,8 @@ const config: PlaywrightTestConfig = {
   ],
   reporter: [["list"], ["html", { open: CI ? "never" : "always" }]],
   retries: CI ? 3 : 1,
-  testDir: "e2e",
+  testDir: "test/playwright",
+  tsconfig: "test/playwright/tsconfig.json",
   use: {
     baseURL,
     trace: "retain-on-failure",
