@@ -2,7 +2,7 @@
 
 ## _浏览器中的桌面环境_
 
-![截图](public/screenshot.png)
+![截图](./screenshot.png)
 
 > 本项目 Fork 自 [DustinBrett/daedalOS](https://github.com/DustinBrett/daedalOS) 并在其基础上修改而成:移除了重型应用与 AI 功能,换装 Win98 风格银色任务栏、斜角开始按钮与深蓝标题栏的经典皮肤。感谢原作者 [Dustin Brett](https://github.com/DustinBrett) 的开源贡献。
 >
