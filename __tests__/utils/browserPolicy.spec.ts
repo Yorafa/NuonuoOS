@@ -1,15 +1,17 @@
 import {
   BROWSER_ALLOWED_DOMAINS,
+  getBrowserHistoryUrl,
   DINO_GAME,
   HOME_PAGE,
+  BLOG,
   bookmarks,
   isAllowedBrowserUrl,
 } from "components/apps/Browser/config";
 
 describe("Browser URL allowlist", () => {
-  test("uses the Yorafa registrable domain and keeps only the Dino bookmark", () => {
+  test("uses the Yorafa registrable domain and keeps the blog and Dino bookmarks", () => {
     expect(BROWSER_ALLOWED_DOMAINS).toEqual(new Set(["yorafa.com"]));
-    expect(bookmarks).toEqual([DINO_GAME]);
+    expect(bookmarks).toEqual([BLOG, DINO_GAME]);
   });
 
   test.each([
@@ -30,5 +32,12 @@ describe("Browser URL allowlist", () => {
     ["ftp://yorafa.com/", false],
   ])("returns %p for %p", (url, expected) => {
     expect(isAllowedBrowserUrl(url)).toBe(expected);
+  });
+
+  test("preserves blocked URLs in browser history", () => {
+    expect(getBrowserHistoryUrl("")).toBe(HOME_PAGE);
+    expect(getBrowserHistoryUrl("https://example.com/page")).toBe(
+      "https://example.com/page"
+    );
   });
 });

@@ -17,6 +17,7 @@ const StyledVim = styled.div`
     width: 100%;
 
     .cm-editor {
+      contain: layout paint;
       height: 100%;
       outline: none;
     }

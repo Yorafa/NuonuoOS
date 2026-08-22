@@ -12,7 +12,7 @@ import StyledBrowser from "components/apps/Browser/StyledBrowser";
 import {
   BLOCKED_PAGE,
   DINO_GAME,
-  HOME_PAGE,
+  getBrowserHistoryUrl,
   isAllowedBrowserUrl,
   NOT_FOUND,
   SURF_TO_MISC,
@@ -63,7 +63,7 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
   const { setForegroundId, updateRecentFiles } = useSession();
   const { prependFileToTitle } = useTitle(id);
   const { initialTitle = "", url = "" } = process || {};
-  const initialUrl = isAllowedBrowserUrl(url) ? url : HOME_PAGE;
+  const initialUrl = getBrowserHistoryUrl(url);
   const { canGoBack, canGoForward, history, moveHistory, position } =
     useHistory(initialUrl, id);
   const { exists, fs, stat, readFile, readdir } = useFileSystem();
@@ -400,6 +400,7 @@ const Browser: FC<ComponentProcessProps> = ({ id }) => {
         changeUrl(id, processedUrl);
         if (currentUrl.current === processedUrl) setUrl(processedUrl);
       } else {
+        changeUrl(id, addressInput);
         setUrl(addressInput);
       }
     },

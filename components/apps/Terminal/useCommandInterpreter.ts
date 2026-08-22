@@ -1020,6 +1020,35 @@ const useCommandInterpreter = (
             }
             break;
           }
+          case "vim": {
+            const [file] = commandArgs;
+
+            if (!file) {
+              open("Vim", { url: "" });
+              break;
+            }
+
+            const fullPath = await getFullPath(file);
+
+            const directory = dirname(fullPath);
+
+            if (
+              !(await exists(directory)) ||
+              !(await stat(directory)).isDirectory()
+            ) {
+              printLn(PATH_NOT_FOUND);
+              break;
+            }
+
+            if ((await exists(fullPath)) && !(await stat(fullPath)).isFile()) {
+              printLn(FILE_NOT_FILE);
+              break;
+            }
+
+            open("Vim", { url: fullPath });
+            updateRecentFiles(fullPath, "Vim");
+            break;
+          }
           case "uptime":
             printLn(`Uptime: ${getUptime()}`);
             break;

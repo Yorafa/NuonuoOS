@@ -5,6 +5,7 @@ import { EditorState } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
 import { memo, useEffect, useRef, useState } from "react";
 import StyledVim from "components/apps/Vim/StyledVim";
+import RenderCostTracker from "components/system/RenderCostProfiler/RenderCostTracker";
 import { type ComponentProcessProps } from "components/system/Apps/RenderComponent";
 import useFileDrop from "components/system/Files/FileManager/useFileDrop";
 import useTitle from "components/system/Window/useTitle";
@@ -17,7 +18,7 @@ const VimEditor: FC<ComponentProcessProps> = ({ id }) => {
     closeWithTransition,
     processes: { [id]: process },
   } = useProcesses();
-  const { readFile, updateFolder, writeFile } = useFileSystem();
+  const { exists, readFile, updateFolder, writeFile } = useFileSystem();
   const { prependFileToTitle } = useTitle(id);
   const { url = "" } = process || {};
   const editorElementRef = useRef<HTMLDivElement>(undefined);
@@ -26,7 +27,21 @@ const VimEditor: FC<ComponentProcessProps> = ({ id }) => {
   const [dirty, setDirty] = useState(false);
   const [status, setStatus] = useState("Loading...");
   const [error, setError] = useState("");
+  // Keep latest callbacks in refs so editor isn't recreated on unrelated re-renders
+  const existsRef = useRef(exists);
+  const saveFileRef = useRef(writeFile);
+  const readFsRef = useRef(readFile);
+  const updateFolderRef = useRef(updateFolder);
+  const closeRef = useRef(closeWithTransition);
+  const titleRef = useRef(prependFileToTitle);
   const fileDrop = useFileDrop({ id });
+
+  existsRef.current = exists;
+  saveFileRef.current = writeFile;
+  readFsRef.current = readFile;
+  updateFolderRef.current = updateFolder;
+  closeRef.current = closeWithTransition;
+  titleRef.current = prependFileToTitle;
 
   useEffect(() => {
     let disposed = false;
@@ -48,16 +63,16 @@ const VimEditor: FC<ComponentProcessProps> = ({ id }) => {
       setStatus("Saving...");
 
       try {
-        if (!(await writeFile(saveUrl, Buffer.from(content), true))) {
+        if (!(await saveFileRef.current(saveUrl, Buffer.from(content), true))) {
           throw new Error("Unable to save file.");
         }
 
-        await updateFolder(dirname(saveUrl), basename(saveUrl));
+        await updateFolderRef.current(dirname(saveUrl), basename(saveUrl));
 
         if (!disposed) {
           setEditorDirty(false);
           setStatus("Saved");
-          prependFileToTitle(basename(saveUrl));
+          titleRef.current(basename(saveUrl));
         }
 
         return true;
@@ -73,7 +88,10 @@ const VimEditor: FC<ComponentProcessProps> = ({ id }) => {
 
     const loadEditor = async (): Promise<void> => {
       try {
-        const content = url ? (await readFile(saveUrl)).toString() : "";
+        const content =
+          url && (await existsRef.current(saveUrl))
+            ? (await readFsRef.current(saveUrl)).toString()
+            : "";
 
         if (disposed || !editorElementRef.current) return;
 
@@ -82,7 +100,7 @@ const VimEditor: FC<ComponentProcessProps> = ({ id }) => {
         });
         Vim.defineEx("quit", "q", (_cm, params) => {
           if (!dirtyRef.current || params.input.includes("!")) {
-            closeWithTransition(id);
+            closeRef.current(id);
           } else {
             setStatus("No write since last change");
             setError("Use :q! to discard changes.");
@@ -91,7 +109,7 @@ const VimEditor: FC<ComponentProcessProps> = ({ id }) => {
         Vim.defineEx("wq", "wq", (cm) => {
           save(cm.getValue())
             .then((saved) => {
-              if (saved) closeWithTransition(id);
+              if (saved) closeRef.current(id);
             })
             .catch(() => false);
         });
@@ -102,7 +120,7 @@ const VimEditor: FC<ComponentProcessProps> = ({ id }) => {
 
           saveAndQuit
             .then((saved) => {
-              if (saved) closeWithTransition(id);
+              if (saved) closeRef.current(id);
             })
             .catch(() => false);
         });
@@ -118,7 +136,7 @@ const VimEditor: FC<ComponentProcessProps> = ({ id }) => {
                 if (docChanged && !disposed) {
                   setEditorDirty(true);
                   setStatus("Modified");
-                  prependFileToTitle(basename(saveUrl), true);
+                  titleRef.current(basename(saveUrl), true);
                 }
               }),
               EditorView.domEventHandlers({
@@ -142,7 +160,7 @@ const VimEditor: FC<ComponentProcessProps> = ({ id }) => {
         editorViewRef.current = view;
         view.focus();
         setStatus("Ready");
-        prependFileToTitle(basename(saveUrl));
+        titleRef.current(basename(saveUrl));
       } catch (loadError: unknown) {
         if (!disposed) {
           const message =
@@ -162,34 +180,37 @@ const VimEditor: FC<ComponentProcessProps> = ({ id }) => {
       editorViewRef.current = undefined;
     };
   }, [
-    closeWithTransition,
     id,
-    prependFileToTitle,
-    readFile,
-    updateFolder,
     url,
-    writeFile,
+    existsRef,
+    saveFileRef,
+    readFsRef,
+    titleRef,
+    closeRef,
+    updateFolderRef,
   ]);
 
   return (
-    <StyledVim>
-      <div
-        ref={(element) => {
-          editorElementRef.current = element ?? undefined;
-        }}
-        aria-label="Vim editor"
-        className="vim-editor"
-        {...fileDrop}
-      />
-      <div aria-live="polite" className="vim-status">
-        <span>{error || status}</span>
-        <span>
-          {dirty
-            ? "Modified · :w save · :q! discard"
-            : "Ctrl-S / :w save · :q quit"}
-        </span>
-      </div>
-    </StyledVim>
+    <RenderCostTracker id="VimEditor">
+      <StyledVim>
+        <div
+          ref={(element) => {
+            editorElementRef.current = element ?? undefined;
+          }}
+          aria-label="Vim editor"
+          className="vim-editor"
+          {...fileDrop}
+        />
+        <div aria-live="polite" className="vim-status">
+          <span>{error || status}</span>
+          <span>
+            {dirty
+              ? "Modified · :w save · :q! discard"
+              : "Ctrl-S / :w save · :q quit"}
+          </span>
+        </div>
+      </StyledVim>
+    </RenderCostTracker>
   );
 };
 

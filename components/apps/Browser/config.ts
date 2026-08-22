@@ -58,7 +58,15 @@ export const isAllowedBrowserUrl = (address: string): boolean => {
   }
 };
 
-export const bookmarks: Bookmark[] = [DINO_GAME];
+export const BLOG = {
+  icon: "/System/Icons/chromium.webp",
+  name: "Yorafa Blog",
+  url: "https://blog.yorafa.com",
+};
+
+export const getBrowserHistoryUrl = (url: string): string => url || HOME_PAGE;
+
+export const bookmarks: Bookmark[] = [BLOG, DINO_GAME];
 
 export const BLOCKED_PAGE = `
   <!doctype html>
